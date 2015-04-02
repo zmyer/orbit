@@ -32,7 +32,7 @@ The minimum requirements for using Orbit are:
 
 
 -  [Git](http://git-scm.com/) is required if you want to get and build the Orbit code manually
--  [MongoDB 2.6](http://www.mongodb.org/downloads) or above is required to build Orbit manually, run the samples or use the built-in storage provider
+-  [MongoDB 2.6](http://www.mongodb.org/downloads) or above is required to run the Orbit samples.
 -  [IntelliJ IDEA](https://www.jetbrains.com/idea/) is our preferred IDE
 
  

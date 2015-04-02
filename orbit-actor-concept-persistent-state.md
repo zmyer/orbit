@@ -18,6 +18,8 @@ previous: "orbit-actor-concept-stages.html"
     -  [Clearing State](#ActorConcept-PersistentState-ClearingState)
     -  [Writing State On Deactivation](#ActorConcept-PersistentState-WritingStateOnDeactivation)
 -  [Storage Providers](#ActorConcept-PersistentState-StorageProviders)
+    -  [Official Providers](#ActorConcept-PersistentState-OfficialProviders)
+    -  [Contributed Providers](#ActorConcept-PersistentState-ContributedProviders)
 
 
 
@@ -158,13 +160,29 @@ Storage Providers {#ActorConcept-PersistentState-StorageProviders}
 The underlying storage mechanism for state in Orbit is determined by the Storage Provider.
 
 
-Developers are free to add storage providers for any provider they wish (Databases etc).
+There are multiple providers available for developers. Developers are also free to add storage providers for any provider they wish (Databases etc).
 
-
-Orbit offers built in providers for the following storage systems:
-
-
--  MongoDB
 
  
 
+
+###Official Providers {#ActorConcept-PersistentState-OfficialProviders}
+
+**MongoDB** 
+{% highlight xml %}
+Source Path: actors/providers/mongodb
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-mongodb
+{% endhighlight %}
+
+ 
+
+
+###Contributed Providers {#ActorConcept-PersistentState-ContributedProviders}
+
+**PostgreSQL** 
+{% highlight xml %}
+Source Path: actors/providers/postgresql
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-postgresql
+{% endhighlight %}

@@ -15,7 +15,6 @@ previous: "orbit-prerequisites.html"
 -  [Building The Code](#BuildingOrbit-BuildingTheCode)
 -  [Common Failures](#BuildingOrbit-CommonFailures)
     -  [Maven/Java Misconfiguration](#BuildingOrbit-Maven_JavaMisconfiguration)
-    -  [MongoDB Failures](#BuildingOrbit-MongoDBFailures)
 
 
 
@@ -98,22 +97,4 @@ Java version: 1.8.0_31, vendor: Oracle Corporation
 Java home: D:\Programs\Java\jdk8\jre
 Default locale: en_US, platform encoding: Cp1252
 OS name: "windows 7", version: "6.1", arch: "amd64", family: "dos"
-{% endhighlight %}
-
- 
-
-
-###MongoDB Failures {#BuildingOrbit-MongoDBFailures}
-
-
-Currently MongoDB is required to build Orbit, it is often not installed or is configured incorrectly, error messages similar to the one below should make it obvious that the problem lies with MongoDB Configuration.
-
-
-{% highlight xml %}
-Tests in error:
-  checkReads(com.ea.orbit.actors.mongodb.test.MongodbPersistenceTes
- after 10000 ms while waiting to connect. Client view of cluster st
-Unknown, servers=[{address=127.0.0.1:27017, type=Unknown, state=Con
-ption={com.mongodb.MongoException$Network: Exception opening the so
- by {java.net.ConnectException: Connection refused: connect}}]
 {% endhighlight %}

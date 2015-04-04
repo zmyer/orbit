@@ -8,20 +8,21 @@ title: Orbit Framework
 
  <br/>
 
-Orbit is a modern Java framework that makes it easier to build and maintain distributed,
-secure and scalable online services.
+Orbit is a modern framework for JVM languages that makes it easier to build and maintain distributed and scalable online services.
 
 Orbit contains two primary components: 
 
 -  Orbit Actors, a framework to write distributed systems using virtual actors.
 -  Orbit Container, a minimal inversion of control container for building online services.
 
-It was developed by [BioWare](http://www.bioware.com), a division of [Electronic Arts](http://www.ea.com), and is available under the [BSD 3-Clause License](https://github.com/electronicarts/orbit/blob/master/LICENSE). Check out the [announcement](http://blog.bioware.com/2015/03/30/launching-into-orbit/) at the BioWare blog.
+It was developed by [BioWare](http://www.bioware.com), a division of [Electronic Arts](http://www.ea.com). For the latest news, follow us on [Twitter](https://twitter.com/OrbitFramework). 
+<br /> If you're looking for virtual actors on the .NET CLR, see [Orleans](https://github.com/dotnet/Orleans). 
 
 You can grab the code on [GitHub](https://github.com/electronicarts/orbit) or [get started](http://orbit.bioware.com/orbit-getting-started.html) now.
 
  <br/>
 
+**Actors - Java Example** 
 {% highlight java %}
 public interface IHello extends IActor
 {
@@ -37,5 +38,21 @@ public class HelloActor extends OrbitActor implements IHello
     }
 }
  
-HelloFactory.getReference("0").sayHello("Meep Meep");
+IActor.getReference(IHello.class, "0").sayHello("Meep Meep");
+{% endhighlight %}
+
+**Actors - Scala Example** 
+{% highlight scala %}
+trait IHello extends IActor {
+  def sayHello(greeting: String): Task[String]
+}
+
+class HelloActor extends OrbitActor[AnyRef] with IHello {
+  def sayHello(greeting: String): Task[String] = {
+    getLogger.info("Here: " + greeting)
+    Task.fromValue("Hello There")
+  }
+}
+
+IActor.getReference(classOf[IHello], "0").sayHello("Meep Meep")
 {% endhighlight %}

@@ -109,7 +109,7 @@ public class HelloActor extends OrbitActor implements IHello
     {
         getLogger().info("Here: " + greeting);
 
-        IGreeter greeter = GreeterFactory.getReference("0");
+        IGreeter greeter = IActor.getReference(IGreeter.class, "0");
 
         return greeter.getGreeting().thenApply(greetResponse -> "You said: '" + greeting
                 + "', I say: " + greetResponse + " from " + System.identityHashCode(this) + " !");

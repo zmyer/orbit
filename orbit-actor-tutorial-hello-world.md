@@ -150,8 +150,10 @@ public class Main
         OrbitStage stage1 = initStage(clusterName, "stage1");
         OrbitStage stage2 = initStage(clusterName, "stage2");
  
-        IHello helloFrom1 = stage1.getReference(IHello.class, "0");
-        IHello helloFrom2 = stage2.getReference(IHello.class, "0");
+        stage1.bind();
+        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        stage2.bind()
+        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
  
         System.out.println(helloFrom1.sayHello("Hi from 01").get());
         System.out.println(helloFrom2.sayHello("Hi from 02").get());
@@ -172,7 +174,7 @@ Important notes:
 
 
 -  We create two orbit stages (actor execution environments) in the same cluster
--  We get a reference to the same actor on both stages by using stage.getReference and providing the same identifier.
+-  We get a reference to the same actor on both stages by binding and using IActor.getReference and providing the same identifier.
 -  The framework will handle the creation of the actor in one of the stages
 -  You can communicate with the actor regardless of which stage it actually lives in.
 

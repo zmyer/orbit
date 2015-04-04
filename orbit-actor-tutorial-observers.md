@@ -155,8 +155,10 @@ public class Main
         OrbitStage stage1 = initStage(clusterName, "stage1");
         OrbitStage stage2 = initStage(clusterName, "stage2");
  
-        IHello helloFrom1 = stage1.getReference(IHello.class, "0");
-        IHello helloFrom2 = stage2.getReference(IHello.class, "0");
+        stage1.bind();
+        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        stage2.bind();
+        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
  
         IHelloObserver observer = new IHelloObserver()
         {

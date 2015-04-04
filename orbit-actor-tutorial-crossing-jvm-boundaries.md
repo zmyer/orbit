@@ -44,7 +44,7 @@ public class MainHost
         stage.setMode(OrbitStage.StageMode.HOST);
         stage.start().join();
 
-        IHello helloInt = stage.getReference(IHello.class, "0");
+        IHello helloInt = IActor.getReference(IHello.class, "0");
 
         System.out.println(helloInt.sayHello("Hi from host").get());
 			
@@ -78,7 +78,7 @@ public class MainFrontend
         stage.setMode(OrbitStage.StageMode.FRONT_END);
         stage.start().join();
 
-        IHello helloInt = stage.getReference(IHello.class, "0");
+        IHello helloInt = IActor.getReference(IHello.class, "0");
 
         System.out.println(helloInt.sayHello("Hi from frontend").get());
     }

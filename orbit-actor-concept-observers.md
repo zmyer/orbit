@@ -92,7 +92,7 @@ You are now free to use the created observer object, and pass it to an Orbit act
 
 **Register Observer** 
 {% highlight java %}
-ISomeActor actor = stage.getReference(ISomeActor.class, "0");
+ISomeActor actor = IActor.getReference(ISomeActor.class, "0");
 actor.someMethod(observer).join();
 {% endhighlight %}
 

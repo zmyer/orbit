@@ -154,8 +154,10 @@ public class Main
         stage1.addProvider(storageProvider);
         stage2.addProvider(storageProvider);
 
-        IHello helloFrom1 = stage1.getReference(IHello.class, "0");
-        IHello helloFrom2 = stage2.getReference(IHello.class, "0");
+        stage1.bind();
+        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        stage2.bind();
+        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
 
         System.out.println(helloFrom1.sayHello("Hi from 01").get());
         System.out.println("Last From 2: " + helloFrom2.getLastHello().get());

@@ -19,7 +19,7 @@ Overview {#AboutOrbit-Overview}
 ----------
 
 
-Orbit is a modern Java framework that makes it easier to build and maintain distributed, secure and scalable online services.
+Orbit is a modern framework for JVM languages that makes it easier to build and maintain distributed and scalable online services.
 
 
 Orbit contains two primary components:

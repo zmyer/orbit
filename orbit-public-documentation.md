@@ -18,10 +18,6 @@ next : "orbit-about-orbit.html"
 ----------
 
 
-[Project Structure](orbit-project-structure.html) {#PublicDocumentation-ProjectStructure}
-----------
-
-
 [Actors](orbit-actors.html) {#PublicDocumentation-Actors}
 ----------
 

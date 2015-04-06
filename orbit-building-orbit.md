@@ -38,7 +38,7 @@ Scope {#BuildingOrbit-Scope}
 ----------
 
 
-This guide assumes that you want to sync and build all projects in orbit-generic and their samples, the process is the same for other repositories.
+This guide assumes that you want to sync and build all projects in orbit and the samples, the process is the same for other repositories.
 
 
 Getting The Code {#BuildingOrbit-GettingTheCode}

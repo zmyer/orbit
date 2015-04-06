@@ -2,21 +2,13 @@
 layout : page
 title : "Orbit : Prerequisites"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Getting Started](orbit-getting-started.html)"
-next : "orbit-building-orbit.html"
+next : "orbit-project-structure.html"
 previous: "orbit-getting-started.html"
 ---
 {% include JB/setup %}
 
-###Overview {#Prerequisites-Overview}
-
-
-Orbit is a modern Java based online services framework. It's very easy to set up and you'll require the software listed on this page to get started. 
-
-
- 
-
-
-###Required Software {#Prerequisites-RequiredSoftware}
+Required Software {#Prerequisites-RequiredSoftware}
+----------
 
 
 The minimum requirements for using Orbit are:
@@ -28,7 +20,8 @@ The minimum requirements for using Orbit are:
  
 
 
-###Recommended Software {#Prerequisites-RecommendedSoftware}
+Recommended Software {#Prerequisites-RecommendedSoftware}
+----------
 
 
 -  [Git](http://git-scm.com/) is required if you want to get and build the Orbit code manually

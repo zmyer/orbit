@@ -3,7 +3,7 @@ layout : page
 title : "Orbit : Actors"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html)"
 next : "orbit-actor-overview.html"
-previous: "orbit-project-structure.html"
+previous: "orbit-building-orbit.html"
 ---
 {% include JB/setup %}
 

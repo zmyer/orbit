@@ -2,8 +2,8 @@
 layout : page
 title : "Orbit : Building Orbit"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Getting Started](orbit-getting-started.html)"
-next : "orbit-project-structure.html"
-previous: "orbit-prerequisites.html"
+next : "orbit-actors.html"
+previous: "orbit-project-structure.html"
 ---
 {% include JB/setup %}
 
@@ -13,6 +13,7 @@ previous: "orbit-prerequisites.html"
 -  [Scope](#BuildingOrbit-Scope)
 -  [Getting The Code](#BuildingOrbit-GettingTheCode)
 -  [Building The Code](#BuildingOrbit-BuildingTheCode)
+    -  [Optional Features](#BuildingOrbit-OptionalFeatures)
 -  [Common Failures](#BuildingOrbit-CommonFailures)
     -  [Maven/Java Misconfiguration](#BuildingOrbit-Maven_JavaMisconfiguration)
 
@@ -73,6 +74,24 @@ If everything worked correctly, you should get a "BUILD SUCCESS" message. 
 
 If the build failed, you can check the common failures below.
 
+
+###Optional Features {#BuildingOrbit-OptionalFeatures}
+
+
+You are able to specify optional features to build using Maven profiles. i.e. "mvn clean install -PwithMongoTests,withPostgresTests"
+
+**Build Scala Samples** 
+{% highlight xml %}
+withScala
+{% endhighlight %}
+**Test MongoDB** 
+{% highlight xml %}
+withMongoTests
+{% endhighlight %}
+**Test PostgreSQL** 
+{% highlight xml %}
+withPostgresTests
+{% endhighlight %}
 
  
 

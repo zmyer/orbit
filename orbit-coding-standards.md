@@ -17,6 +17,7 @@ previous: "orbit-policies.html"
     -  [Member Variables](#CodingStandards-MemberVariables)
     -  [Local Variables and Arguments](#CodingStandards-LocalVariablesandArguments)
     -  [Constants](#CodingStandards-Constants)
+    -  [Package Names](#CodingStandards-PackageNames)
 -  [Code Style](#CodingStandards-CodeStyle)
     -  [Braces](#CodingStandards-Braces)
     -  [Assignment / Comparison](#CodingStandards-Assignment_Comparison)
@@ -61,7 +62,7 @@ public interface ISecurityFilter
 
 ###Enums {#CodingStandards-Enums}
 
-**Use PascalCase for name, UPPER_CASE for constants.** 
+**Use PascalCase for name, UPPER_CASE for constants** 
 {% highlight java %}
 public enum StageMode
 {
@@ -86,8 +87,10 @@ public class SecurityFilter
 {% highlight java %}
 public class SecurityFilter
 {
- private int sum(int a, int b){int result = a + b;return result;
- }
+    private int sum(int a, int b)
+    {
+        int result = a + b;return result;
+    }
 }
 {% endhighlight %}
 
@@ -98,6 +101,14 @@ public class SecurityFilter
 public static final byte NORMAL_MESSAGE = 0;
 {% endhighlight %}
 
+###Package Names {#CodingStandards-PackageNames}
+
+**Use lowercase** 
+{% highlight java %}
+package com.ea.orbit.actors;
+{% endhighlight %}
+
+ 
 
 
 Code Style {#CodingStandards-CodeStyle}

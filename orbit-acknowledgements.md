@@ -2,7 +2,7 @@
 layout : page
 title : "Orbit : Acknowledgements"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html)"
-previous: "orbit-sample-chat.html"
+previous: "orbit-coding-standards.html"
 ---
 {% include JB/setup %}
 

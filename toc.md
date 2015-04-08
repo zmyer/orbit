@@ -40,4 +40,6 @@ breadCrumb : ""
         -  [Container Guide](orbit-container-guide.html)
     -  [Samples](orbit-samples.html)
         -  [Sample - Chat](orbit-sample-chat.html)
+    -  [Policies](orbit-policies.html)
+        -  [Coding Standards](orbit-coding-standards.html)
     -  [Acknowledgements](orbit-acknowledgements.html)

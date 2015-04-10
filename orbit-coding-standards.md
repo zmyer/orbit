@@ -14,6 +14,7 @@ previous: "orbit-policies.html"
     -  [Classes](#CodingStandards-Classes)
     -  [Interfaces](#CodingStandards-Interfaces)
     -  [Enums](#CodingStandards-Enums)
+    -  [Methods](#CodingStandards-Methods)
     -  [Member Variables](#CodingStandards-MemberVariables)
     -  [Local Variables and Arguments](#CodingStandards-LocalVariablesandArguments)
     -  [Constants](#CodingStandards-Constants)
@@ -31,10 +32,10 @@ Overview {#CodingStandards-Overview}
 ----------
 
 
-The Orbit team follows the standards set out in this document to ensure our code is consistent and readable. 
+Orbit follows the coding standards laid out in this document.
 
 
-We realize that coding standards are often contentious, this standard represents a set of common rules that the Orbit project will follow and does not seek to discredit any other standards that exist.
+We realize that standards are often contentious and believe that having any standard (even where not everyone agrees) is the best course of action to ensure consistent and readable code across the project.
 
 
 Naming Conventions {#CodingStandards-NamingConventions}
@@ -52,11 +53,10 @@ public class SecurityFilter
 
 ###Interfaces {#CodingStandards-Interfaces}
 
-**Prefix with I** 
+**Use PascalCase, prefix with I** 
 {% highlight java %}
 public interface ISecurityFilter
 {
-
 }
 {% endhighlight %}
 
@@ -68,6 +68,15 @@ public enum StageMode
 {
     FRONT_END, 
     HOST
+}
+{% endhighlight %}
+
+###Methods {#CodingStandards-Methods}
+
+**Use camelCase** 
+{% highlight java %}
+public void doSomeStuff()
+{
 }
 {% endhighlight %}
 
@@ -85,12 +94,10 @@ public class SecurityFilter
 
 **Use camelCase** 
 {% highlight java %}
-public class SecurityFilter
+public static int sum(int leftHandSide, int rightHandSide)
 {
-    private int sum(int a, int b)
-    {
-        int result = a + b;return result;
-    }
+    int totalSum = leftHandSide + rightHandSide;
+    return totalSum;
 }
 {% endhighlight %}
 
@@ -124,9 +131,8 @@ Opening braces should always be on a new line, always align the opening and clos
 {% highlight java %}
 if(someValue.equals("Ferrets")
 {
-    if(someotherValue.equals("Penguins")
+    if(someOtherValue.equals("Penguins")
     {
- 
     }
 }
 {% endhighlight %}
@@ -139,7 +145,9 @@ Always include a space before and after an assignment or comparison.
 
 {% highlight java %}
 someValue += 1;
-if(someValue == 1) ...
+if(someValue == 1)
+{
+}
 {% endhighlight %}
 
 ###Brackets {#CodingStandards-Brackets}
@@ -162,7 +170,7 @@ Always annotate on a separate line above.
 {% highlight java %}
 @GET 
 @PermitAll 
-@Path("/ferrety")
+@Path("/healthCheck")
 public HealthCheckDto getHealthCheck()
 {
 }

@@ -14,9 +14,9 @@ title: Orbit Framework
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/electronicarts/orbit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Orbit is a modern framework for JVM languages that makes it easier to build and maintain distributed and scalable online services.
-It was developed by [BioWare](http://www.bioware.com), a division of [Electronic Arts](http://www.ea.com). <br/> 
-You can grab the code on [GitHub](https://github.com/electronicarts/orbit) or [get started](http://orbit.bioware.com/orbit-getting-started.html) now. <br />
-For the latest news, follow us on [Twitter](https://twitter.com/OrbitFramework).
+It was developed by [BioWare](http://www.bioware.com), a division of [Electronic Arts](http://www.ea.com). For the latest news, follow us on [Twitter](https://twitter.com/OrbitFramework). 
+
+You can grab the code on [GitHub](https://github.com/electronicarts/orbit) or [get started](http://orbit.bioware.com/orbit-getting-started.html) now. 
 
 Orbit is primarily made up of the following components:
 
@@ -24,6 +24,8 @@ Orbit is primarily made up of the following components:
 -  Orbit Container, a minimal inversion of control container for building online services.
 -  Orbit Web, a lightweight HTTP and Websockets container for Orbit, powered by Jetty.
 -  Orbit Commons, various common utilities used by Orbit.
+
+<br />
 
 **Actors - Java Example** 
 {% highlight java %}

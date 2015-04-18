@@ -17,8 +17,11 @@ Orbit is a modern framework for JVM languages that makes it easier to build and 
 
 Orbit contains two primary components: 
 
+Orbit is primarily made up of the following components:
 -  Orbit Actors, a framework to write distributed systems using virtual actors.
 -  Orbit Container, a minimal inversion of control container for building online services.
+-  Orbit Web, a lightweight HTTP and Websockets container for Orbit, powered by Jetty.
+-  Orbit Commons, various common utilities used by Orbit.
 
 It was developed by [BioWare](http://www.bioware.com), a division of [Electronic Arts](http://www.ea.com). For the latest news, follow us on [Twitter](https://twitter.com/OrbitFramework). 
 <br /> If you're looking for virtual actors on the .NET CLR, see [Orleans](https://github.com/dotnet/Orleans). 

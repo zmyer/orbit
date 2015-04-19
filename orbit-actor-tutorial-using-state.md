@@ -90,6 +90,8 @@ package com.example.orbit.hello;
 
 import com.ea.orbit.actors.runtime.OrbitActor;
 import com.ea.orbit.concurrent.Task;
+import com.ea.orbit.async.Await;
+import static com.ea.orbit.async.Await.await;
  
 public class HelloActor extends OrbitActor<HelloActor.State> implements IHello
 {
@@ -103,7 +105,8 @@ public class HelloActor extends OrbitActor<HelloActor.State> implements IHello
         getLogger().info("Here: " + greeting);
         String message = "You said: '" + greeting + "', I say: Hello from " + System.identityHashCode(this) + " !";
         state().lastMessage = message;
-        return writeState().thenApply(x -> message);
+        await(writeState());
+        return message;
     }
  
     public Task<String> getLastHello()

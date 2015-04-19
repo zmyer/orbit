@@ -7,6 +7,6 @@ previous: "orbit-sample-chat.html"
 ---
 {% include JB/setup %}
 
-[Coding Standards](orbit-coding-standards.html) {#Policies-CodingStandards}
+[Coding Standards](orbit-coding-standards.html) {#Policies-CodingStandardsCoding-Standards_99026657_html}
 ----------
 

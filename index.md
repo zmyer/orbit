@@ -21,6 +21,7 @@ You can grab the code on [GitHub](https://github.com/electronicarts/orbit) or [g
 Orbit is primarily made up of the following components:
 
 -  Orbit Actors, a framework to write distributed systems using virtual actors.
+-  Orbit Async, async-await methods for the JVM.
 -  Orbit Container, a minimal inversion of control container for building online services.
 -  Orbit Web, a lightweight HTTP and Websockets container for Orbit, powered by Jetty.
 -  Orbit Commons, various common utilities used by Orbit.

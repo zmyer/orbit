@@ -122,16 +122,17 @@ com.ea.orbit.container.Bootstrap
 ###Optional Configuration {#ContainerGuide-OptionalConfiguration}
 
 
-It is possible to manually include or substitute application components and modules
+It is possible to manually include application components and modules
 
 
 {% highlight java %}
-container.addComponent(HelloWorld.class);
-container.addModule(JettyRestModule.class);
-container.addComponent(IClusterPeer.class, JGroupsPeer.class);
+container.add(HelloWorld.class);
+container.add(JettyRestModule.class);
+container.addInstance(myRestModule);
 {% endhighlight %}
 
--  useful for testing  
+ 
+
 
 ###Starting a Container {#ContainerGuide-StartingaContainer}
 

@@ -63,8 +63,9 @@ public class Party implements Startable {
          return Task.done();
     }  
 }
+ 
 OrbitContainer container = new OrbitContainer();
-container.addComponent(Party.class);
+container.add(Party.class);
 container.start().join();
 container.stop().join();
 

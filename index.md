@@ -23,7 +23,7 @@ Orbit is primarily made up of the following components:
 -  Orbit Actors, a framework to write distributed systems using virtual actors.
 -  Orbit Async, async-await methods for the JVM.
 -  Orbit Container, a minimal inversion of control container for building online services.
--  Orbit Tools, a set of tools to help simplify various tasks on the JVM.
+-  Orbit Utils, a set of utils to help simplify various tasks on the JVM.
 -  Orbit Web, a lightweight HTTP and Websockets container for Orbit, powered by Jetty.
 -  Orbit Commons, various common utilities used by Orbit.
 

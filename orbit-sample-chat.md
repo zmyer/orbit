@@ -2,7 +2,7 @@
 layout : page
 title : "Orbit : Sample - Chat"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Samples](orbit-samples.html)"
-next : "orbit-acknowledgements.html"
+next : "orbit-policies.html"
 previous: "orbit-samples.html"
 ---
 {% include JB/setup %}

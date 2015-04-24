@@ -3,15 +3,15 @@ layout : page
 title : "Orbit : Container"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html)"
 next : "orbit-container-overview.html"
-previous: "orbit-actor-tutorial-cross-actor-communication.html"
+previous: "orbit-async-guide.html"
 ---
 {% include JB/setup %}
 
-[Container Overview](orbit-container-overview.html) {#Container-ContainerOverview}
+[Container Overview](orbit-container-overview.html) {#Container-ContainerOverviewContainer-Overview_97848940_html}
 ----------
 
 
-[Container Guide](orbit-container-guide.html) {#Container-ContainerGuide}
+[Container Guide](orbit-container-guide.html) {#Container-ContainerGuideContainer-Guide_97859542_html}
 ----------
 
 
@@ -63,8 +63,9 @@ public class Party implements Startable {
          return Task.done();
     }  
 }
+ 
 OrbitContainer container = new OrbitContainer();
-container.addComponent(Party.class);
+container.add(Party.class);
 container.start().join();
 container.stop().join();
 

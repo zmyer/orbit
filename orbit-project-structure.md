@@ -11,6 +11,8 @@ previous: "orbit-prerequisites.html"
 
 -  [Source Structure](#ProjectStructure-SourceStructure)
 -  [Maven Structure](#ProjectStructure-MavenStructure)
+    -  [Core](#ProjectStructure-Core)
+    -  [Providers](#ProjectStructure-Providers)
 
 
 
@@ -45,21 +47,29 @@ Maven Structure {#ProjectStructure-MavenStructure}
 Orbit is also hosted on the maven central repository.
 
 
-<table>
-<tr><th> Group </th><th> Artifact </th><th> Purpose </th></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-all </td><td> Contains the full actor framework </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-container </td><td> Contains the container system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-web </td><td> Contains the web system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-commons </td><td> Contains the common utils </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-mongodb </td><td> Contains the actors MongoDB storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-postgresql </td><td> Contains the actors PostgreSQL storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-* </td><td> Contains the various individual actor systems </td></tr>
-<tr><td> com.ea.orbit.samples </td><td> orbit-* </td><td> Contains the samples </td></tr>
-</table>
+###Core {#ProjectStructure-Core}
+
+
+| Group | Artifact | Purpose |
+|-------|----------|---------|
+| com.ea.orbit | orbit-actors-all | Contains the full actor framework |
+| com.ea.orbit | orbit-container | Contains the container system |
+| com.ea.orbit | orbit-web | Contains the web system |
+| com.ea.orbit | orbit-commons | Contains the common utils |
+| com.ea.orbit | orbit-actors-* | Contains the various individual actor systems |
+| com.ea.orbit.samples | orbit-* | Contains the samples |
 
 
  
 
 
- 
+###Providers {#ProjectStructure-Providers}
+
+
+| Group | Artifact | Purpose |
+|-------|----------|---------|
+| com.ea.orbit | orbit-actors-mongodb | Contains the actors MongoDB storage system |
+| com.ea.orbit | orbit-actors-postgresql | Contains the actors PostgreSQL storage system |
+| com.ea.orbit | orbit-actors-redis | Contains the actors Redis storage system |
+| com.ea.orbit | orbit-actors-spring | Contains the actors Spring project integration |
 

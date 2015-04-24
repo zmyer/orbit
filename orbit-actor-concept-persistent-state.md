@@ -36,7 +36,7 @@ In Orbit actor state is typically handled as part of the system itself rather th
 State is automatically retrieved when an actor is activated. Writing state is developer defined.
 
 
-Interacting with any state method will always result in a standard Orbit Task being returned.
+Interaction with most state methods will result in a standard Orbit Task being returned.
 
 
 Working With State {#ActorConcept-PersistentState-WorkingWithState}
@@ -95,7 +95,7 @@ Developers can also manually re-retrieve the state using the readState method.
 {% highlight java %}
 public Task doReadState()
 {
-    readState().join();
+    await(readState());
     // New state is accessible here	
     return Task.done();
 }
@@ -146,7 +146,8 @@ Sometimes it is desirable to write state on actor deactivation, this ensures tha
 @Override
 public Task deactivateAsync()
 {
-    return writeState().thenCompose(x -> super.deactivateAsync());
+    await(writeState());
+    return super.deactivateAsync();
 }
 {% endhighlight %}
 
@@ -180,9 +181,21 @@ Artifact ID: orbit-actors-mongodb
 
 ###Contributed Providers {#ActorConcept-PersistentState-ContributedProviders}
 
+**Redis** 
+{% highlight xml %}
+Source Path: actors/providers/redis
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-redis
+{% endhighlight %}
 **PostgreSQL** 
 {% highlight xml %}
 Source Path: actors/providers/postgresql
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-postgresql
+{% endhighlight %}
+**JPA** 
+{% highlight xml %}
+Source Path: actors/providers/jpa
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-jpa
 {% endhighlight %}

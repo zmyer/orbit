@@ -54,7 +54,7 @@ Causes your actor to be a stateless worker. See [stateless workers](orbit-actor
 public interface IMyActor extends IActor {}
 {% endhighlight %}
 
-Denotes that this actor does have an identity and acts as a singleton. Actor is accessed using getReference() instead of getReference(id).
+Denotes that this actor does not have an identity and acts as a singleton. Actor is accessed using getReference() instead of getReference(id).
 
 
  

@@ -19,6 +19,6 @@ previous: "orbit-release-notes.html"
 ----------
 
 
-4. [Actors](orbit-actors.html) or [Container](orbit-container.html) or [Samples](orbit-samples.html) {#GettingStarted-4_oror}
+4. [Actors](orbit-actors.html), [Async](orbit-async.html), [Container](orbit-container.html) or [Samples](orbit-samples.html) {#GettingStarted-4___or}
 ----------
 

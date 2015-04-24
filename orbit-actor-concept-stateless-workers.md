@@ -29,7 +29,7 @@ Orbit's standard [runtime guarantees](orbit-actor-concept-actors.html) ensure th
 ###Stateless Workers {#ActorConcept-StatelessWorkers-StatelessWorkers}
 
 
-In some specific scenarios this strict runtime behavior is not desired. If an actor has no internal state to maintain at all this guarantee adds latency to an action that does require these strict restrictions.
+In some specific scenarios this strict runtime behavior is not desired. As a consequence, Orbit’s standard behavior adds unnecessary latency to Actors that do not maintain an internal state.
 
 
 For these scenarios, Orbit offers the concept of Stateless Workers.

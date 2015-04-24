@@ -2,7 +2,8 @@
 layout : page
 title : "Orbit : Acknowledgements"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html)"
-previous: "orbit-sample-chat.html"
+next : "http://www.atlassian.com/"
+previous: "orbit-coding-standards.html"
 ---
 {% include JB/setup %}
 
@@ -51,10 +52,10 @@ Inspirations {#Acknowledgements-Inspirations}
 -  [Project Orleans](https://github.com/dotnet/Orleans)
 -  [Akka](http://akka.io/)
 -  [Pico Container](http://picocontainer.codehaus.org/)
--  [HK2](https://hk2.java.net/) from GlassFish
--  [Guice](https://github.com/google/guice) from google.
--  [Spring](https://spring.io/) framework.
--  [Avalon](https://avalon.apache.org/closed.html) (defunct)
+-  [HK2](https://hk2.java.net/) 
+-  [Guice](https://github.com/google/guice) 
+-  [Spring](https://spring.io/) 
+-  [Avalon](https://avalon.apache.org/closed.html)
 -  [SilkDI](http://www.silkdi.com/)
 -  [NInject](http://www.ninject.org/) (C#)
 

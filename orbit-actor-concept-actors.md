@@ -2,7 +2,7 @@
 layout : page
 title : "Orbit : Actor Concept - Actors"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html) / [Actor Concepts](orbit-actor-concepts.html)"
-next : "orbit-actor-concept-tasks.html"
+next : "orbit-actor-concept-tasks-and-async.html"
 previous: "orbit-actor-concepts.html"
 ---
 {% include JB/setup %}
@@ -72,7 +72,7 @@ public interface IHello extends IActor
 {% endhighlight %}
 
 -  Actor interfaces must extend Orbit's IActor interface
--  Methods in actor interfaces must return an Orbit [Task](orbit-actor-concept-tasks.html).
+-  Methods in actor interfaces must return an Orbit [Task](orbit-actor-concept-tasks-and-async.html).
 
 Actor Implementations {#ActorConcept-Actors-ActorImplementations}
 ----------

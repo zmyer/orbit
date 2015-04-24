@@ -146,6 +146,14 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/injection/DependencyRegistry.html#addSingleton-java.lang.Class-">addSingleton(Class&lt;?&gt;)</a></span> - Method in class com.ea.orbit.injection.<a href="com/ea/orbit/injection/DependencyRegistry.html" title="class in com.ea.orbit.injection">DependencyRegistry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/instrumentation/Agent.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">Agent</span></a> - Class in <a href="com/ea/orbit/async/instrumentation/package-summary.html">com.ea.orbit.async.instrumentation</a></dt>
+<dd>
+<div class="block">Class called when a java agent is attached to the jvm in runtime.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/Agent.html#Agent--">Agent()</a></span> - Constructor for class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Agent.html" title="class in com.ea.orbit.async.instrumentation">Agent</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/Agent.html#agentmain-java.lang.String-java.lang.instrument.Instrumentation-">agentmain(String, Instrumentation)</a></span> - Static method in class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Agent.html" title="class in com.ea.orbit.async.instrumentation">Agent</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/concurrent/Task.html#allOf-java.util.concurrent.CompletableFuture...-">allOf(CompletableFuture&lt;?&gt;...)</a></span> - Static method in class com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/Task.html" title="class in com.ea.orbit.concurrent">Task</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/concurrent/Task.html#allOf-C-">allOf(C)</a></span> - Static method in class com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/Task.html" title="class in com.ea.orbit.concurrent">Task</a></dt>
@@ -162,6 +170,26 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/cluster/NodeAddress.html#asUUID--">asUUID()</a></span> - Method in class com.ea.orbit.actors.cluster.<a href="com/ea/orbit/actors/cluster/NodeAddress.html" title="class in com.ea.orbit.actors.cluster">NodeAddress</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/Async.html" title="annotation in com.ea.orbit.async"><span class="typeNameLink">Async</span></a> - Annotation Type in <a href="com/ea/orbit/async/package-summary.html">com.ea.orbit.async</a></dt>
+<dd>
+<div class="block">Annotation to mark methods that will work with asynchronously with async-await.</div>
+</dd>
+<dt><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime"><span class="typeNameLink">AsyncAwaitState</span></a> - Class in <a href="com/ea/orbit/async/runtime/package-summary.html">com.ea.orbit.async.runtime</a></dt>
+<dd>
+<div class="block">Internal class to hold the locals and stack of an async-await method
+ while the method is awaiting for a future.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#AsyncAwaitState-int-int-int-">AsyncAwaitState(int, int, int)</a></span> - Constructor for class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/Await.html" title="interface in com.ea.orbit.async"><span class="typeNameLink">Await</span></a> - Interface in <a href="com/ea/orbit/async/package-summary.html">com.ea.orbit.async</a></dt>
+<dd>
+<div class="block">In methods annotated with @Async calls to <code>await(future)</code>
+ will cause the method to return a CompletableFuture (or Task) instead of blocking.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/Await.html#await-java.util.concurrent.CompletableFuture-">await(CompletableFuture&lt;T&gt;)</a></span> - Static method in interface com.ea.orbit.async.<a href="com/ea/orbit/async/Await.html" title="interface in com.ea.orbit.async">Await</a></dt>
+<dd>
+<div class="block">Calls to this method are replaced by the orbit-async instrumentation.</div>
+</dd>
 </dl>
 <a name="I:B">
 <!--   -->
@@ -266,6 +294,14 @@
 <dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/annotation/package-summary.html">com.ea.orbit.annotation</a> - package com.ea.orbit.annotation</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/package-summary.html">com.ea.orbit.async</a> - package com.ea.orbit.async</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/instrumentation/package-summary.html">com.ea.orbit.async.instrumentation</a> - package com.ea.orbit.async.instrumentation</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/processor/package-summary.html">com.ea.orbit.async.processor</a> - package com.ea.orbit.async.processor</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/runtime/package-summary.html">com.ea.orbit.async.runtime</a> - package com.ea.orbit.async.runtime</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/concurrent/package-summary.html">com.ea.orbit.concurrent</a> - package com.ea.orbit.concurrent</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/configuration/package-summary.html">com.ea.orbit.configuration</a> - package com.ea.orbit.configuration</dt>
@@ -278,6 +314,11 @@
 <dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/reflect/package-summary.html">com.ea.orbit.reflect</a> - package com.ea.orbit.reflect</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/rest/async/package-summary.html">com.ea.orbit.rest.async</a> - package com.ea.orbit.rest.async</dt>
+<dd>
+<div class="block">Tools to use <a href="http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent"><code>CompletableFuture</code></a> and <a href="com/ea/orbit/concurrent/Task.html" title="class in com.ea.orbit.concurrent"><code>Task</code></a>
+ with jax-rs rest interfaces.</div>
+</dd>
 <dt><a href="com/ea/orbit/util/package-summary.html">com.ea.orbit.util</a> - package com.ea.orbit.util</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/web/package-summary.html">com.ea.orbit.web</a> - package com.ea.orbit.web</dt>
@@ -286,6 +327,8 @@
 <dd>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html#completed-T-">completed(T)</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async">OrbitRestClient.RestInvocationCallback</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/concurrent/Task.html#completeExceptionally-java.lang.Throwable-">completeExceptionally(Throwable)</a></span> - Method in class com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/Task.html" title="class in com.ea.orbit.concurrent">Task</a></dt>
 <dd>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -312,11 +355,15 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/util/IOUtils.html#copy-java.io.Reader-java.io.File-">copy(Reader, File)</a></span> - Static method in class com.ea.orbit.util.<a href="com/ea/orbit/util/IOUtils.html" title="class in com.ea.orbit.util">IOUtils</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.html#createAsyncInvocationCallback-java.lang.reflect.Type-">createAsyncInvocationCallback(Type)</a></span> - Static method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async">OrbitRestClient</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/ClassCache.html#createClassDescriptor-java.lang.Class-">createClassDescriptor(Class&lt;T&gt;)</a></span> - Method in class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassCache.html" title="class in com.ea.orbit.reflect">ClassCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/ClassDescriptor.html#createFieldDescriptor-java.lang.reflect.Field-">createFieldDescriptor(Field)</a></span> - Method in class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassDescriptor.html" title="class in com.ea.orbit.reflect">ClassDescriptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/ClassDescriptor.html#createFieldDescriptors--">createFieldDescriptors()</a></span> - Method in class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassDescriptor.html" title="class in com.ea.orbit.reflect">ClassDescriptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.html#createFuture-java.lang.reflect.Method-">createFuture(Method)</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async">OrbitRestClient</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/injection/DependencyRegistry.html#createNew-java.lang.Class-">createNew(Class&lt;T&gt;)</a></span> - Method in class com.ea.orbit.injection.<a href="com/ea/orbit/injection/DependencyRegistry.html" title="class in com.ea.orbit.injection">DependencyRegistry</a></dt>
 <dd>&nbsp;</dd>
@@ -412,6 +459,8 @@
 </a>
 <h2 class="title">F</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html#failed-java.lang.Throwable-">failed(Throwable)</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async">OrbitRestClient.RestInvocationCallback</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/reflect/FieldDescriptor.html" title="class in com.ea.orbit.reflect"><span class="typeNameLink">FieldDescriptor</span></a> - Class in <a href="com/ea/orbit/reflect/package-summary.html">com.ea.orbit.reflect</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/FieldDescriptor.html#FieldDescriptor-java.lang.reflect.Field-">FieldDescriptor(Field)</a></span> - Constructor for class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/FieldDescriptor.html" title="class in com.ea.orbit.reflect">FieldDescriptor</a></dt>
@@ -448,6 +497,8 @@
 <dd>
 <div class="block">Creates an already completed task from the given value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html#future-java.util.concurrent.CompletableFuture-">future(CompletableFuture&lt;?&gt;)</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async">OrbitRestClient.RestInvocationCallback</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a name="I:G">
 <!--   -->
@@ -456,6 +507,10 @@
 <dl>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/container/OrbitContainer.html#get-java.lang.Class-">get(Class&lt;T&gt;)</a></span> - Method in class com.ea.orbit.container.<a href="com/ea/orbit/container/OrbitContainer.html" title="class in com.ea.orbit.container">OrbitContainer</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.html#get-java.lang.Class-">get(Class&lt;T&gt;)</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async">OrbitRestClient</a></dt>
+<dd>
+<div class="block">Returns an implementation of a jax-rs interface.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/util/ClassPath.html#get--">get()</a></span> - Static method in class com.ea.orbit.util.<a href="com/ea/orbit/util/ClassPath.html" title="class in com.ea.orbit.util">ClassPath</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/ActorReference.html#getAddress-com.ea.orbit.actors.runtime.ActorReference-">getAddress(ActorReference&lt;?&gt;)</a></span> - Static method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorReference.html" title="class in com.ea.orbit.actors.runtime">ActorReference</a></dt>
@@ -527,6 +582,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/Execution.html#getCurrentTraceId--">getCurrentTraceId()</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Execution.html" title="class in com.ea.orbit.actors.runtime">Execution</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getD-int-">getD(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/ClassDescriptor.html#getDeclaredFields--">getDeclaredFields()</a></span> - Method in class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassDescriptor.html" title="class in com.ea.orbit.reflect">ClassDescriptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/reflect/ClassDescriptor.html#getDeclaredFieldsMap--">getDeclaredFieldsMap()</a></span> - Method in class com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassDescriptor.html" title="class in com.ea.orbit.reflect">ClassDescriptor</a></dt>
@@ -534,6 +591,8 @@
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/OrbitStage.html#getExecutionPool--">getExecutionPool()</a></span> - Method in class com.ea.orbit.actors.<a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors">OrbitStage</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/Execution.html#getExecutor--">getExecutor()</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Execution.html" title="class in com.ea.orbit.actors.runtime">Execution</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getF-int-">getF(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/ActorFactoryGenerator.html#getFactoryFor-java.lang.Class-">getFactoryFor(Class&lt;T&gt;)</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorFactoryGenerator.html" title="class in com.ea.orbit.actors.runtime">ActorFactoryGenerator</a></dt>
 <dd>&nbsp;</dd>
@@ -544,6 +603,8 @@
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/TickStatus.html#getFirstTickTime--">getFirstTickTime()</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/TickStatus.html" title="class in com.ea.orbit.actors.runtime">TickStatus</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/OrbitStage.html#getHosting--">getHosting()</a></span> - Method in class com.ea.orbit.actors.<a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors">OrbitStage</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getI-int-">getI(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/ActorReference.html#getId-com.ea.orbit.actors.runtime.ActorReference-">getId(ActorReference&lt;?&gt;)</a></span> - Static method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorReference.html" title="class in com.ea.orbit.actors.runtime">ActorReference</a></dt>
 <dd>
@@ -564,6 +625,8 @@
  the IActor or IActorObserver interface implemented by this reference.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/ActorFactory.html#getInvoker--">getInvoker()</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorFactory.html" title="class in com.ea.orbit.actors.runtime">ActorFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getJ-int-">getJ(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/cluster/ClusterPeer.html#getJgroupsConfig--">getJgroupsConfig()</a></span> - Method in class com.ea.orbit.actors.cluster.<a href="com/ea/orbit/actors/cluster/ClusterPeer.html" title="class in com.ea.orbit.actors.cluster">ClusterPeer</a></dt>
 <dd>&nbsp;</dd>
@@ -593,6 +656,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/OrbitStage.html#getNodeName--">getNodeName()</a></span> - Method in class com.ea.orbit.actors.<a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors">OrbitStage</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getObj-int-">getObj(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/Execution.html#getObjectReference-java.lang.Class-T-">getObjectReference(Class&lt;T&gt;, T)</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Execution.html" title="class in com.ea.orbit.actors.runtime">Execution</a></dt>
 <dd>
 <div class="block">Installs this observer into this node.</div>
@@ -618,6 +683,8 @@
 <dt><span class="memberNameLink"><a href="com/ea/orbit/web/EmbeddedHttpServer.html#getPort--">getPort()</a></span> - Method in class com.ea.orbit.web.<a href="com/ea/orbit/web/EmbeddedHttpServer.html" title="class in com.ea.orbit.web">EmbeddedHttpServer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/cluster/ClusterPeer.html#getPortRangeLength--">getPortRangeLength()</a></span> - Method in class com.ea.orbit.actors.cluster.<a href="com/ea/orbit/actors/cluster/ClusterPeer.html" title="class in com.ea.orbit.actors.cluster">ClusterPeer</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#getPos--">getPos()</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/configuration/OrbitProperties.html#getPrefixedValues-java.lang.String-">getPrefixedValues(String)</a></span> - Method in interface com.ea.orbit.configuration.<a href="com/ea/orbit/configuration/OrbitProperties.html" title="interface in com.ea.orbit.configuration">OrbitProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -688,6 +755,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/concurrent/ConcurrentHashSet.html#hashCode--">hashCode()</a></span> - Method in class com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/ConcurrentHashSet.html" title="class in com.ea.orbit.concurrent">ConcurrentHashSet</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.html#headers--">headers()</a></span> - Method in class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async">OrbitRestClient</a></dt>
+<dd>
+<div class="block">Http Headers used for all proxies.</div>
+</dd>
 <dt><a href="com/ea/orbit/actors/runtime/Hosting.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">Hosting</span></a> - Class in <a href="com/ea/orbit/actors/runtime/package-summary.html">com.ea.orbit.actors.runtime</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/Hosting.html#Hosting--">Hosting()</a></span> - Constructor for class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Hosting.html" title="class in com.ea.orbit.actors.runtime">Hosting</a></dt>
@@ -730,7 +801,18 @@
 <dd>
 <div class="block">Listener the actor activation/deactivation process.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/Await.html#init--">init()</a></span> - Static method in interface com.ea.orbit.async.<a href="com/ea/orbit/async/Await.html" title="interface in com.ea.orbit.async">Await</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/InitializeAsync.html#init--">init()</a></span> - Static method in class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/InitializeAsync.html" title="class in com.ea.orbit.async.instrumentation">InitializeAsync</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/injection/DependencyRegistry.html#initialize-java.lang.Class-T-boolean-">initialize(Class&lt;T&gt;, T, boolean)</a></span> - Method in class com.ea.orbit.injection.<a href="com/ea/orbit/injection/DependencyRegistry.html" title="class in com.ea.orbit.injection">DependencyRegistry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/instrumentation/InitializeAsync.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">InitializeAsync</span></a> - Class in <a href="com/ea/orbit/async/instrumentation/package-summary.html">com.ea.orbit.async.instrumentation</a></dt>
+<dd>
+<div class="block">Internal class to (when necessary) attach a java agent to
+ the jvm to instrument async-await methods.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/InitializeAsync.html#InitializeAsync--">InitializeAsync()</a></span> - Constructor for class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/InitializeAsync.html" title="class in com.ea.orbit.async.instrumentation">InitializeAsync</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/container/OrbitContainer.html#inject-java.lang.Object-">inject(Object)</a></span> - Method in class com.ea.orbit.container.<a href="com/ea/orbit/container/OrbitContainer.html" title="class in com.ea.orbit.container">OrbitContainer</a></dt>
 <dd>&nbsp;</dd>
@@ -802,6 +884,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/util/StringUtils.html#isNotEmpty-java.lang.CharSequence-">isNotEmpty(CharSequence)</a></span> - Static method in class com.ea.orbit.util.<a href="com/ea/orbit/util/StringUtils.html" title="class in com.ea.orbit.util">StringUtils</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/InitializeAsync.html#isRunning--">isRunning()</a></span> - Static method in class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/InitializeAsync.html" title="class in com.ea.orbit.async.instrumentation">InitializeAsync</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/actors/providers/IStorageProvider.html" title="interface in com.ea.orbit.actors.providers"><span class="typeNameLink">IStorageProvider</span></a> - Interface in <a href="com/ea/orbit/actors/providers/package-summary.html">com.ea.orbit.actors.providers</a></dt>
 <dd>
 <div class="block">Storage providers are used by the orbit actors framework to load and store actor states.</div>
@@ -852,6 +936,8 @@
 <dd>
 <div class="block">Locates the node address of an actor.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/Await.html#logger">logger</a></span> - Static variable in interface com.ea.orbit.async.<a href="com/ea/orbit/async/Await.html" title="interface in com.ea.orbit.async">Await</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a name="I:M">
 <!--   -->
@@ -1021,6 +1107,14 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/configuration/OrbitPropertiesImpl.html#OrbitPropertiesImpl--">OrbitPropertiesImpl()</a></span> - Constructor for class com.ea.orbit.configuration.<a href="com/ea/orbit/configuration/OrbitPropertiesImpl.html" title="class in com.ea.orbit.configuration">OrbitPropertiesImpl</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async"><span class="typeNameLink">OrbitRestClient</span></a> - Class in <a href="com/ea/orbit/rest/async/package-summary.html">com.ea.orbit.rest.async</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.html#OrbitRestClient-javax.ws.rs.client.WebTarget-">OrbitRestClient(WebTarget)</a></span> - Constructor for class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async">OrbitRestClient</a></dt>
+<dd>
+<div class="block">Constructs an orbit rest client from a jax-rs WebTarget.</div>
+</dd>
+<dt><a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async"><span class="typeNameLink">OrbitRestClient.RestInvocationCallback</span></a>&lt;<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="type parameter in OrbitRestClient.RestInvocationCallback">T</a>&gt; - Class in <a href="com/ea/orbit/rest/async/package-summary.html">com.ea.orbit.rest.async</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors"><span class="typeNameLink">OrbitStage</span></a> - Class in <a href="com/ea/orbit/actors/package-summary.html">com.ea.orbit.actors</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/OrbitStage.html#OrbitStage--">OrbitStage()</a></span> - Constructor for class com.ea.orbit.actors.<a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors">OrbitStage</a></dt>
@@ -1074,6 +1168,42 @@
 <div class="block">Called immediately before invoking the actors deactivation code.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/providers/IInvokeListenerProvider.html#preInvoke-long-java.lang.String-java.lang.String-java.lang.String-java.lang.String-int-java.lang.Object:A-">preInvoke(long, String, String, String, String, int, Object[])</a></span> - Method in interface com.ea.orbit.actors.providers.<a href="com/ea/orbit/actors/providers/IInvokeListenerProvider.html" title="interface in com.ea.orbit.actors.providers">IInvokeListenerProvider</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/instrumentation/Premain.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">Premain</span></a> - Class in <a href="com/ea/orbit/async/instrumentation/package-summary.html">com.ea.orbit.async.instrumentation</a></dt>
+<dd>
+<div class="block">Class called when the jvm option -javaagent is used with the orbit-async jar.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/Premain.html#Premain--">Premain()</a></span> - Constructor for class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Premain.html" title="class in com.ea.orbit.async.instrumentation">Premain</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/instrumentation/Premain.html#premain-java.lang.String-java.lang.instrument.Instrumentation-">premain(String, Instrumentation)</a></span> - Static method in class com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Premain.html" title="class in com.ea.orbit.async.instrumentation">Premain</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/processor/Processor.html#process-java.util.Set-javax.annotation.processing.RoundEnvironment-">process(Set&lt;? extends TypeElement&gt;, RoundEnvironment)</a></span> - Method in class com.ea.orbit.async.processor.<a href="com/ea/orbit/async/processor/Processor.html" title="class in com.ea.orbit.async.processor">Processor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/ea/orbit/async/processor/Processor.html" title="class in com.ea.orbit.async.processor"><span class="typeNameLink">Processor</span></a> - Class in <a href="com/ea/orbit/async/processor/package-summary.html">com.ea.orbit.async.processor</a></dt>
+<dd>
+<div class="block">Annotation processor to detect misuses of Async</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/processor/Processor.html#Processor--">Processor()</a></span> - Constructor for class com.ea.orbit.async.processor.<a href="com/ea/orbit/async/processor/Processor.html" title="class in com.ea.orbit.async.processor">Processor</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-int-com.ea.orbit.async.runtime.AsyncAwaitState-">push(int, AsyncAwaitState)</a></span> - Static method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-long-com.ea.orbit.async.runtime.AsyncAwaitState-">push(long, AsyncAwaitState)</a></span> - Static method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-float-com.ea.orbit.async.runtime.AsyncAwaitState-">push(float, AsyncAwaitState)</a></span> - Static method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-double-com.ea.orbit.async.runtime.AsyncAwaitState-">push(double, AsyncAwaitState)</a></span> - Static method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-java.lang.Object-com.ea.orbit.async.runtime.AsyncAwaitState-">push(Object, AsyncAwaitState)</a></span> - Static method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-int-">push(int)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-long-">push(long)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-float-">push(float)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-double-">push(double)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/async/runtime/AsyncAwaitState.html#push-java.lang.Object-">push(Object)</a></span> - Method in class com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime">AsyncAwaitState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/configuration/OrbitProperties.html#put-java.lang.String-java.lang.String-">put(String, String)</a></span> - Method in interface com.ea.orbit.configuration.<a href="com/ea/orbit/configuration/OrbitProperties.html" title="interface in com.ea.orbit.configuration">OrbitProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -1181,6 +1311,8 @@
 <dd>
 <div class="block">Remove one observer</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html#RestInvocationCallback--">RestInvocationCallback()</a></span> - Constructor for class com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async">OrbitRestClient.RestInvocationCallback</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/concurrent/ConcurrentHashSet.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/ConcurrentHashSet.html" title="class in com.ea.orbit.concurrent">ConcurrentHashSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/ea/orbit/actors/runtime/ExecutionSerializer.Runner.html#run--">run()</a></span> - Method in class com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ExecutionSerializer.Runner.html" title="class in com.ea.orbit.actors.runtime">ExecutionSerializer.Runner</a></dt>

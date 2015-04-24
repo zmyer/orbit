@@ -80,12 +80,17 @@
 <li><a href="com/ea/orbit/actors/providers/package-tree.html">com.ea.orbit.actors.providers</a>, </li>
 <li><a href="com/ea/orbit/actors/runtime/package-tree.html">com.ea.orbit.actors.runtime</a>, </li>
 <li><a href="com/ea/orbit/annotation/package-tree.html">com.ea.orbit.annotation</a>, </li>
+<li><a href="com/ea/orbit/async/package-tree.html">com.ea.orbit.async</a>, </li>
+<li><a href="com/ea/orbit/async/instrumentation/package-tree.html">com.ea.orbit.async.instrumentation</a>, </li>
+<li><a href="com/ea/orbit/async/processor/package-tree.html">com.ea.orbit.async.processor</a>, </li>
+<li><a href="com/ea/orbit/async/runtime/package-tree.html">com.ea.orbit.async.runtime</a>, </li>
 <li><a href="com/ea/orbit/concurrent/package-tree.html">com.ea.orbit.concurrent</a>, </li>
 <li><a href="com/ea/orbit/configuration/package-tree.html">com.ea.orbit.configuration</a>, </li>
 <li><a href="com/ea/orbit/container/package-tree.html">com.ea.orbit.container</a>, </li>
 <li><a href="com/ea/orbit/exception/package-tree.html">com.ea.orbit.exception</a>, </li>
 <li><a href="com/ea/orbit/injection/package-tree.html">com.ea.orbit.injection</a>, </li>
 <li><a href="com/ea/orbit/reflect/package-tree.html">com.ea.orbit.reflect</a>, </li>
+<li><a href="com/ea/orbit/rest/async/package-tree.html">com.ea.orbit.rest.async</a>, </li>
 <li><a href="com/ea/orbit/util/package-tree.html">com.ea.orbit.util</a>, </li>
 <li><a href="com/ea/orbit/web/package-tree.html">com.ea.orbit.web</a></li>
 </ul>
@@ -104,6 +109,11 @@
 </li>
 </ul>
 </li>
+<li type="circle">javax.annotation.processing.<a href="http://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/AbstractProcessor.html?is-external=true" title="class or interface in javax.annotation.processing"><span class="typeNameLink">AbstractProcessor</span></a> (implements javax.annotation.processing.<a href="http://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html?is-external=true" title="class or interface in javax.annotation.processing">Processor</a>)
+<ul>
+<li type="circle">com.ea.orbit.async.processor.<a href="com/ea/orbit/async/processor/Processor.html" title="class in com.ea.orbit.async.processor"><span class="typeNameLink">Processor</span></a></li>
+</ul>
+</li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorClassFinder.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorClassFinder</span></a> (implements com.ea.orbit.actors.providers.<a href="com/ea/orbit/actors/providers/IActorClassFinder.html" title="interface in com.ea.orbit.actors.providers">IActorClassFinder</a>)</li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorFactory.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorFactory</span></a>&lt;T&gt;</li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorFactoryGenerator.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorFactoryGenerator</span></a></li>
@@ -111,6 +121,8 @@
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorKey.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorKey</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorObserver.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorObserver</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ActorReference.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ActorReference</span></a>&lt;T&gt; (implements com.ea.orbit.actors.<a href="com/ea/orbit/actors/IAddressable.html" title="interface in com.ea.orbit.actors">IAddressable</a>, java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
+<li type="circle">com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Agent.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">Agent</span></a></li>
+<li type="circle">com.ea.orbit.async.runtime.<a href="com/ea/orbit/async/runtime/AsyncAwaitState.html" title="class in com.ea.orbit.async.runtime"><span class="typeNameLink">AsyncAwaitState</span></a></li>
 <li type="circle">com.ea.orbit.container.<a href="com/ea/orbit/container/Bootstrap.html" title="class in com.ea.orbit.container"><span class="typeNameLink">Bootstrap</span></a></li>
 <li type="circle">com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassCache.html" title="class in com.ea.orbit.reflect"><span class="typeNameLink">ClassCache</span></a></li>
 <li type="circle">com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/ClassDescriptor.html" title="class in com.ea.orbit.reflect"><span class="typeNameLink">ClassDescriptor</span></a>&lt;T&gt;</li>
@@ -145,6 +157,7 @@
 <li type="circle">com.ea.orbit.concurrent.<a href="com/ea/orbit/concurrent/ExecutorUtils.html" title="class in com.ea.orbit.concurrent"><span class="typeNameLink">ExecutorUtils</span></a></li>
 <li type="circle">com.ea.orbit.reflect.<a href="com/ea/orbit/reflect/FieldDescriptor.html" title="class in com.ea.orbit.reflect"><span class="typeNameLink">FieldDescriptor</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Hosting.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">Hosting</span></a> (implements com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/IHosting.html" title="interface in com.ea.orbit.actors.runtime">IHosting</a>, com.ea.orbit.container.<a href="com/ea/orbit/container/Startable.html" title="interface in com.ea.orbit.container">Startable</a>)</li>
+<li type="circle">com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/InitializeAsync.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">InitializeAsync</span></a></li>
 <li type="circle">com.ea.orbit.util.<a href="com/ea/orbit/util/IOUtils.html" title="class in com.ea.orbit.util"><span class="typeNameLink">IOUtils</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/MessageDefinitions.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">MessageDefinitions</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/Messaging.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">Messaging</span></a> (implements com.ea.orbit.container.<a href="com/ea/orbit/container/Startable.html" title="interface in com.ea.orbit.container">Startable</a>)</li>
@@ -164,11 +177,14 @@
 </li>
 <li type="circle">com.ea.orbit.container.<a href="com/ea/orbit/container/OrbitContainer.html" title="class in com.ea.orbit.container"><span class="typeNameLink">OrbitContainer</span></a></li>
 <li type="circle">com.ea.orbit.container.<a href="com/ea/orbit/container/OrbitContainer.ComponentState.html" title="class in com.ea.orbit.container"><span class="typeNameLink">OrbitContainer.ComponentState</span></a></li>
+<li type="circle">com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.html" title="class in com.ea.orbit.rest.async"><span class="typeNameLink">OrbitRestClient</span></a></li>
+<li type="circle">com.ea.orbit.rest.async.<a href="com/ea/orbit/rest/async/OrbitRestClient.RestInvocationCallback.html" title="class in com.ea.orbit.rest.async"><span class="typeNameLink">OrbitRestClient.RestInvocationCallback</span></a>&lt;T&gt; (implements javax.ws.rs.client.InvocationCallback&lt;RESPONSE&gt;)</li>
 <li type="circle">com.ea.orbit.actors.<a href="com/ea/orbit/actors/OrbitStage.html" title="class in com.ea.orbit.actors"><span class="typeNameLink">OrbitStage</span></a> (implements com.ea.orbit.container.<a href="com/ea/orbit/container/Startable.html" title="interface in com.ea.orbit.container">Startable</a>)
 <ul>
 <li type="circle">com.ea.orbit.actors.client.<a href="com/ea/orbit/actors/client/OrbitStageClient.html" title="class in com.ea.orbit.actors.client"><span class="typeNameLink">OrbitStageClient</span></a></li>
 </ul>
 </li>
+<li type="circle">com.ea.orbit.async.instrumentation.<a href="com/ea/orbit/async/instrumentation/Premain.html" title="class in com.ea.orbit.async.instrumentation"><span class="typeNameLink">Premain</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ReferenceFactory.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ReferenceFactory</span></a> (implements com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/IReferenceFactory.html" title="interface in com.ea.orbit.actors.runtime">IReferenceFactory</a>)</li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ReminderController.State.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ReminderController.State</span></a></li>
 <li type="circle">com.ea.orbit.actors.runtime.<a href="com/ea/orbit/actors/runtime/ReminderEntry.html" title="class in com.ea.orbit.actors.runtime"><span class="typeNameLink">ReminderEntry</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
@@ -202,6 +218,7 @@
 </ul>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li type="circle">com.ea.orbit.async.<a href="com/ea/orbit/async/Await.html" title="interface in com.ea.orbit.async"><span class="typeNameLink">Await</span></a></li>
 <li type="circle">com.ea.orbit.actors.<a href="com/ea/orbit/actors/IActor.html" title="interface in com.ea.orbit.actors"><span class="typeNameLink">IActor</span></a>
 <ul>
 <li type="circle">com.ea.orbit.actors.<a href="com/ea/orbit/actors/IRemindable.html" title="interface in com.ea.orbit.actors"><span class="typeNameLink">IRemindable</span></a></li>
@@ -250,6 +267,7 @@
 <li type="circle">com.ea.orbit.annotation.<a href="com/ea/orbit/annotation/Wired.html" title="annotation in com.ea.orbit.annotation"><span class="typeNameLink">Wired</span></a> (implements java.lang.annotation.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/annotation/Annotation.html?is-external=true" title="class or interface in java.lang.annotation">Annotation</a>)</li>
 <li type="circle">com.ea.orbit.annotation.<a href="com/ea/orbit/annotation/Nullable.html" title="annotation in com.ea.orbit.annotation"><span class="typeNameLink">Nullable</span></a> (implements java.lang.annotation.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/annotation/Annotation.html?is-external=true" title="class or interface in java.lang.annotation">Annotation</a>)</li>
 <li type="circle">com.ea.orbit.annotation.<a href="com/ea/orbit/annotation/Config.html" title="annotation in com.ea.orbit.annotation"><span class="typeNameLink">Config</span></a> (implements java.lang.annotation.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/annotation/Annotation.html?is-external=true" title="class or interface in java.lang.annotation">Annotation</a>)</li>
+<li type="circle">com.ea.orbit.async.<a href="com/ea/orbit/async/Async.html" title="annotation in com.ea.orbit.async"><span class="typeNameLink">Async</span></a> (implements java.lang.annotation.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/annotation/Annotation.html?is-external=true" title="class or interface in java.lang.annotation">Annotation</a>)</li>
 </ul>
 <h2 title="Enum Hierarchy">Enum Hierarchy</h2>
 <ul>

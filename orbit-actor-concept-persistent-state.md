@@ -193,6 +193,12 @@ Source Path: actors/providers/postgresql
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-postgresql
 {% endhighlight %}
+**Memcached** 
+{% highlight xml %}
+Source Path: actors/providers/memcached
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-memcached
+{% endhighlight %}
 **JPA** 
 {% highlight xml %}
 Source Path: actors/providers/jpa

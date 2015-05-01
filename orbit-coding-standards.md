@@ -129,9 +129,9 @@ Opening braces should always be on a new line, always align the opening and clos
 
 
 {% highlight java %}
-if(someValue.equals("Ferrets")
+if(someValue.equals("Ferrets"))
 {
-    if(someOtherValue.equals("Penguins")
+    if(someOtherValue.equals("Penguins"))
     {
     }
 }

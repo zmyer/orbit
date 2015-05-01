@@ -9,35 +9,86 @@ previous: "orbit-async-overview.html"
 
 
 
--  [Starting Async](#AsyncGuide-StartingAsync)
+-  [Implementing Async](#AsyncGuide-ImplementingAsync)
+    -  [Option 1 - Runtime](#AsyncGuide-Option1-Runtime)
+    -  [Option 2 - JVM Parameter](#AsyncGuide-Option2-JVMParameter)
+    -  [Option 3 - Compile Time Instrumentation (Maven)](#AsyncGuide-Option3-CompileTimeInstrumentation_Maven_)
 -  [Using Async](#AsyncGuide-UsingAsync)
     -  [Orbit Tasks](#AsyncGuide-OrbitTasks)
     -  [CompletableFuture](#AsyncGuide-CompletableFuture)
 
 
 
-Starting Async {#AsyncGuide-StartingAsync}
+Implementing Async {#AsyncGuide-ImplementingAsync}
 ----------
 
 
-Before you can leverage the features in Orbit Async it must be started. Only a single method call is required to initialize the system, this is usually called during your application startup sequence.
+Before you can leverage the features in Orbit Async your code must be instrumented.
 
 
-Note: If your application leverages Orbit Actors or Orbit Container there is no need to initialize async manually, Orbit will initialize it during internal bootstrap.
+Note: If your application leverages Orbit Actors or Orbit Container there is no need to instrument async manually (though you are free to do so), Orbit will initialize it during bootstrap using the runtime bytecode weaving.
+
+
+There are 3 options for instrumenting your code. Please choose the most appropriate for your use case.
+
+
+###Option 1 - Runtime {#AsyncGuide-Option1-Runtime}
+
+
+On your main class or as early as possible, call at least once:
 
 
 {% highlight java %}
-import com.ea.orbit.async.Await;
- 
-class ApplicationBootstrap
-{
-    public static void main(String[] args) 
-    {
-        Await.init(); 
-        // App logic
-    }
-}
+Await.init();
 {% endhighlight %}
+
+Provided that your JVM has the capability enabled, this will start a runtime instrumentation agent.
+
+
+This is the prefered solution for testing and development, it has the least amount of configuration. If you forget to invoke this function, the first call to await will initialize the system (and print a warning).
+
+
+###Option 2 - JVM Parameter {#AsyncGuide-Option2-JVMParameter}
+
+
+Start your application with an extra JVM parameter: -javaagent:orbit-async-VERSION.jar
+
+
+{% highlight xml %}
+java -javaagent:orbit-async-VERSION.jar -cp your_claspath YourMainClass args...
+{% endhighlight %}
+
+###Option 3 - Compile Time Instrumentation (Maven) {#AsyncGuide-Option3-CompileTimeInstrumentation_Maven_}
+
+
+Use the [orbit-async-maven-plugin](https://github.com/electronicarts/orbit/blob/master/async/maven-plugin). It will instrument your classes in compile time and remove all references to await.
+
+
+This is the best option for libraries.
+
+
+{% highlight xml %}
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.ea.orbit</groupId>
+            <artifactId>orbit-async-maven-plugin</artifactId>
+            <version>${orbit.version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>instrument</goal>
+                        <goal>instrument-test</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+{% endhighlight %}
+
+ 
+
 
 Using Async {#AsyncGuide-UsingAsync}
 ----------

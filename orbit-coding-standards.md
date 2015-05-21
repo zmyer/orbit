@@ -11,8 +11,7 @@ previous: "orbit-policies.html"
 
 -  [Overview](#CodingStandards-Overview)
 -  [Naming Conventions](#CodingStandards-NamingConventions)
-    -  [Classes](#CodingStandards-Classes)
-    -  [Interfaces](#CodingStandards-Interfaces)
+    -  [Classes / Interfaces](#CodingStandards-Classes)
     -  [Enums](#CodingStandards-Enums)
     -  [Methods](#CodingStandards-Methods)
     -  [Member Variables](#CodingStandards-MemberVariables)
@@ -46,16 +45,11 @@ Naming Conventions {#CodingStandards-NamingConventions}
 
 **Use PascalCase** 
 {% highlight java %}
-public class SecurityFilter
+public interface User extends Actor
 {
 }
-{% endhighlight %}
 
-###Interfaces {#CodingStandards-Interfaces}
-
-**Use PascalCase, prefix with I** 
-{% highlight java %}
-public interface ISecurityFilter
+public class UserActor extends AbstractActor implements User
 {
 }
 {% endhighlight %}

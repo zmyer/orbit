@@ -43,10 +43,10 @@ The first thing we will do is introduce a new actor interface, the greeter.
 package com.example.orbit.hello;
  
 
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
 
-public interface IGreeter extends IActor
+public interface Greeter extends Actor
 {
     Task<String> getGreeting();
 }
@@ -66,12 +66,12 @@ Next we introduce an actor implementation for our newly created greeter.
 {% highlight java %}
 package com.example.orbit.hello;
  
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
 
 import java.util.Random;
 
-public class GreeterActor extends OrbitActor implements IGreeter
+public class GreeterActor extends AbstractActor implements Greeter
 {
     public Task<String> getGreeting()
     {
@@ -100,16 +100,16 @@ Finally we'll make a simple change to the hello world actor to use the newly int
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
  
-public class HelloActor extends OrbitActor implements IHello
+public class HelloActor extends AbstractActor implements Hello
 {
     public Task<String> sayHello(String greeting)
     {
         getLogger().info("Here: " + greeting);
 
-        IGreeter greeter = IActor.getReference(IGreeter.class, "0");
+        IGreeter greeter = Actor.getReference(Greeter.class, "0");
 
         return greeter.getGreeting().thenApply(greetResponse -> "You said: '" + greeting
                 + "', I say: " + greetResponse + " from " + System.identityHashCode(this) + " !");
@@ -121,7 +121,7 @@ public class HelloActor extends OrbitActor implements IHello
 Important Notes:
 
 
--  We use a GreeterFactory to get a reference to our greeter actor. Factories are automatically generated from the actor interface
+-  We use a Actor.getReference to get a reference to our greeter actor. 
 -  We request the greeting and then return a task which will be complete upon getting a response from the greeting actor.
 
  

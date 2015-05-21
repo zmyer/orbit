@@ -26,7 +26,7 @@ breadCrumb : ""
             -  [Actor Concept - Actors and Container](orbit-actor-concept-actors-and-container.html)
             -  [Actor Concept - Advanced Topics](orbit-actor-concept-advanced-topics.html)
                 -  [Advanced Topic - Cluster Configuration](orbit-advanced-topic-cluster-configuration.html)
-                -  [Advanced Topic - Lifetime Providers](orbit-advanced-topic-lifetime-providers.html)
+                -  [Advanced Topic - Lifetime Extensions](orbit-advanced-topic-lifetime-extensions.html)
         -  [Actor Tutorials](orbit-actor-tutorials.html)
             -  [Actor Tutorial - Hello World](orbit-actor-tutorial-hello-world.html)
             -  [Actor Tutorial - Crossing JVM Boundaries](orbit-actor-tutorial-crossing-jvm-boundaries.html)

@@ -48,11 +48,11 @@ Creating a stateless worker simply requires adding an annotation to your Actor I
 **Stateless Worker** 
 {% highlight java %}
 import com.ea.orbit.annotation.StatelessWorker;
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
 
 @StatelessWorker
-public interface ISomeStatelessWorker extends IActor
+public interface SomeStatelessWorker extends Actor
 {
     Task<String> someMethod(String message);
 }

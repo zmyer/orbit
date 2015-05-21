@@ -12,7 +12,7 @@ previous: "orbit-prerequisites.html"
 -  [Source Structure](#ProjectStructure-SourceStructure)
 -  [Maven Structure](#ProjectStructure-MavenStructure)
     -  [Core](#ProjectStructure-Core)
-    -  [Providers](#ProjectStructure-Providers)
+    -  [Extensions](#ProjectStructure-Extensions)
 
 
 
@@ -63,13 +63,17 @@ Orbit is also hosted on the maven central repository.
  
 
 
-###Providers {#ProjectStructure-Providers}
+###Extensions {#ProjectStructure-Extensions}
 
 
-| Group | Artifact | Purpose |
-|-------|----------|---------|
-| com.ea.orbit | orbit-actors-mongodb | Contains the actors MongoDB storage system |
-| com.ea.orbit | orbit-actors-postgresql | Contains the actors PostgreSQL storage system |
-| com.ea.orbit | orbit-actors-redis | Contains the actors Redis storage system |
-| com.ea.orbit | orbit-actors-spring | Contains the actors Spring project integration |
+<table>
+<tr><th> Group </th><th> Artifact </th><th> Purpose </th></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-mongodb </td><td> Contains the actors MongoDB storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-postgresql </td><td> Contains the actors PostgreSQL storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-redis </td><td> Contains the actors Redis storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-jpa </td><td> Contains the actors JPA storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-memcached </td><td> Contains the actors Memcached storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-ldap </td><td> Contains the actors LDAP storage system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-spring </td><td> Contains the actors Spring project integration </td></tr>
+</table>
 

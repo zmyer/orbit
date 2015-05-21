@@ -40,7 +40,7 @@ Actor Interface Annotations {#ActorConcept-UsefulAnnotations-ActorInterfaceAnnot
 
 {% highlight java %}
 @StatelessWorker
-public interface IMyActor extends IActor {}
+public interface MyActor extends Actor {}
 {% endhighlight %}
 
 Causes your actor to be a stateless worker. See [stateless workers](orbit-actor-concept-stateless-workers.html).
@@ -51,7 +51,7 @@ Causes your actor to be a stateless worker. See [stateless workers](orbit-actor
 
 {% highlight java %}
 @NoIdentity
-public interface IMyActor extends IActor {}
+public interface MyActor extends Actor {}
 {% endhighlight %}
 
 Denotes that this actor does not have an identity and acts as a singleton. Actor is accessed using getReference() instead of getReference(id).

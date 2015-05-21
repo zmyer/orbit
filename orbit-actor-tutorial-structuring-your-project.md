@@ -90,7 +90,7 @@ Dependencies:
 ###Actor Interfaces {#ActorTutorial-StructuringYourProject-ActorInterfaces}
 
 
-Your actor interfaces project is a simple module that contains all of the interfaces which extend IActor 
+Your actor interfaces project is a simple module that contains all of the interfaces which extend Actor 
 
 
 Dependencies:
@@ -104,7 +104,7 @@ Dependencies:
 ###Actor Implementation {#ActorTutorial-StructuringYourProject-ActorImplementation}
 
 
-Your actor implementation project is a simple module which contains all of the Orbit actor implementations which extend OrbitActor
+Your actor implementation project is a simple module which contains all of the Orbit actor implementations which extend AbstractActor
 
 
 Dependencies:

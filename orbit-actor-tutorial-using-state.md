@@ -10,7 +10,7 @@ previous: "orbit-actor-tutorial-structuring-your-project.html"
 
 
 -  [Overview](#ActorTutorial-UsingState-Overview)
--  [Choosing A Storage Provider](#ActorTutorial-UsingState-ChoosingAStorageProvider)
+-  [Choosing A Storage Extension](#ActorTutorial-UsingState-ChoosingAStorageExtension)
 -  [Actor Interface](#ActorTutorial-UsingState-ActorInterface)
 -  [Actor Implementation](#ActorTutorial-UsingState-ActorImplementation)
 -  [Using The Actor](#ActorTutorial-UsingState-UsingTheActor)
@@ -30,17 +30,17 @@ We'll store the last message that was sent, and allow that to be retrieved.
 
 
 
-Choosing A Storage Provider {#ActorTutorial-UsingState-ChoosingAStorageProvider}
+Choosing A Storage Extension {#ActorTutorial-UsingState-ChoosingAStorageExtension}
 ----------
 
 
-Orbit supports different storage providers and you are able to create one manually.
+Orbit supports different storage extensions and you are able to create one manually.
 
 
-In this example we are going to use the primary storage provider provided by the Orbit team, MongoDB.
+In this example we are going to use the primary storage extension provided by the Orbit team, MongoDB.
 
 
-In order to use the MongoDB provider, you'll need to add the following to your Maven dependencies:
+In order to use the MongoDB extension, you'll need to add the following to your Maven dependencies:
 
 
 {% highlight xml %}
@@ -63,10 +63,10 @@ First we'll make a small change to the actor example to support getting the last
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
  
-public interface IHello extends IActor
+public interface Hello extends Actor
 {
     Task<String> sayHello(String greeting);
     Task<String> getLastHello();
@@ -88,12 +88,12 @@ Next we'll adapt the actor implementation to support state
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
 import com.ea.orbit.async.Await;
 import static com.ea.orbit.async.Await.await;
  
-public class HelloActor extends OrbitActor<HelloActor.State> implements IHello
+public class HelloActor extends AbstractActor<HelloActor.State> implements Hello
 {
     public static class State
     {
@@ -121,7 +121,7 @@ public class HelloActor extends OrbitActor<HelloActor.State> implements IHello
 Important notes:
 
 
--  Notice that in this example we're passing HelloActor.State as a generic into OrbitActor. This is what makes an actor stateful.
+-  Notice that in this example we're passing HelloActor.State as a generic into AbstractActor. This is what makes an actor stateful.
 -  State can be accessed using the state() method
 -  State will automatically be retrieved on actor activation, so there is no need to read the state manually
 -  The return value is then chained so the Task will only be complete once the writeState has taken place.
@@ -139,8 +139,8 @@ The final step to get a working example is for us to actually use the actor.
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.OrbitStage;
-import com.ea.orbit.actors.providers.mongodb.MongoDBStorageProvider;
+import com.ea.orbit.actors.Stage;
+import com.ea.orbit.actors.extensions.mongodb.MongoDBStorageExtension;
 
 public class Main
 {
@@ -151,16 +151,16 @@ public class Main
         OrbitStage stage1 = initStage(clusterName, "stage1");
         OrbitStage stage2 = initStage(clusterName, "stage2");
 
-        final MongoDBStorageProvider storageProvider = new MongoDBStorageProvider();
-        storageProvider.setDatabase("database_name");
+        final MongoDBStorageExtension storageExtension = new MongoDBStorageExtension();
+        storageExtension.setDatabase("database_name");
 
-        stage1.addProvider(storageProvider);
-        stage2.addProvider(storageProvider);
+        stage1.addExtension(storageExtension);
+        stage2.addExtension(storageExtension);
 
         stage1.bind();
-        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom1 = Actor.getReference(Hello.class, "0");
         stage2.bind();
-        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom2 = Actor.getReference(Hello.class, "0");
 
         System.out.println(helloFrom1.sayHello("Hi from 01").get());
         System.out.println("Last From 2: " + helloFrom2.getLastHello().get());
@@ -170,7 +170,7 @@ public class Main
  
     public static OrbitStage initStage(String clusterId, String stageId) throws Exception
     {
-        OrbitStage stage = new OrbitStage();
+        Stagestage = new Stage();
         stage.setClusterName(clusterId);
         stage.start().join();
         return stage;
@@ -181,7 +181,7 @@ public class Main
 Important Notes:
 
 
--  The default storage provider is created as MongoDB, you can initialize any storage provider you like
+-  The default storage extension is created as MongoDB, you can initialize any storage extension you like
 -  Calls to getLastHello have been introduced
 
  

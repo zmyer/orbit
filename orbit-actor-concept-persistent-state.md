@@ -17,9 +17,9 @@ previous: "orbit-actor-concept-stages.html"
     -  [Writing State](#ActorConcept-PersistentState-WritingState)
     -  [Clearing State](#ActorConcept-PersistentState-ClearingState)
     -  [Writing State On Deactivation](#ActorConcept-PersistentState-WritingStateOnDeactivation)
--  [Storage Providers](#ActorConcept-PersistentState-StorageProviders)
-    -  [Official Providers](#ActorConcept-PersistentState-OfficialProviders)
-    -  [Contributed Providers](#ActorConcept-PersistentState-ContributedProviders)
+-  [Storage Extensions](#ActorConcept-PersistentState-StorageExtensions)
+    -  [Official Extensions](#ActorConcept-PersistentState-OfficialExtensions)
+    -  [Contributed Extensions](#ActorConcept-PersistentState-ContributedExtensions)
 
 
 
@@ -46,14 +46,14 @@ Working With State {#ActorConcept-PersistentState-WorkingWithState}
 ###Adding State {#ActorConcept-PersistentState-AddingState}
 
 
-Adding state to an actor in Orbit is simple. When extending OrbitActor the developer simply passes a state object as a generic parameter.
+Adding state to an actor in Orbit is simple. When extending AbstractActor the developer simply passes a state object as a generic parameter.
 
 
 The state object must be serializeable.
 
 **Stateful Actor** 
 {% highlight java %}
-public class StatefulActor extends OrbitActor<StatefulActor.State> implements ISomeActor
+public class StatefulActor extends AbstractActor<StatefulActor.State> implements Some
 {
     public static class State
     {
@@ -154,24 +154,24 @@ public Task deactivateAsync()
  
 
 
-Storage Providers {#ActorConcept-PersistentState-StorageProviders}
+Storage Extensions {#ActorConcept-PersistentState-StorageExtensions}
 ----------
 
 
-The underlying storage mechanism for state in Orbit is determined by the Storage Provider.
+The underlying storage mechanism for state in Orbit is determined by the Storage Extensions.
 
 
-There are multiple providers available for developers. Developers are also free to add storage providers for any provider they wish (Databases etc).
+There are multiple extensions available for developers. Developers are also free to add storage extensions for any storage system they wish (Databases etc).
 
 
  
 
 
-###Official Providers {#ActorConcept-PersistentState-OfficialProviders}
+###Official Extensions {#ActorConcept-PersistentState-OfficialExtensions}
 
 **MongoDB** 
 {% highlight xml %}
-Source Path: actors/providers/mongodb
+Source Path: actors/extensions/mongodb
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-mongodb
 {% endhighlight %}
@@ -179,29 +179,35 @@ Artifact ID: orbit-actors-mongodb
  
 
 
-###Contributed Providers {#ActorConcept-PersistentState-ContributedProviders}
+###Contributed Extensions {#ActorConcept-PersistentState-ContributedExtensions}
 
 **Redis** 
 {% highlight xml %}
-Source Path: actors/providers/redis
+Source Path: actors/extensions/redis
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-redis
 {% endhighlight %}
 **PostgreSQL** 
 {% highlight xml %}
-Source Path: actors/providers/postgresql
+Source Path: actors/extensions/postgresql
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-postgresql
 {% endhighlight %}
 **Memcached** 
 {% highlight xml %}
-Source Path: actors/providers/memcached
+Source Path: actors/extensions/memcached
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-memcached
 {% endhighlight %}
 **JPA** 
 {% highlight xml %}
-Source Path: actors/providers/jpa
+Source Path: actors/extensions/jpa
 Group ID: com.ea.orbit
 Artifact ID: orbit-actors-jpa
+{% endhighlight %}
+**LDAP** 
+{% highlight xml %}
+Source Path: actors/extensions/ldap
+Group ID: com.ea.orbit
+Artifact ID: orbit-actors-ldap
 {% endhighlight %}

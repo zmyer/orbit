@@ -25,7 +25,7 @@ Recommended Software {#Prerequisites-RecommendedSoftware}
 
 
 -  [Git](http://git-scm.com/) is required if you want to get and build the Orbit code manually
--  [MongoDB 2.6](http://www.mongodb.org/downloads) or above is required to run the Orbit samples.
+-  [MongoDB 2.6](http://www.mongodb.org/downloads) or above is required to run some of the Orbit samples.
 -  [IntelliJ IDEA](https://www.jetbrains.com/idea/) is our preferred IDE
 
  

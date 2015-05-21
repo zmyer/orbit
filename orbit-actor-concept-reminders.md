@@ -36,11 +36,11 @@ Using Reminders {#ActorConcept-Reminders-UsingReminders}
 
 **Reminder** 
 {% highlight java %}
-public static interface IMatch extends IActor, IRemindable
+public static interface Match extends Actor, Remindable
 {
     // ...
 }
-public class Match extends OrbitActor implements IMatch {
+public class MatchActor extends AbstractActor implements Match {
     private long lastEvent;
  
     @Override

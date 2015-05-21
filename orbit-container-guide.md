@@ -106,7 +106,7 @@ You can start a container manually
 
 
 {% highlight java %}
-OrbitContainer container = new OrbitContainer();
+Container container = new Container();
 {% endhighlight %}
 
 It is also possible to create and start a container using the default container bootstrap
@@ -201,7 +201,7 @@ Basic injection of components is achieved using the standard Inject annotation.
 
 {% highlight java %}
 @Inject
-OrbitContainer container;
+Container container;
 {% endhighlight %}
 
 ###Configuration Injection {#ContainerGuide-ConfigurationInjection}
@@ -230,7 +230,7 @@ If you have an object where its lifetime is managed outside of container, you ca
 
 {% highlight java %}
 @Inject
-OrbitContainer container;
+Container container;
  
 void exampleInject()
 {

@@ -52,14 +52,14 @@ Observer interfaces typically live in the same location as Actor Interfaces.
 
 **Observer Interface** 
 {% highlight java %}
-public interface ISomeObserver extends IActorObserver
+public interface SomeObserver extends ActorObserver
 {
     @OneWay
     Task someEvent(String message);
 }
 {% endhighlight %}
 
--  Observers must extend Orbit's IActorObserver interface.
+-  Observers must extend Orbit's ActorObserver interface.
 -  Like Actor Interfaces, all methods must return an Orbit Task.
 -  It is often desirable for observer messages to be [OneWay](orbit-actor-concept-useful-annotations.html).
 
@@ -73,7 +73,7 @@ The implementation of an Observer Interface is usually contained within the exte
 
 **Observer Implementation** 
 {% highlight java %}
-ISomeObserver observer = new ISomeObserver()
+SomeObserver observer = new SomeObserver()
 {
     @Override
     public Task someEvent(String message)
@@ -92,7 +92,7 @@ You are now free to use the created observer object, and pass it to an Orbit act
 
 **Register Observer** 
 {% highlight java %}
-ISomeActor actor = IActor.getReference(ISomeActor.class, "0");
+SomeActor actor = Actor.getReference(SomeActor.class, "0");
 actor.someMethod(observer).join();
 {% endhighlight %}
 
@@ -111,9 +111,9 @@ Orbit offers an observer collection named ObserverManager which can be used by a
 
 **Registering Observers** 
 {% highlight java %}
-private ObserverManager<ISomeObserver> observers = new ObserverManager<>();
+private ObserverManager<SomeObserver> observers = new ObserverManager<>();
  
-public Task someMethod(ISomeObserver observer)
+public Task someMethod(SomeObserver observer)
 {
     observers.addObserver(observer);
     return Task.done();
@@ -143,7 +143,7 @@ There are no special requirements for persisting observers. 
 
 **Persistent Observers** 
 {% highlight java %}
-public class RandomActor extends OrbitActor<RandomActor.State> implements IRandom
+public class RandomActor extends AbstractActor<RandomActor.State> implements Random
 {
     public static class State
     {

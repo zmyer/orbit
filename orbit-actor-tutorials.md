@@ -3,7 +3,7 @@ layout : page
 title : "Orbit : Actor Tutorials"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html)"
 next : "orbit-actor-tutorial-hello-world.html"
-previous: "orbit-advanced-topic-lifetime-providers.html"
+previous: "orbit-advanced-topic-lifetime-extensions.html"
 ---
 {% include JB/setup %}
 

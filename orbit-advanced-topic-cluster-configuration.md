@@ -2,7 +2,7 @@
 layout : page
 title : "Orbit : Advanced Topic - Cluster Configuration"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html) / [Actor Concepts](orbit-actor-concepts.html) / [Actor Concept - Advanced Topics](orbit-actor-concept-advanced-topics.html)"
-next : "orbit-advanced-topic-lifetime-providers.html"
+next : "orbit-advanced-topic-lifetime-extensions.html"
 previous: "orbit-actor-concept-advanced-topics.html"
 ---
 {% include JB/setup %}

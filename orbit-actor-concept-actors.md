@@ -62,16 +62,16 @@ Before you can implement an actor you must create an interface for it.
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
  
-public interface IHello extends IActor
+public interface Hello extends Actor
 {
     Task<String> sayHello(String greeting);
 }
 {% endhighlight %}
 
--  Actor interfaces must extend Orbit's IActor interface
+-  Actor interfaces must extend Orbit's Actor interface
 -  Methods in actor interfaces must return an Orbit [Task](orbit-actor-concept-tasks-and-async.html).
 
 Actor Implementations {#ActorConcept-Actors-ActorImplementations}
@@ -84,10 +84,10 @@ Once you have created an Actor, you must offer an implementation of that Actor f
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
  
-public class HelloActor extends OrbitActor implements IHello
+public class HelloActor extends AbstractActor implements Hello
 {
     public Task<String> sayHello(String greeting)
     {
@@ -100,7 +100,7 @@ public class HelloActor extends OrbitActor implements IHello
 
 {% endhighlight %}
 
--  Actor implementations must extend OrbitActor
+-  Actor implementations must extend AbstractActor
 -  Actor implementations must implement a single actor interface
 -  Only one implementation per actor interface is permitted
 
@@ -159,7 +159,7 @@ Orbit offers 2 methods that can be overridden in an actor to allow developers to
 
 **Activation Events** 
 {% highlight java %}
-public class SomeActor extends OrbitActor implements ISomeActor
+public class SomeActor extends AbstractActor implements Some
 {
     @Override
     public Task activateAsync()

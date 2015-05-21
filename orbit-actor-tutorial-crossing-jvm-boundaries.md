@@ -33,18 +33,18 @@ First we will create a Main class for the Host Stage, this is the stage that wil
 {% highlight java %}
 package com.ea.orbit.actors.samples.hello;
 
-import com.ea.orbit.actors.OrbitStage;
+import com.ea.orbit.actors.Stage;
 
 public class MainHost
 {
     public static void main(String[] args) throws Exception
     {
-    	OrbitStage stage = new OrbitStage();
+    	Stage stage = new Stage();
         stage.setClusterName("helloWorldCluster");
-        stage.setMode(OrbitStage.StageMode.HOST);
+        stage.setMode(Stage.StageMode.HOST);
         stage.start().join();
 
-        IHello helloInt = IActor.getReference(IHello.class, "0");
+        Hello helloInt = Actor.getReference(Hello.class, "0");
 
         System.out.println(helloInt.sayHello("Hi from host").get());
 			
@@ -67,18 +67,18 @@ Secondly we will create a Main class for the Front End Stage, this is the stage 
 {% highlight java %}
 package com.ea.orbit.actors.samples.hello;
 
-import com.ea.orbit.actors.OrbitStage;
+import com.ea.orbit.actors.Stage;
 
 public class MainFrontend
 {
     public static void main(String[] args) throws Exception
     {
-        OrbitStage stage = new OrbitStage();
+        Stage stage = new Stage();
         stage.setClusterName("helloWorldCluster");
         stage.setMode(OrbitStage.StageMode.FRONT_END);
         stage.start().join();
 
-        IHello helloInt = IActor.getReference(IHello.class, "0");
+        Hello helloInt = Actor.getReference(Hello.class, "0");
 
         System.out.println(helloInt.sayHello("Hi from frontend").get());
     }

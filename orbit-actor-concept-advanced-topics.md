@@ -11,6 +11,6 @@ previous: "orbit-actor-concept-actors-and-container.html"
 ----------
 
 
-[Lifetime Providers](orbit-advanced-topic-lifetime-providers.html) {#ActorConcept-AdvancedTopics-LifetimeProviders}
+[Lifetime Extensions](orbit-advanced-topic-lifetime-extensions.html) {#ActorConcept-AdvancedTopics-LifetimeExtensions}
 ----------
 

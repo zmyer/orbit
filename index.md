@@ -31,12 +31,12 @@ Orbit is primarily made up of the following components:
 
 **Actors - Java Example** 
 {% highlight java %}
-public interface IHello extends IActor
+public interface Hello extends Actor
 {
     Task<String> sayHello(String greeting);
 }
  
-public class HelloActor extends OrbitActor implements IHello
+public class HelloActor extends AbstractActor implements Hello
 {
     public Task<String> sayHello(String greeting)
     {
@@ -45,21 +45,21 @@ public class HelloActor extends OrbitActor implements IHello
     }
 }
  
-IActor.getReference(IHello.class, "0").sayHello("Meep Meep");
+Actor.getReference(Hello.class, "0").sayHello("Meep Meep");
 {% endhighlight %}
 
 **Actors - Scala Example** 
 {% highlight scala %}
-trait IHello extends IActor {
+trait Hello extends Actor {
   def sayHello(greeting: String): Task[String]
 }
 
-class HelloActor extends OrbitActor[AnyRef] with IHello {
+class HelloActor extends AbstractActor[AnyRef] with Hello {
   def sayHello(greeting: String): Task[String] = {
     getLogger.info("Here: " + greeting)
     Task.fromValue("Hello There")
   }
 }
 
-IActor.getReference(classOf[IHello], "0").sayHello("Meep Meep")
+Actor.getReference(classOf[Hello], "0").sayHello("Meep Meep")
 {% endhighlight %}

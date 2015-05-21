@@ -44,11 +44,11 @@ Like actors, the first step required to create an Observer is the creation of an
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.IActorObserver;
+import com.ea.orbit.actors.ActorObserver;
 import com.ea.orbit.annotation.OneWay;
 import com.ea.orbit.concurrent.Task;
 
-public interface IHelloObserver extends IActorObserver
+public interface HelloObserver extends ActorObserver
 {
     @OneWay
     Task saidHello(String message);
@@ -58,7 +58,7 @@ public interface IHelloObserver extends IActorObserver
 Important Notes:
 
 
--  Observers must extend IActorObserver
+-  Observers must extend ActorObserver
 -  Like actor interfaces, every method must return an Orbit Task.
 
  
@@ -74,13 +74,13 @@ Next we'll just create an actor interface similar to our previous examples
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
  
-public interface IHello extends IActor
+public interface Hello extends Actor
 {
     Task<String> sayHello(String greeting);
-    Task registerObserver(IHelloObserver observer);
+    Task registerObserver(HelloObserver observer);
 }
 {% endhighlight %}
 
@@ -102,13 +102,13 @@ Next we'll adapt the actor implementation to use the observer system
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.actors.ObserverManager;
 import com.ea.orbit.concurrent.Task;
  
-public class HelloActor extends OrbitActor implements IHello
+public class HelloActor extends AbstractActor implements Hello
 {
-	private ObserverManager<IHelloObserver> observers = new ObserverManager<>();
+	private ObserverManager<HelloObserver> observers = new ObserverManager<>();
  
     public Task<String> sayHello(String greeting)
     {
@@ -144,7 +144,7 @@ We'll now use our actor with an observer
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.OrbitStage;
+import com.ea.orbit.actors.Stage;
 import com.ea.orbit.concurrent.Task;
 
 public class Main
@@ -152,15 +152,15 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         final String clusterName = "helloWorldCluster." + System.currentTimeMillis();
-        OrbitStage stage1 = initStage(clusterName, "stage1");
-        OrbitStage stage2 = initStage(clusterName, "stage2");
+        Stage stage1 = initStage(clusterName, "stage1");
+        Stage stage2 = initStage(clusterName, "stage2");
  
         stage1.bind();
-        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom1 = Actor.getReference(Hello.class, "0");
         stage2.bind();
-        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom2 = Actor.getReference(Hello.class, "0");
  
-        IHelloObserver observer = new IHelloObserver()
+        HelloObserver observer = new HelloObserver()
         {
             @Override
             public Task saidHello(String message)
@@ -174,9 +174,9 @@ public class Main
         System.out.println(helloFrom2.sayHello("Hi from 02").get());
     }
  
-    public static OrbitStage initStage(String clusterId, String stageId) throws Exception
+    public static Stage initStage(String clusterId, String stageId) throws Exception
     {
-        OrbitStage stage = new OrbitStage();
+        Stage stage = new Stage();
         stage.setClusterName(clusterId);
         stage.start().join();
         return stage;
@@ -187,8 +187,8 @@ public class Main
 Important notes:
 
 
--  We have introduced an implementation of the IHelloObserver
--  We register the observer with the IHello actor by calling registerObserver and wait for the result
+-  We have introduced an implementation of the HelloObserver
+-  We register the observer with the Hello actor by calling registerObserver and wait for the result
 
  
 

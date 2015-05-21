@@ -72,10 +72,10 @@ In Orbit all actors must have an interface, below we'll create a very simple act
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.IActor;
+import com.ea.orbit.actors.Actor;
 import com.ea.orbit.concurrent.Task;
  
-public interface IHello extends IActor
+public interface Hello extends Actor
 {
     Task<String> sayHello(String greeting);
 }
@@ -85,7 +85,7 @@ Important notes:
 
 
 -  Actor interfaces are standard Java interfaces with special constraints
--  All Actor interfaces must extend IActor
+-  All Actor interfaces must extend Actor
 -  All interface methods must return a promise in the form of a Task.
 -  The Future type (if any) must be serializable.
 
@@ -102,10 +102,10 @@ Once you have an actor interface in place, the final step to complete the actor 
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.runtime.OrbitActor;
+import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
  
-public class HelloActor extends OrbitActor implements IHello
+public class HelloActor extends AbstractActor implements Hello
 {
     public Task<String> sayHello(String greeting)
     {
@@ -122,11 +122,11 @@ Important notes:
 
 
 -  An actor implementation is a standard Java class
--  All actors must extend OrbitActor
+-  All actors must extend AbstractActor
 -  The actor must implement an actor interface
 -  Only one actor implementation per actor interface is permitted
 -  There is a built in logger that can be retrieved with getLogger()
--  The actor can return any valid Java future. There is no requirement to use an Orbit specific promise.
+-  The must return an Orbit Task.
 
  
 
@@ -141,19 +141,19 @@ The final step to get a working example is for us to actually use the actor.
 {% highlight java %}
 package com.example.orbit.hello;
 
-import com.ea.orbit.actors.OrbitStage;
+import com.ea.orbit.actors.Stage;
 
 public class Main
 {
     public static void main(String[] args) throws Exception
     {
-        OrbitStage stage1 = initStage(clusterName, "stage1");
-        OrbitStage stage2 = initStage(clusterName, "stage2");
+        Stage stage1 = initStage(clusterName, "stage1");
+        Stage stage2 = initStage(clusterName, "stage2");
  
         stage1.bind();
-        IHello helloFrom1 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom1 = Actor.getReference(Hello.class, "0");
         stage2.bind()
-        IHello helloFrom2 = IActor.getReference(IHello.class, "0");
+        Hello helloFrom2 = Actor.getReference(Hello.class, "0");
  
         System.out.println(helloFrom1.sayHello("Hi from 01").get());
         System.out.println(helloFrom2.sayHello("Hi from 02").get());
@@ -162,7 +162,7 @@ public class Main
  
     public static OrbitStage initStage(String clusterId, String stageId) throws Exception
     {
-        OrbitStage stage = new OrbitStage();
+        Stage stage = new Stage();
         stage.setClusterName(clusterId);
         stage.start().join();
         return stage;
@@ -174,7 +174,7 @@ Important notes:
 
 
 -  We create two orbit stages (actor execution environments) in the same cluster
--  We get a reference to the same actor on both stages by binding and using IActor.getReference and providing the same identifier.
+-  We get a reference to the same actor on both stages by binding and using Actor.getReference and providing the same identifier.
 -  The framework will handle the creation of the actor in one of the stages
 -  You can communicate with the actor regardless of which stage it actually lives in.
 

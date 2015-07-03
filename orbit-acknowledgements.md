@@ -41,6 +41,7 @@ Foundation {#Acknowledgements-Foundation}
 -  [Logback](http://logback.qos.ch/)
 -  [Jackson](https://github.com/FasterXML/jackson)
 -  [SnakeYAML](https://code.google.com/p/snakeyaml/)
+-  [Dropwizard Metrics](https://dropwizard.github.io/metrics/3.1.0/)
 
  
 

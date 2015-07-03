@@ -11,7 +11,7 @@ previous: "orbit-policies.html"
 
 -  [Overview](#CodingStandards-Overview)
 -  [Naming Conventions](#CodingStandards-NamingConventions)
-    -  [Classes / Interfaces](#CodingStandards-Classes)
+    -  [Classes / Interfaces](#CodingStandards-Classes_Interfaces)
     -  [Enums](#CodingStandards-Enums)
     -  [Methods](#CodingStandards-Methods)
     -  [Member Variables](#CodingStandards-MemberVariables)
@@ -41,14 +41,14 @@ Naming Conventions {#CodingStandards-NamingConventions}
 ----------
 
 
-###Classes {#CodingStandards-Classes}
+###Classes / Interfaces {#CodingStandards-Classes_Interfaces}
 
 **Use PascalCase** 
 {% highlight java %}
 public interface User extends Actor
 {
 }
-
+ 
 public class UserActor extends AbstractActor implements User
 {
 }

@@ -9,6 +9,7 @@ previous: "orbit-public-documentation.html"
 
 | Version | Release | Notes |
 |---------|---------|-------|
+| 0.4.1 | July 7th 2015 | [Release Notes](https://github.com/electronicarts/orbit/releases/tag/v0.4.1) |
 | 0.4.0 | July 3rd 2015 | [Release Notes](https://github.com/electronicarts/orbit/releases/tag/v0.4.0) |
 | 0.3.1 | May 29th 2015 | [Release Notes](https://github.com/electronicarts/orbit/releases/tag/v0.3.1) |
 | 0.3.0 | May 21st 2015 | [Release Notes](https://github.com/electronicarts/orbit/releases/tag/v0.3.0) |

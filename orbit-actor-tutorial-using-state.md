@@ -59,7 +59,7 @@ Actor Interface {#ActorTutorial-UsingState-ActorInterface}
 
 First we'll make a small change to the actor example to support getting the last message.
 
-**IHello.java** 
+**Hello.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 

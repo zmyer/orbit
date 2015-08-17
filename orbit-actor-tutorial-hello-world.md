@@ -68,7 +68,7 @@ Actor Interface {#ActorTutorial-HelloWorld-ActorInterface}
 
 In Orbit all actors must have an interface, below we'll create a very simple actor interface.
 
-**IHello.java** 
+**Hello.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 

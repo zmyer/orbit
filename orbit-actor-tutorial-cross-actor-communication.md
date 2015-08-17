@@ -38,7 +38,7 @@ Greeter Interface {#ActorTutorial-CrossActorCommunication-GreeterInterface}
 
 The first thing we will do is introduce a new actor interface, the greeter.
 
-**IGreeter.java** 
+**Greeter.java** 
 {% highlight java %}
 package com.example.orbit.hello;
  

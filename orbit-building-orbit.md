@@ -14,6 +14,7 @@ previous: "orbit-project-structure.html"
 -  [Getting The Code](#BuildingOrbit-GettingTheCode)
 -  [Building The Code](#BuildingOrbit-BuildingTheCode)
     -  [Optional Features](#BuildingOrbit-OptionalFeatures)
+        -  [Storage Extensions](#BuildingOrbit-StorageExtensions)
 -  [Common Failures](#BuildingOrbit-CommonFailures)
     -  [Maven/Java Misconfiguration](#BuildingOrbit-Maven_JavaMisconfiguration)
 
@@ -84,16 +85,11 @@ You are able to specify optional features to build using Maven profiles. i.e. "m
 {% highlight xml %}
 withScala
 {% endhighlight %}
-**Test MongoDB** 
-{% highlight xml %}
-withMongoTests
-{% endhighlight %}
-**Test PostgreSQL** 
-{% highlight xml %}
-withPostgresTests
-{% endhighlight %}
 
- 
+####Storage Extensions {#BuildingOrbit-StorageExtensions}
+
+
+By default storage extensions are built but they are not tested. You can enable the tests using a Maven Profile. See [Persistent State ](Qorbit-actor-concept-persistent-state.htmlE#ActorConcept-PersistentState-StorageExtensions)for a list of available extensions.
 
 
 Common Failures {#BuildingOrbit-CommonFailures}

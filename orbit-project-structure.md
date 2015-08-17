@@ -12,7 +12,6 @@ previous: "orbit-prerequisites.html"
 -  [Source Structure](#ProjectStructure-SourceStructure)
 -  [Maven Structure](#ProjectStructure-MavenStructure)
     -  [Core](#ProjectStructure-Core)
-    -  [Extensions](#ProjectStructure-Extensions)
 
 
 
@@ -25,15 +24,17 @@ Orbit is organized into a set of folders which contain the high level systems.
 
 <table>
 <tr><th> Component </th><th> Path </th><th> Purpose </th></tr>
-<tr><td> Actors </td><td> /actors </td><td> Orbit Actors is a framework to write distributed systems using virtual actors. It abstracts much of the work that programmers are usually required to perform in order to work with distributed actors such state management, actor addressability and actor lifetime.  </td></tr>
+<tr><td> Actors </td><td> /actors </td><td> A framework to write distributed systems using virtual actors. </td></tr>
+<tr><td> Async </td><td> /async </td><td> async-await methods for the JVM. </td></tr>
 <tr><td> Container </td><td> /container </td><td>
 
-Orbit Container is a minimal inversion of control container designed to make writing and managing applications easier by simplifying object injection, service location, application configuration and dependency management. It abstracts the implementation details of the underlying technology away from programmers and operations engineers who are able to develop and maintain different technologies with a unified interface. 
+A minimal inversion of control container for building online services.
 
  </td></tr>
-<tr><td> Web </td><td> /web </td><td> Orbit Web is a basic implementation of a web service container for Orbit Applications, it uses Jetty and Jersey and offers HTTP and WebSocket endpoints. </td></tr>
-<tr><td> Commons </td><td> /commons </td><td> Orbit Commons contains common helper and utility classes which are used across multiple Orbit modules. </td></tr>
-<tr><td> Samples </td><td> /samples </td><td> Samples contains the samples which demonstrate the use of the Orbit stack. </td></tr>
+<tr><td> Utils </td><td> /utils </td><td> A set of utils to help simplify various tasks on the JVM </td></tr>
+<tr><td> Web </td><td> /web </td><td> A lightweight HTTP and Websockets container for Orbit, powered by Jetty. </td></tr>
+<tr><td> Commons </td><td> /commons </td><td> Various common utilities used by Orbit. </td></tr>
+<tr><td> Samples </td><td> /samples </td><td> Samples which demonstrate the use of the Orbit stack. </td></tr>
 </table>
 
 
@@ -50,30 +51,14 @@ Orbit is also hosted on the maven central repository.
 ###Core {#ProjectStructure-Core}
 
 
-| Group | Artifact | Purpose |
-|-------|----------|---------|
-| com.ea.orbit | orbit-actors-all | Contains the full actor framework |
-| com.ea.orbit | orbit-container | Contains the container system |
-| com.ea.orbit | orbit-web | Contains the web system |
-| com.ea.orbit | orbit-commons | Contains the common utils |
-| com.ea.orbit | orbit-actors-* | Contains the various individual actor systems |
-| com.ea.orbit.samples | orbit-* | Contains the samples |
-
-
- 
-
-
-###Extensions {#ProjectStructure-Extensions}
-
-
 <table>
 <tr><th> Group </th><th> Artifact </th><th> Purpose </th></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-mongodb </td><td> Contains the actors MongoDB storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-postgresql </td><td> Contains the actors PostgreSQL storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-redis </td><td> Contains the actors Redis storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-jpa </td><td> Contains the actors JPA storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-memcached </td><td> Contains the actors Memcached storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-ldap </td><td> Contains the actors LDAP storage system </td></tr>
-<tr><td> com.ea.orbit </td><td> orbit-actors-spring </td><td> Contains the actors Spring project integration </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-all </td><td> Contains the full actor framework </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-actors-* </td><td> Contains the various individual actor systems </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-async </td><td> Contains the async-await system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-container </td><td> Contains the container system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-web </td><td> Contains the web system </td></tr>
+<tr><td> com.ea.orbit </td><td> orbit-commons </td><td> Contains the common utils </td></tr>
+<tr><td> com.ea.orbit.samples </td><td> orbit-* </td><td> Contains the samples </td></tr>
 </table>
 

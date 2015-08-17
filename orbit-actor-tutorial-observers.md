@@ -40,7 +40,7 @@ Observer Interface {#ActorTutorial-Observers-ObserverInterface}
 
 Like actors, the first step required to create an Observer is the creation of an interface.
 
-**IHelloObserver.java** 
+**HelloObserver.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 
@@ -70,7 +70,7 @@ Actor Interface {#ActorTutorial-Observers-ActorInterface}
 
 Next we'll just create an actor interface similar to our previous examples
 
-**IHello.java** 
+**Hello.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 

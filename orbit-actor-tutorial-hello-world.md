@@ -38,7 +38,7 @@ Maven Project {#ActorTutorial-HelloWorld-MavenProject}
 The first step is to set up a Maven project that is able to pull in the Orbit dependencies.
 
 
-Replace [ORBIT-VERSION] with the latest version of Orbit (see [Release Notes](orbit-release-notes.html)).
+Replace [ORBIT-VERSION] with the latest version of Orbit (see [Releases](https://github.com/electronicarts/orbit/releases)).
 
 **pom.xml** 
 {% highlight xml %}

@@ -89,7 +89,7 @@ withScala
 ####Storage Extensions {#BuildingOrbit-StorageExtensions}
 
 
-By default storage extensions are built but they are not tested. You can enable the tests using a Maven Profile. See [Persistent State ](orbit-actor-concept-persistent-state.html)for a list of available extensions.
+By default storage extensions are built but they are not tested. You can enable the tests using a Maven Profile. See [persistent state](orbit-actor-concept-persistent-state.html)for a list of available extensions.
 
 
 Common Failures {#BuildingOrbit-CommonFailures}

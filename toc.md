@@ -6,7 +6,6 @@ breadCrumb : ""
 {% include JB/setup %}
 
 -  [Public Documentation](orbit-public-documentation.html)
-    -  [Release Notes](orbit-release-notes.html)
     -  [Getting Started](orbit-getting-started.html)
         -  [Prerequisites](orbit-prerequisites.html)
         -  [Project Structure](orbit-project-structure.html)

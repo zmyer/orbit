@@ -2,13 +2,9 @@
 layout : page
 title : "Orbit : Public Documentation"
 breadCrumb : "[Orbit](index.html)"
-next : "orbit-release-notes.html"
+next : "orbit-getting-started.html"
 ---
 {% include JB/setup %}
-
-[Release Notes](orbit-release-notes.html) {#PublicDocumentation-ReleaseNotesRelease-Notes_95848038_html}
-----------
-
 
 [Getting Started](orbit-getting-started.html) {#PublicDocumentation-GettingStartedGetting-Started_95848140_html}
 ----------

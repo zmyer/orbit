@@ -3,7 +3,7 @@ layout : page
 title : "Orbit : Acknowledgements"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html)"
 next : "http://www.atlassian.com/"
-previous: "orbit-coding-standards.html"
+previous: "orbit-submission-policy.html"
 ---
 {% include JB/setup %}
 

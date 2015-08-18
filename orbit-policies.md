@@ -10,3 +10,11 @@ previous: "orbit-sample-chat.html"
 [Coding Standards](orbit-coding-standards.html) {#Policies-CodingStandardsCoding-Standards_99026657_html}
 ----------
 
+
+[Branching Procedures](orbit-branching-procedures.html) {#Policies-BranchingProceduresBranching-Procedures_115933884_html}
+----------
+
+
+[Submission Policy](orbit-submission-policy.html) {#Policies-SubmissionPolicySubmission-Policy_115933881_html}
+----------
+

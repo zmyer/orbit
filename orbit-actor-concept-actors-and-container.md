@@ -41,7 +41,7 @@ Using Container with Actors is very simple, there are only two requirements:
 
 **Starting Container** 
 {% highlight java %}
-final Container container = new ontainer();
+final Container container = new Container();
 container.start();
 {% endhighlight %}
 

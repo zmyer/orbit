@@ -126,7 +126,6 @@ Important notes:
 -  The actor must implement an actor interface
 -  Only one actor implementation per actor interface is permitted
 -  There is a built in logger that can be retrieved with getLogger()
--  The must return an Orbit Task.
 
  
 

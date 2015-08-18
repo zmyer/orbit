@@ -47,4 +47,6 @@ breadCrumb : ""
         -  [Sample - Chat](orbit-sample-chat.html)
     -  [Policies](orbit-policies.html)
         -  [Coding Standards](orbit-coding-standards.html)
+        -  [Branching Procedures](orbit-branching-procedures.html)
+        -  [Submission Policy](orbit-submission-policy.html)
     -  [Acknowledgements](orbit-acknowledgements.html)

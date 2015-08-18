@@ -20,7 +20,7 @@ Overview {#Metrics-Overview}
 ----------
 
 
-Orbit Metrics is a wrapper for the Dropwizard Metrics library. Once the MetricsManager is initialized with one or more Reporters, you can register objects contaning annotated fields or methods for export.
+Orbit Metrics is a wrapper for the [Dropwizard Metrics](https://dropwizard.github.io/metrics/) library. Once the MetricsManager is initialized with one or more Reporters, you can register objects contaning annotated fields or methods for export.
 
 
 An Orbit Container module is provided to initialize the MetricsManager using the orbit.yaml config file.

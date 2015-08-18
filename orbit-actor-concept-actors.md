@@ -58,7 +58,7 @@ Actor Interfaces {#ActorConcept-Actors-ActorInterfaces}
 
 Before you can implement an actor you must create an interface for it.
 
-**IHello.java** 
+**Hello.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 
@@ -80,14 +80,14 @@ Actor Implementations {#ActorConcept-Actors-ActorImplementations}
 
 Once you have created an Actor, you must offer an implementation of that Actor for Orbit to use.
 
-**HelloActor.java** 
+**Hello.java** 
 {% highlight java %}
 package com.example.orbit.hello;
 
 import com.ea.orbit.actors.runtime.AbstractActor;
 import com.ea.orbit.concurrent.Task;
  
-public class HelloActor extends AbstractActor implements Hello
+public class Hello extends AbstractActor implements Hello
 {
     public Task<String> sayHello(String greeting)
     {

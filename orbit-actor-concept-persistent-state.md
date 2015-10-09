@@ -2,7 +2,7 @@
 layout : page
 title : "Orbit : Actor Concept - Persistent State"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html) / [Actor Concepts](orbit-actor-concepts.html)"
-next : "orbit-actor-concept-stateless-workers.html"
+next : "orbit-actor-concept-active-record-state.html"
 previous: "orbit-actor-concept-stages.html"
 ---
 {% include JB/setup %}
@@ -11,12 +11,8 @@ previous: "orbit-actor-concept-stages.html"
 
 -  [Overview](#ActorConcept-PersistentState-Overview)
 -  [Working With State](#ActorConcept-PersistentState-WorkingWithState)
-    -  [Adding State](#ActorConcept-PersistentState-AddingState)
-    -  [Accessing State](#ActorConcept-PersistentState-AccessingState)
-    -  [Retrieving State](#ActorConcept-PersistentState-RetrievingState)
-    -  [Writing State](#ActorConcept-PersistentState-WritingState)
-    -  [Clearing State](#ActorConcept-PersistentState-ClearingState)
-    -  [Writing State On Deactivation](#ActorConcept-PersistentState-WritingStateOnDeactivation)
+    -  [Active Record](#ActorConcept-PersistentState-ActiveRecord)
+    -  [Event Sourcing](#ActorConcept-PersistentState-EventSourcing)
 -  [Storage Extensions](#ActorConcept-PersistentState-StorageExtensions)
     -  [Official Extensions](#ActorConcept-PersistentState-OfficialExtensions)
     -  [Contributed Extensions](#ActorConcept-PersistentState-ContributedExtensions)
@@ -39,117 +35,45 @@ State is automatically retrieved when an actor is activated. Writing state is de
 Interaction with most state methods will result in a standard Orbit Task being returned.
 
 
+ 
+
+
 Working With State {#ActorConcept-PersistentState-WorkingWithState}
 ----------
 
 
-###Adding State {#ActorConcept-PersistentState-AddingState}
+There are two methods for interacting with state in Orbit.
 
-
-Adding state to an actor in Orbit is simple. When extending AbstractActor the developer simply passes a state object as a generic parameter.
-
-
-The state object must be serializeable.
-
-**Stateful Actor** 
-{% highlight java %}
-public class StatefulActor extends AbstractActor<StatefulActor.State> implements Some
-{
-    public static class State
-    {
-        String lastMessage;
-    }
-}
-{% endhighlight %}
 
  
 
 
-###Accessing State {#ActorConcept-PersistentState-AccessingState}
+###Active Record {#ActorConcept-PersistentState-ActiveRecord}
 
 
-Accessing state in a stateful actor is simple. The state methods provides access to the current state.
+Active Record state stores the entire current state of the Actor.
 
-**Accessing State** 
-{% highlight java %}
-public Task doSomeState()
-{
-    System.out.println(state().lastMessage);
-    state().lastMessage = "Meep";
-    return Task.done();
-}
-{% endhighlight %}
+
+State changes overwrite the existing state.
+
+
+Learn more about active record [here](orbit-actor-concept-active-record-state.html).
+
 
  
 
 
-###Retrieving State {#ActorConcept-PersistentState-RetrievingState}
+###Event Sourcing {#ActorConcept-PersistentState-EventSourcing}
 
 
-State is automatically retrieved when an actor is activated.
+Event Sourced state stores the history of an Actor's state by recording Events which change the Actor's state.
 
 
-Developers can also manually re-retrieve the state using the readState method.
-
-**Retrieving State** 
-{% highlight java %}
-public Task doReadState()
-{
-    await(readState());
-    // New state is accessible here	
-    return Task.done();
-}
-{% endhighlight %}
-
- 
+Events can be replayed to recover the current valid state for the Actor.
 
 
-###Writing State {#ActorConcept-PersistentState-WritingState}
+Learn more about event sourcing [here](orbit-actor-concept-event-sourced-state.html).
 
-
-The writing is of State is determined only by developers, Orbit will not automatically write state.
-
-**Writing State** 
-{% highlight java %}
-public Task doWriteState()
-{
-    return writeState();
-}
-{% endhighlight %}
-
- 
-
-
-###Clearing State {#ActorConcept-PersistentState-ClearingState}
-
-
-While actors are never created or destroyed in Orbit, developers can choose to clear an actors state if they wish.
-
-**Clearing State** 
-{% highlight java %}
-public Task doClearState()
-{
-    return clearState();
-}
-{% endhighlight %}
-
- 
-
-
-###Writing State On Deactivation {#ActorConcept-PersistentState-WritingStateOnDeactivation}
-
-
-Sometimes it is desirable to write state on actor deactivation, this ensures that the latest state is persisted once the actor has been deactivated.
-
-**Writing State on Deactivation** 
-{% highlight java %}
-@Override
-public Task deactivateAsync()
-{
-    await(writeState());
-    return super.deactivateAsync();
-}
-{% endhighlight %}
 
  
 

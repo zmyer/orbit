@@ -3,7 +3,7 @@ layout : page
 title : "Orbit : Actor Concept - Stateless Workers"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html) / [Actor Concepts](orbit-actor-concepts.html)"
 next : "orbit-actor-concept-timers.html"
-previous: "orbit-actor-concept-persistent-state.html"
+previous: "orbit-actor-concept-distributed-transactions.html"
 ---
 {% include JB/setup %}
 

@@ -23,6 +23,10 @@ previous: "orbit-actor-overview.html"
 ----------
 
 
+[Distributed Transactions](orbit-actor-concept-distributed-transactions.html) {#ActorConcepts-DistributedTransactions}
+----------
+
+
 [Stateless Workers](orbit-actor-concept-stateless-workers.html) {#ActorConcepts-StatelessWorkers}
 ----------
 

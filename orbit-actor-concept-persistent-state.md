@@ -32,9 +32,6 @@ In Orbit actor state is typically handled as part of the system itself rather th
 State is automatically retrieved when an actor is activated. Writing state is developer defined.
 
 
-Interaction with most state methods will result in a standard Orbit Task being returned.
-
-
  
 
 
@@ -66,7 +63,7 @@ Learn more about active record [here](orbit-actor-concept-active-record-state.h
 ###Event Sourcing {#ActorConcept-PersistentState-EventSourcing}
 
 
-Event Sourced state stores the history of an Actor's state by recording Events which change the Actor's state.
+Event Sourced state stores the history of an Actor's state by recording Events which changed the Actor's state.
 
 
 Events can be replayed to recover the current valid state for the Actor.

@@ -8,7 +8,7 @@ previous: "orbit-actor-concept-persistent-state.html"
 {% include JB/setup %}
 
 
--  [](#ActorConcept-ActiveRecordState-)
+
 -  [Overview](#ActorConcept-ActiveRecordState-Overview)
 -  [Working with Active Record](#ActorConcept-ActiveRecordState-WorkingwithActiveRecord)
     -  [Adding State](#ActorConcept-ActiveRecordState-AddingState)
@@ -17,8 +17,7 @@ previous: "orbit-actor-concept-persistent-state.html"
     -  [Writing State](#ActorConcept-ActiveRecordState-WritingState)
     -  [Clearing State](#ActorConcept-ActiveRecordState-ClearingState)
     -  [Writing State On Deactivation](#ActorConcept-ActiveRecordState-WritingStateOnDeactivation)
- {#ActorConcept-ActiveRecordState-_____CDATA___div_rbtoc1444424827285_padding_0px__div_rbtoc1444424827285ul_list-style_disc_margin-left_0px__div_rbtoc1444424827285li_margin-left_0px_padding-left_0px__________ActorConcept-ActiveRecordState-Overview_ActorConce}
-----------
+
 
 
 Overview {#ActorConcept-ActiveRecordState-Overview}

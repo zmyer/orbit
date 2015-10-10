@@ -21,10 +21,10 @@ Overview {#ActorConcept-DistributedTransactions-Overview}
 ----------
 
 
-Distributed Transactions in Orbit allow developers coordinate transactions between various Orbit actors providing full rollback support.
+Distributed Transactions in Orbit allow developers coordinate actions between various Orbit actors with the ability to rollback those actions in the event of a failure.
 
 
-For instance, if a developers wishes to deduct currency from a user and then grant an item and these actions happens in different actors, distributed transactions would allow the developer to rollback to currency deduction if the item grant failed.
+For instance, if a developer wishes to deduct currency from a user and then grant an item and these actions happens in different actors, distributed transactions would allow the developer to rollback to currency deduction if the item grant failed.
 
 
  
@@ -37,10 +37,10 @@ Using Distributed Transactions {#ActorConcept-DistributedTransactions-UsingDistr
 ###Support {#ActorConcept-DistributedTransactions-Support}
 
 
-Distributed Transactions are only supported by actors which implement Transactional. 
+Distributed Transactions are currently only supported by actors which implement Transactional. 
 
 
-Out of the box, Orbit only supports Distributed Transactions when using the[ Event Sourcing](orbit-actor-concept-event-sourced-state.html) persistence model. Developers are free to implement support for transactions in actors manually by implementing Transactional manually.
+Out of the box, Orbit only supports Distributed Transactions when using the[ Event Sourcing](orbit-actor-concept-event-sourced-state.html) persistence model without any further work required from the application developer. Developers are free to implement support for transactions in actors manually by implementing Transactional manually.
 
 
  
@@ -84,7 +84,7 @@ public class BankActor extends EventSourcedActor<BankActor.State> implements Ban
 Complex transactions rely on each individual transaction to be wrapped in in a higher level transaction.
 
 
-Transactions must wait for nested transactions to complete, this can be achieved using await.
+Transactions must wait for nested transactions to complete, this can be achieved using await. A more efficient implementation would send both messages in parallel and then await the response of both. 
 
 **Complex Transaction** 
 {% highlight java %}

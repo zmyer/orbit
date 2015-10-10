@@ -8,25 +8,25 @@ previous: "orbit-actor-concept-active-record-state.html"
 {% include JB/setup %}
 
 
--  [](#ActorConcept-EventSourcedState-)
+
 -  [Overview](#ActorConcept-EventSourcedState-Overview)
 -  [Working with Event Sourcing](#ActorConcept-EventSourcedState-WorkingwithEventSourcing)
     -  [Adding State](#ActorConcept-EventSourcedState-AddingState)
     -  [Adding Events](#ActorConcept-EventSourcedState-AddingEvents)
+    -  [Retrieving State](#ActorConcept-EventSourcedState-RetrievingState)
     -  [Accessing State](#ActorConcept-EventSourcedState-AccessingState)
     -  [Executing an Event](#ActorConcept-EventSourcedState-ExecutinganEvent)
     -  [Writing State](#ActorConcept-EventSourcedState-WritingState)
     -  [Clearing State](#ActorConcept-EventSourcedState-ClearingState)
     -  [Writing State On Deactivation](#ActorConcept-EventSourcedState-WritingStateOnDeactivation)
- {#ActorConcept-EventSourcedState-_____CDATA___div_rbtoc1444424827385_padding_0px__div_rbtoc1444424827385ul_list-style_disc_margin-left_0px__div_rbtoc1444424827385li_margin-left_0px_padding-left_0px__________ActorConcept-EventSourcedState-Overview_ActorConce}
-----------
+
 
 
 Overview {#ActorConcept-EventSourcedState-Overview}
 ----------
 
 
-Event Sourced state stores the history of an Actor's state by recording Events which change the Actor's state.
+Event Sourced state stores the history of an Actor's state by recording Events which changed the Actor's state.
 
 
 Events can be replayed to recover the current valid state for the Actor.
@@ -42,10 +42,10 @@ Working with Event Sourcing {#ActorConcept-EventSourcedState-WorkingwithEventSou
 ###Adding State {#ActorConcept-EventSourcedState-AddingState}
 
 
-Adding Event Souced state to an actor in Orbit is simple. Developers simply extend EventSourceActor in place of AbstractrActor, passing a generic which extends TransactionalState as the state object.
+Adding Event Souced state to an actor in Orbit is simple. Developers simply extend EventSourceActor in place of AbstractActor, passing a generic which extends TransactionalState as the state object.
 
 
-The state object must be serializeable.
+As with Active Record, the state object must be serializeable.
 
 **Event Sourced Actor** 
 {% highlight java %}
@@ -89,6 +89,24 @@ public class StatefulActor extends EventSourcedActor<StatefulActor.State> implem
  
 
 
+###Retrieving State {#ActorConcept-EventSourcedState-RetrievingState}
+
+
+Like Active record, Event Sourced state is automatically retrieved when an actor is activated.
+
+
+Developers can also manually re-retrieve the state using the readState method.
+
+**Retrieving State** 
+{% highlight java %}
+public Task doReadState()
+{
+    await(readState());
+    // New state is accessible here	
+    return Task.done();
+}
+{% endhighlight %}
+
 ###Accessing State {#ActorConcept-EventSourcedState-AccessingState}
 
 
@@ -99,7 +117,6 @@ Accessing Event Sourced state in a stateful actor is simple and works exactly th
 public Task doSomeState()
 {
     System.out.println(state().lastMessage);
-    state().lastMessage = "Meep";
     return Task.done();
 }
 {% endhighlight %}

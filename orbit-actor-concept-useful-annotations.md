@@ -13,6 +13,7 @@ previous: "orbit-actor-concept-observers.html"
 -  [Actor Interface Annotations](#ActorConcept-UsefulAnnotations-ActorInterfaceAnnotations)
     -  [StatelessWorker](#ActorConcept-UsefulAnnotations-StatelessWorker)
     -  [NoIdentity](#ActorConcept-UsefulAnnotations-NoIdentity)
+    -  [PreferLocalPlacement](#ActorConcept-UsefulAnnotations-PreferLocalPlacement)
 -  [Message Annotations](#ActorConcept-UsefulAnnotations-MessageAnnotations)
     -  [OneWay](#ActorConcept-UsefulAnnotations-OneWay)
     -  [OnlyIfActivated](#ActorConcept-UsefulAnnotations-OnlyIfActivated)
@@ -59,7 +60,15 @@ public interface MyActor extends Actor {}
 Denotes that this actor does not have an identity and acts as a singleton. Actor is accessed using getReference() instead of getReference(id).
 
 
- 
+###PreferLocalPlacement {#ActorConcept-UsefulAnnotations-PreferLocalPlacement}
+
+
+{% highlight java %}
+@PreferLocalPlacement(percentile=100)
+public interface MyActor extends Actor {}
+{% endhighlight %}
+
+Denotes that this actor should prefer to be placed locally if not already activated and the local node is capable of hosting it. Optional percentile value allows developers to define the likelihood of preferring local placement (default 100). 
 
 
 Message Annotations {#ActorConcept-UsefulAnnotations-MessageAnnotations}

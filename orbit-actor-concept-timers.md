@@ -3,7 +3,7 @@ layout : page
 title : "Orbit : Actor Concept - Timers"
 breadCrumb : "[Orbit](index.html) / [Public Documentation](orbit-public-documentation.html) / [Actors](orbit-actors.html) / [Actor Concepts](orbit-actor-concepts.html)"
 next : "orbit-actor-concept-reminders.html"
-previous: "orbit-actor-concept-stateless-workers.html"
+previous: "orbit-actor-concept-streams.html"
 ---
 {% include JB/setup %}
 

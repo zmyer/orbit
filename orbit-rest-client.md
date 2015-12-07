@@ -40,7 +40,7 @@ public static void main(String args[])
 {
     WebTarget webTarget = getWebTarget("http://example.com");
 
-    Hello hello = new OrbitRestClient(webTarget).get(Hello.class);
+    Hello hello = new RestClient(webTarget).get(Hello.class);
 
     Task<String> response = hello.getHome();
 
@@ -69,7 +69,7 @@ public static void main(String args[])
 {
     WebTarget webTarget = getWebTarget("http://example.com");
 
-    Hello hello = new OrbitRestClient(webTarget).get(Hello.class);
+    Hello hello = new RestClient(webTarget).get(Hello.class);
 
     CompletableFuture<String> response = hello.getHome();
 

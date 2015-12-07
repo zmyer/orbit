@@ -1220,7 +1220,7 @@ hr {
 
 .page-history-view a:before {
     display: inline-block;
-    content: "·";
+    content: "?";
     padding: 0 10px;
 }
 
@@ -1574,16 +1574,16 @@ a.blogHeading {
 
 /* consistent placeholder text color */
 ::-webkit-input-placeholder {
-   color: #999;
+?  color: #999;
 }
 :-moz-placeholder { /* Firefox 18- */
-   color: #999; 
+?  color: #999;?
 }
-::-moz-placeholder {  /* Firefox 19+ */
-   color: #999; 
+::-moz-placeholder {? /* Firefox 19+ */
+?  color: #999;?
 }
-:-ms-input-placeholder { 
-   color: #999; 
+:-ms-input-placeholder {?
+?  color: #999;?
 }
 
 /* End PDL master.css */
@@ -3003,7 +3003,7 @@ hr {
 
 .page-history-view a:before {
     display: inline-block;
-    content: "·";
+    content: "?";
     padding: 0 10px;
 }
 
@@ -3357,16 +3357,16 @@ a.blogHeading {
 
 /* consistent placeholder text color */
 ::-webkit-input-placeholder {
-   color: #999;
+?  color: #999;
 }
 :-moz-placeholder { /* Firefox 18- */
-   color: #999; 
+?  color: #999;?
 }
-::-moz-placeholder {  /* Firefox 19+ */
-   color: #999; 
+::-moz-placeholder {? /* Firefox 19+ */
+?  color: #999;?
 }
-:-ms-input-placeholder { 
-   color: #999; 
+:-ms-input-placeholder {?
+?  color: #999;?
 }
 
 /* End PDL master.css */

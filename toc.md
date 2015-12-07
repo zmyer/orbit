@@ -21,6 +21,7 @@ breadCrumb : ""
                 -  [Actor Concept - Event Sourced State](orbit-actor-concept-event-sourced-state.html)
             -  [Actor Concept - Distributed Transactions](orbit-actor-concept-distributed-transactions.html)
             -  [Actor Concept - Stateless Workers](orbit-actor-concept-stateless-workers.html)
+            -  [Actor Concept - Streams](orbit-actor-concept-streams.html)
             -  [Actor Concept - Timers](orbit-actor-concept-timers.html)
             -  [Actor Concept - Reminders](orbit-actor-concept-reminders.html)
             -  [Actor Concept - Observers](orbit-actor-concept-observers.html)

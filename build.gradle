@@ -26,3 +26,108 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+def configureProject(final String projectName, final List<List<Project>> toAdd) {
+    toAdd.each {
+        it.add(project(projectName))
+    }
+}
+
+buildscript {
+    ext.kotlinVersion = getProperty("kotlin.version")
+    ext.junitPlatformVersion = "1.0.1"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
+    }
+}
+
+// Global Properties
+ext {
+    kotlinVersion = "1.2.0"
+    orbitGroup = "cloud.orbit"
+    orbitVersion = getProperty("orbit.version")
+    orbitCodename = getProperty("orbit.codename")
+    orbitCompat = getProperty("orbit.compat")
+    orbitUrl = "http://www.orbit.cloud"
+    orgName = "Electronic Arts"
+    orgUrl = "http://www.ea.com"
+
+    javaTargetVersion = "1.8"
+    javaSourceVersion = "1.8"
+    kotlinTargetVersion = "1.8"
+
+    junitJupiterVersion = "5.0.1"
+}
+
+// Project Configurations
+def withKotlin = []
+def withJava = []
+def withTests = []
+
+configureProject(":framework:orbit-core", [withKotlin, withJava, withTests])
+configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests])
+
+allprojects {
+    group =  orbitGroup
+    version = orbitVersion
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+// Kotlin
+configure(withKotlin) {
+    apply plugin: "kotlin"
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = kotlinTargetVersion
+        }
+    }
+
+    dependencies {
+        compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+        compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    }
+}
+
+// Java
+configure(withJava) {
+    apply plugin: "java"
+
+    compileJava   {
+        sourceCompatibility = javaSourceVersion
+        targetCompatibility = javaTargetVersion
+    }
+
+    jar {
+        manifest {
+            attributes(
+                    "Name": project.name,
+                    "Implementation-Title": "$orbitCodename Orbit",
+                    "Implementation-Version": orbitVersion,
+                    "Implementation-Vendor": orgName,
+                    "Specification-Title": "$orbitCodename Orbit",
+                    "Specification-Version": orbitCompat,
+                    "Specification-Vendor": orgName
+            )
+        }
+    }
+}
+
+// Tests
+configure(withTests) {
+    apply plugin: "org.junit.platform.gradle.plugin"
+
+    dependencies {
+        testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+        testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    }
+}

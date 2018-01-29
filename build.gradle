@@ -34,7 +34,7 @@ def configureProject(final String projectName, final List<List<Project>> toAdd) 
 
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
-    ext.junitPlatformVersion = "1.0.1"
+    ext.junitPlatformVersion = "1.0.3"
 
     repositories {
         mavenCentral()
@@ -49,7 +49,6 @@ buildscript {
 
 // Global Properties
 ext {
-    kotlinVersion = "1.2.0"
     orbitGroup = "cloud.orbit"
     orbitVersion = getProperty("orbit.version")
     orbitCodename = getProperty("orbit.codename")
@@ -62,7 +61,7 @@ ext {
     javaSourceVersion = "1.8"
     kotlinTargetVersion = "1.8"
 
-    junitJupiterVersion = "5.0.1"
+    junitJupiterVersion = "5.0.3"
 }
 
 // Project Configurations

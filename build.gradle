@@ -69,8 +69,7 @@ def withKotlin = []
 def withJava = []
 def withTests = []
 
-configureProject(":framework:orbit-core", [withKotlin, withJava, withTests])
-configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests])
+configureProject(":core:orbit-core-try", [withKotlin, withJava, withTests])
 
 allprojects {
     group =  orbitGroup

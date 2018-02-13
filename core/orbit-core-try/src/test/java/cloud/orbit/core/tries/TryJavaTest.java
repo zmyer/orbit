@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,3 +26,33 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package cloud.orbit.core.tries;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class TryJavaTest {
+    private static class TryJavaTestException extends RuntimeException {
+        public TryJavaTestException() {
+            super("TryJavaTestException");
+        }
+    }
+
+    @Test
+    void tryJavaAPITest() {
+        // Basic success
+        Try<String> success = Try.create(() -> "success");
+        Assertions.assertTrue(success.isSuccess());
+        Assertions.assertEquals("success", success.get());
+
+        // Basic fail
+        Try<String> fail = Try.create(() -> { throw new TryJavaTestException(); });
+        Assertions.assertTrue(fail.isFailure());
+        Assertions.assertThrows(TryJavaTestException.class, fail::get);
+
+        // Try an operator
+        Try<Integer> map = Try.create(() -> 5).map((v) -> v*v);
+        Assertions.assertTrue(map.isSuccess());
+        Assertions.assertEquals((Integer) 25, map.get());
+    }
+}

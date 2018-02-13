@@ -28,7 +28,7 @@
 
 package cloud.orbit.core.tries
 
-import java.util.*
+import java.util.Optional
 
 sealed class Try<T> {
     abstract fun isSuccess(): Boolean
@@ -59,7 +59,7 @@ sealed class Try<T> {
         } catch(t: Throwable) {
             Failure<Z>(t)
         }
-        is Failure -> Failure<Z>(value)
+        is Failure -> Failure<Z>(throwable)
     }
 
     infix fun <Z> map(body: (T) -> Z) = flatMap { Success(body(it)) }
@@ -75,7 +75,7 @@ sealed class Try<T> {
     infix fun onFailure(body: (Throwable) -> Unit) = when(this) {
         is Success -> this
         is Failure -> {
-            body(value)
+            body(throwable)
             this
         }
     }
@@ -92,14 +92,14 @@ sealed class Try<T> {
     }
 }
 
-data class Success<T>(internal val value: T): Try<T>() {
+data class Success<T>(val value: T): Try<T>() {
     override fun isSuccess() = true
 
     override fun get() = value
 }
 
-data class Failure<T>(internal val value: Throwable): Try<T>() {
+data class Failure<T>(internal val throwable: Throwable): Try<T>() {
     override fun isSuccess() = false
 
-    override fun get() = throw value
+    override fun get() = throw throwable
 }

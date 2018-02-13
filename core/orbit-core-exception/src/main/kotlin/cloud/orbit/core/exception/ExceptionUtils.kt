@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,10 +26,35 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "retrograde"
+package cloud.orbit.core.exception
 
-// Core
-include ":core:orbit-core-exception"
-include ":core:orbit-core-maybe"
-include ":core:orbit-core-try"
-include ":core:orbit-core-concurrent"
+object ExceptionUtils {
+    private const val MAX_DEPTH = 128
+
+    private tailrec fun checkChainRecursive(cause: Class<out Throwable>, chain: Throwable?, depth: Int = 0): Throwable? {
+        return if (chain != null && depth < MAX_DEPTH) {
+            if (cause.isInstance(chain)) {
+                chain
+            } else {
+                checkChainRecursive(cause, chain.cause, depth + 1)
+            }
+        } else {
+            null
+        }
+    }
+
+    inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
+            ExceptionUtils.isCauseInChain(T::class.java, chain)
+
+    inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
+            ExceptionUtils.getCauseInChain(T::class.java, chain)
+
+    @JvmStatic
+    fun isCauseInChain(cause: Class<out Throwable>, chain: Throwable?) =
+            checkChainRecursive(cause, chain) != null
+
+    @JvmStatic
+    fun getCauseInChain(cause: Class<out Throwable>, chain: Throwable?) =
+            checkChainRecursive(cause, chain)
+
+}

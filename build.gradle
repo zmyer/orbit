@@ -32,6 +32,17 @@ def configureProject(final String projectName, final List<List<Project>> toAdd) 
     }
 }
 
+// Project Configurations
+def withKotlin = []
+def withJava = []
+def withTests = []
+
+configureProject(":core:orbit-core-exception", [withKotlin, withJava, withTests])
+configureProject(":core:orbit-core-maybe", [withKotlin, withJava, withTests])
+configureProject(":core:orbit-core-try", [withKotlin, withJava, withTests])
+configureProject(":core:orbit-core-concurrent", [withKotlin, withJava, withTests])
+
+
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
     ext.junitPlatformVersion = "1.0.3"
@@ -64,14 +75,6 @@ ext {
     junitJupiterVersion = "5.0.3"
 }
 
-// Project Configurations
-def withKotlin = []
-def withJava = []
-def withTests = []
-
-configureProject(":core:orbit-core-maybe", [withKotlin, withJava, withTests])
-configureProject(":core:orbit-core-try", [withKotlin, withJava, withTests])
-
 allprojects {
     group =  orbitGroup
     version = orbitVersion
@@ -86,6 +89,12 @@ configure(withKotlin) {
     apply plugin: "kotlin"
 
     compileKotlin {
+        kotlinOptions {
+            jvmTarget = kotlinTargetVersion
+        }
+    }
+
+    compileTestKotlin {
         kotlinOptions {
             jvmTarget = kotlinTargetVersion
         }

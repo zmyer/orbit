@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,10 +26,27 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "retrograde"
+package cloud.orbit.core.exception;
 
-// Core
-include ":core:orbit-core-exception"
-include ":core:orbit-core-maybe"
-include ":core:orbit-core-try"
-include ":core:orbit-core-concurrent"
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class OrbitExceptionJavaTest {
+    @Test
+    void orbitExceptionJavaAPITest() {
+        final OrbitException blankOrbitException = new OrbitException();
+        Assertions.assertNull(blankOrbitException.getMessage());
+        Assertions.assertNull(blankOrbitException.getCause());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, blankOrbitException));
+
+        final OrbitException textOrbitException = new OrbitException("textOrbitException");
+        Assertions.assertEquals("textOrbitException", textOrbitException.getMessage());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, textOrbitException));
+
+        final OrbitException nullOrbitException = null;
+        Assertions.assertFalse(ExceptionUtils.isCauseInChain(OrbitException.class, nullOrbitException));
+
+        final RuntimeException nestedOrbitException = new RuntimeException("nested", new OrbitException());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
+    }
+}

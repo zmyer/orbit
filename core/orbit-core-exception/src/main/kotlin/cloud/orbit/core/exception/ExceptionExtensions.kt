@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,10 +26,6 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "retrograde"
+package cloud.orbit.core.exception
 
-// Core
-include ":core:orbit-core-exception"
-include ":core:orbit-core-maybe"
-include ":core:orbit-core-try"
-include ":core:orbit-core-concurrent"
+inline fun <reified T: Throwable>Throwable?.isCauseInChain() = ExceptionUtils.isCauseInChain(T::class.java, this)

@@ -30,7 +30,7 @@ package cloud.orbit.core.maybe
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Optional
 
 class MaybeTest {
     @Test

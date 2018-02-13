@@ -36,25 +36,17 @@ sealed class Maybe<out T> {
 
     abstract fun get(): T
 
-    fun orNull() = if(isEmpty) {
-        null
-    } else {
-        get()
-    }
-
     fun toOptional(): Optional<out T> = if(isEmpty) {
         Optional.empty()
     } else {
         Optional.of(get())
     }
 
-    /*
-    fun getOrElse(body: () -> T): T = if(isEmpty) {
-        body()
+    fun orNull(): T? = if(isEmpty) {
+        null
     } else {
         get()
     }
-    */
 
     infix fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if(isEmpty) {
         None
@@ -83,9 +75,6 @@ sealed class Maybe<out T> {
         }
     }
 }
-
-
-
 
 
 object None: Maybe<Nothing>() {

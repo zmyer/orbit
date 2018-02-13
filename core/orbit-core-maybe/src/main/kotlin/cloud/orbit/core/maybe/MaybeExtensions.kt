@@ -31,9 +31,9 @@ package cloud.orbit.core.maybe
 import java.util.Optional
 
 fun <T> T?.toMaybe() = if(this == null) {
-    None
+    Maybe.empty()
 } else {
-    Some(this)
+    Maybe.of(this)
 }
 
 fun <T> Optional<T>.toMaybe() = Maybe.fromOptional(this)

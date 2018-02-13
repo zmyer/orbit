@@ -28,8 +28,20 @@
 
 package cloud.orbit.core.maybe;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MaybeJavaTest {
+class MaybeJavaTest {
 
+    @Test
+    @SuppressWarnings("unchecked")
+    void maybeAPITest() {
+        Maybe<String> some = Maybe.of("some");
+        Assertions.assertTrue(some.isPresent());
+        Assertions.assertEquals("some", some.get());
+
+        Maybe<String> none = Maybe.empty();
+        Assertions.assertTrue(none.isEmpty());
+        Assertions.assertThrows(Throwable.class, none::get);
+    }
 }

@@ -93,7 +93,7 @@ class MaybeTest {
     }
 
     @Test
-    fun equalityTests() {
+    fun equalityTest() {
         val firstSome = Maybe.of("match")
         val secondSome = Maybe.of("match")
         val thirdSome = Maybe.of("dontMatch")

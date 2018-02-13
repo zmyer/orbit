@@ -26,47 +26,51 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.tries;
+package cloud.orbit.core.maybe
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
-import java.util.Optional;
+class MaybeTest {
+    @Test
+    fun simpleTest() {
+        val empty = Maybe.empty()
+        Assertions.assertTrue(empty.isEmpty)
+        Assertions.assertThrows(Throwable::class.java, empty::get)
 
-class TryJavaTest {
-    private static class TryJavaTestException extends RuntimeException {
-        public TryJavaTestException() {
-            super("TryJavaTestException");
-        }
+        val value = Maybe.of("valueTest")
+        Assertions.assertTrue(value.isPresent)
+        Assertions.assertEquals("valueTest", value.get())
     }
 
     @Test
-    void tryJavaAPITest() {
-        // Basic success
-        final Try<String> success = Try.create(() -> "success");
-        Assertions.assertTrue(success.isSuccess());
-        Assertions.assertEquals("success", success.get());
+    fun mapTest() {
+        val squared = Maybe.of(5) map { it * it }
+        Assertions.assertTrue(squared.isPresent)
+        Assertions.assertEquals(25, squared.get())
 
-        // Basic fail
-        final Try<String> fail = Try.create(() -> { throw new TryJavaTestException(); });
-        Assertions.assertTrue(fail.isFailure());
-        Assertions.assertThrows(TryJavaTestException.class, fail::get);
-
-        // Try an operator
-        final Try<Integer> map = Try.create(() -> 5).map((v) -> v*v);
-        Assertions.assertTrue(map.isSuccess());
-        Assertions.assertEquals((Integer) 25, map.get());
+        val emptyMaybe: Maybe<Int> = Maybe.empty()
+        val mapEmpty = emptyMaybe.map { it * it }
+        Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
     @Test
-    void tryJavaOptionalConversions() {
-        final Try<String> stringTry = Try.create(() -> "stringTry");
-        final Optional<String> javaStringOptional = stringTry.toOptional();
-        Assertions.assertTrue(javaStringOptional.isPresent());
-        Assertions.assertEquals("stringTry", javaStringOptional.get());
+    fun flatMapTest() {
+        val squared = Maybe.of(5) flatMap { Maybe.of(it * it) }
+        Assertions.assertTrue(squared.isPresent)
+        Assertions.assertEquals(25, squared.get())
 
-        final Try<String> throwableTry = Try.create(() -> { throw new TryJavaTestException(); });
-        final Optional<String> javaEmptyOptional = throwableTry.toOptional();
-        Assertions.assertFalse(javaEmptyOptional.isPresent());
+        val emptyMaybe: Maybe<Int> = Maybe.empty()
+        val mapEmpty = emptyMaybe.flatMap { Maybe.of(it * it) }
+        Assertions.assertTrue(mapEmpty.isEmpty)
+    }
+
+    @Test
+    fun orNullTest() {
+        val testRealVal = Maybe.of("testVal")
+        Assertions.assertNotNull(testRealVal.orNull())
+
+        val testEmptyVal = Maybe.empty()
+        Assertions.assertNull(testEmptyVal.orNull())
     }
 }

@@ -26,47 +26,77 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.tries;
+package cloud.orbit.core.maybe
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.util.Optional
 
-import java.util.Optional;
+sealed class Maybe<out T> {
+    abstract val isEmpty: Boolean
+    val isPresent get() = !isEmpty
 
-class TryJavaTest {
-    private static class TryJavaTestException extends RuntimeException {
-        public TryJavaTestException() {
-            super("TryJavaTestException");
+    abstract fun get(): T
+
+    fun orNull() = if(isEmpty) {
+        null
+    } else {
+        get()
+    }
+
+    fun toOptional(): Optional<out T> = if(isEmpty) {
+        Optional.empty()
+    } else {
+        Optional.of(get())
+    }
+
+    /*
+    fun getOrElse(body: () -> T): T = if(isEmpty) {
+        body()
+    } else {
+        get()
+    }
+    */
+
+    infix fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if(isEmpty) {
+        None
+    } else {
+        body(get())
+    }
+
+    infix fun <V> map(body: (T) -> V): Maybe<V> = if(isEmpty) {
+        None
+    } else {
+        Some(body(get()))
+    }
+
+    companion object {
+        operator fun invoke() = empty()
+        operator fun <V> invoke(value: V) = of(value)
+
+        @JvmStatic
+        fun empty(): None  = None
+
+        @JvmStatic
+        fun <V> of(value: V) = Some(value)
+
+        @JvmStatic
+        fun <V> fromOptional(optional: Optional<V>) = if(optional.isPresent) {
+            of(optional.get())
+        } else {
+            empty()
         }
     }
+}
 
-    @Test
-    void tryJavaAPITest() {
-        // Basic success
-        final Try<String> success = Try.create(() -> "success");
-        Assertions.assertTrue(success.isSuccess());
-        Assertions.assertEquals("success", success.get());
 
-        // Basic fail
-        final Try<String> fail = Try.create(() -> { throw new TryJavaTestException(); });
-        Assertions.assertTrue(fail.isFailure());
-        Assertions.assertThrows(TryJavaTestException.class, fail::get);
 
-        // Try an operator
-        final Try<Integer> map = Try.create(() -> 5).map((v) -> v*v);
-        Assertions.assertTrue(map.isSuccess());
-        Assertions.assertEquals((Integer) 25, map.get());
-    }
 
-    @Test
-    void tryJavaOptionalConversions() {
-        final Try<String> stringTry = Try.create(() -> "stringTry");
-        final Optional<String> javaStringOptional = stringTry.toOptional();
-        Assertions.assertTrue(javaStringOptional.isPresent());
-        Assertions.assertEquals("stringTry", javaStringOptional.get());
 
-        final Try<String> throwableTry = Try.create(() -> { throw new TryJavaTestException(); });
-        final Optional<String> javaEmptyOptional = throwableTry.toOptional();
-        Assertions.assertFalse(javaEmptyOptional.isPresent());
-    }
+object None: Maybe<Nothing>() {
+    override val isEmpty = true
+    override fun get() = throw IllegalAccessException("Trying to use None.get")
+}
+
+data class Some<out T>(private val value: T): Maybe<T>() {
+    override val isEmpty = false
+    override fun get() = value
 }

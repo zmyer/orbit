@@ -26,47 +26,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.tries;
+package cloud.orbit.core.maybe;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
+public class MaybeJavaTest {
 
-class TryJavaTest {
-    private static class TryJavaTestException extends RuntimeException {
-        public TryJavaTestException() {
-            super("TryJavaTestException");
-        }
-    }
-
-    @Test
-    void tryJavaAPITest() {
-        // Basic success
-        final Try<String> success = Try.create(() -> "success");
-        Assertions.assertTrue(success.isSuccess());
-        Assertions.assertEquals("success", success.get());
-
-        // Basic fail
-        final Try<String> fail = Try.create(() -> { throw new TryJavaTestException(); });
-        Assertions.assertTrue(fail.isFailure());
-        Assertions.assertThrows(TryJavaTestException.class, fail::get);
-
-        // Try an operator
-        final Try<Integer> map = Try.create(() -> 5).map((v) -> v*v);
-        Assertions.assertTrue(map.isSuccess());
-        Assertions.assertEquals((Integer) 25, map.get());
-    }
-
-    @Test
-    void tryJavaOptionalConversions() {
-        final Try<String> stringTry = Try.create(() -> "stringTry");
-        final Optional<String> javaStringOptional = stringTry.toOptional();
-        Assertions.assertTrue(javaStringOptional.isPresent());
-        Assertions.assertEquals("stringTry", javaStringOptional.get());
-
-        final Try<String> throwableTry = Try.create(() -> { throw new TryJavaTestException(); });
-        final Optional<String> javaEmptyOptional = throwableTry.toOptional();
-        Assertions.assertFalse(javaEmptyOptional.isPresent());
-    }
 }

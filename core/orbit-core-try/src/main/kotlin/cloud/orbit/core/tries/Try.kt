@@ -28,19 +28,25 @@
 
 package cloud.orbit.core.tries
 
+import cloud.orbit.core.maybe.Maybe
 import java.util.Optional
 
 sealed class Try<T> {
-    abstract fun isSuccess(): Boolean
-    fun isFailure() = !isSuccess()
+    abstract val isSuccess: Boolean
+    val isFailure get() = !isSuccess
 
     operator fun invoke() = get()
 
     abstract fun get(): T
 
-    fun toOptional(): Optional<T> = when(this) {
+    fun toOptional() = when(this) {
         is Success -> Optional.of(get())
         is Failure -> Optional.empty()
+    }
+
+    fun toMaybe() = when(this) {
+        is Success -> Maybe.of(get())
+        is Failure -> Maybe.empty()
     }
 
     infix fun getOrElse(body: () -> T): T = when(this) {
@@ -48,7 +54,7 @@ sealed class Try<T> {
         is Failure -> body()
     }
 
-    fun getOrNull() = when(this) {
+    fun orNull() = when(this) {
         is Success -> get()
         is Failure -> null
     }
@@ -66,7 +72,7 @@ sealed class Try<T> {
 
     infix fun onSuccess(body: (T) -> Unit) = when(this) {
         is Success -> {
-            if(isSuccess()) { body(get()) }
+            if(isSuccess) { body(get()) }
             this
         }
         is Failure -> this
@@ -92,14 +98,17 @@ sealed class Try<T> {
     }
 }
 
-data class Success<T>(val value: T): Try<T>() {
-    override fun isSuccess() = true
+data class Success<T>(private val value: T): Try<T>() {
+    override val isSuccess = true
 
     override fun get() = value
 }
 
-data class Failure<T>(internal val throwable: Throwable): Try<T>() {
-    override fun isSuccess() = false
+data class Failure<T>(private val value: Throwable): Try<T>() {
+    override val isSuccess = false
 
     override fun get() = throw throwable
+
+    internal val throwable
+        get() = value
 }

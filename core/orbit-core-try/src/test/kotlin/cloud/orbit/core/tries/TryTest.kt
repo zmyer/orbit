@@ -37,14 +37,14 @@ class TryTest {
     @Test
     fun validateBasicSuccess() {
         val success = Try  { "success"}
-        Assertions.assertTrue(success.isSuccess())
+        Assertions.assertTrue(success.isSuccess)
         Assertions.assertEquals("success", success.get())
     }
 
     @Test
     fun validateBasicFailure() {
         val fail = Try  { throw TryTestException() }
-        Assertions.assertTrue(fail.isFailure())
+        Assertions.assertTrue(fail.isFailure)
         Assertions.assertThrows(TryTestException::class.java, fail::get)
     }
 
@@ -58,11 +58,11 @@ class TryTest {
     }
 
     @Test
-    fun getOrNullTest() {
-        val success = Try { "get" }.getOrNull()
+    fun orNullTest() {
+        val success = Try { "get" }.orNull()
         Assertions.assertEquals("get", success)
 
-        val fail = Try<String> { throw TryTestException() }.getOrNull()
+        val fail = Try<String> { throw TryTestException() }.orNull()
         Assertions.assertEquals(null, fail)
     }
 
@@ -72,10 +72,10 @@ class TryTest {
         Assertions.assertEquals(25, square.get())
 
         val failInTry = Try<Int> { throw TryTestException() } map { it * it }
-        Assertions.assertTrue(failInTry.isFailure())
+        Assertions.assertTrue(failInTry.isFailure)
 
         val failInMap = Try { 5 } map { throw TryTestException() }
-        Assertions.assertTrue(failInMap.isFailure())
+        Assertions.assertTrue(failInMap.isFailure)
     }
 
     @Test
@@ -84,10 +84,10 @@ class TryTest {
         Assertions.assertEquals(25, square.get())
 
         val failInTry = Try<Int> { throw TryTestException() } flatMap { Try{ it * it}  }
-        Assertions.assertTrue(failInTry.isFailure())
+        Assertions.assertTrue(failInTry.isFailure)
 
         val failInMap = Try { 5 } flatMap { Try { throw TryTestException() } }
-        Assertions.assertTrue(failInMap.isFailure())
+        Assertions.assertTrue(failInMap.isFailure)
     }
 
     @Test
@@ -100,7 +100,49 @@ class TryTest {
     @Test
     fun onFailureTest() {
         var didTrigger = false
-        Try { throw TryTestException() } onFailure  { didTrigger = true }
+        Try { throw TryTestException() } onFailure { didTrigger = true }
         Assertions.assertTrue(didTrigger)
+    }
+
+    @Test
+    fun equalityTest() {
+        val firstSuccess = Try { 5 }
+        val secondSuccess = Try { 5 }
+        val thirdSuccess = Try { 10 }
+
+        Assertions.assertEquals(firstSuccess, firstSuccess)
+        Assertions.assertEquals(firstSuccess, secondSuccess)
+        Assertions.assertNotEquals(firstSuccess, thirdSuccess)
+
+        val commonException = TryTestException()
+        val firstFail = Try { commonException }
+        val secondFail = Try { commonException }
+        val thirdFail = Try { TryTestException() }
+
+        Assertions.assertEquals(firstFail, firstFail)
+        Assertions.assertEquals(firstFail, secondFail)
+        Assertions.assertNotEquals(firstFail, thirdFail)
+
+        Assertions.assertNotEquals(firstSuccess, firstFail)
+    }
+
+    @Test
+    fun maybeConversionTest() {
+        val maybeSuccess = Try { "trySuccess" }.toMaybe()
+        Assertions.assertTrue(maybeSuccess.isPresent)
+        Assertions.assertEquals("trySuccess", maybeSuccess.get())
+
+        val maybeFail = Try { throw TryTestException() }.toMaybe()
+        Assertions.assertTrue(maybeFail.isEmpty)
+    }
+
+    @Test
+    fun optionalConversionTest() {
+        val optionalSuccess = Try { "trySuccess" }.toOptional()
+        Assertions.assertTrue(optionalSuccess.isPresent)
+        Assertions.assertEquals("trySuccess", optionalSuccess.get())
+
+        val optionalFailure = Try { throw TryTestException() }.toOptional()
+        Assertions.assertFalse(optionalFailure.isPresent)
     }
 }

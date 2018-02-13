@@ -115,6 +115,11 @@ configure(withJava) {
         targetCompatibility = javaTargetVersion
     }
 
+    compileTestJava {
+        sourceCompatibility = javaSourceVersion
+        targetCompatibility = javaTargetVersion
+    }
+
     jar {
         manifest {
             attributes(

@@ -30,13 +30,14 @@ package cloud.orbit.core.maybe
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.util.*
 
 class MaybeTest {
     @Test
     fun simpleTest() {
-        val empty = Maybe.empty()
+        val empty: Maybe<String> = Maybe.empty()
         Assertions.assertTrue(empty.isEmpty)
-        Assertions.assertThrows(Throwable::class.java, empty::get)
+        Assertions.assertThrows(Throwable::class.java, { empty.get() })
 
         val value = Maybe.of("valueTest")
         Assertions.assertTrue(value.isPresent)
@@ -72,5 +73,22 @@ class MaybeTest {
 
         val testEmptyVal = Maybe.empty()
         Assertions.assertNull(testEmptyVal.orNull())
+    }
+
+    @Test
+    fun optionalConversionTest() {
+        val maybeSomeOptional = Maybe.of("maybeSomeOptional").toOptional()
+        Assertions.assertTrue(maybeSomeOptional.isPresent)
+        Assertions.assertEquals("maybeSomeOptional", maybeSomeOptional.get())
+
+        val maybeNoneOptional = Maybe.empty().toOptional()
+        Assertions.assertFalse(maybeNoneOptional.isPresent)
+
+        val optionalSomeMaybe = Optional.of("optionalSomeMaybe").toMaybe()
+        Assertions.assertTrue(optionalSomeMaybe.isPresent)
+        Assertions.assertEquals("optionalSomeMaybe", optionalSomeMaybe.get())
+
+        val optionalNoneMaybe = Optional.empty<String>().toMaybe()
+        Assertions.assertTrue(optionalNoneMaybe.isEmpty)
     }
 }

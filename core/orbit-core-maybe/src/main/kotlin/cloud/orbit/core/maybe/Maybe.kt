@@ -69,11 +69,8 @@ sealed class Maybe<out T> {
     }
 
     companion object {
-        operator fun invoke() = empty()
-        operator fun <V> invoke(value: V) = of(value)
-
         @JvmStatic
-        fun empty(): None  = None
+        fun empty() = None
 
         @JvmStatic
         fun <V> of(value: V) = Some(value)
@@ -96,7 +93,7 @@ object None: Maybe<Nothing>() {
     override fun get() = throw IllegalAccessException("Trying to use None.get")
 }
 
-data class Some<out T>(private val value: T): Maybe<T>() {
+data class Some<T>(private val value: T): Maybe<T>() {
     override val isEmpty = false
     override fun get() = value
 }

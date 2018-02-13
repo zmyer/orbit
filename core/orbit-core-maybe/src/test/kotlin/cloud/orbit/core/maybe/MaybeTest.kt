@@ -91,4 +91,22 @@ class MaybeTest {
         val optionalNoneMaybe = Optional.empty<String>().toMaybe()
         Assertions.assertTrue(optionalNoneMaybe.isEmpty)
     }
+
+    @Test
+    fun equalityTests() {
+        val firstSome = Maybe.of("match")
+        val secondSome = Maybe.of("match")
+        val thirdSome = Maybe.of("dontMatch")
+        Assertions.assertEquals(firstSome, firstSome)
+        Assertions.assertEquals(firstSome, secondSome)
+        Assertions.assertNotEquals(firstSome, thirdSome)
+
+        val firstEmpty = Maybe.empty()
+        val secondEmpty = Maybe.empty()
+        Assertions.assertEquals(firstEmpty, firstEmpty)
+        Assertions.assertEquals(firstEmpty, secondEmpty)
+
+        Assertions.assertNotEquals(firstEmpty, thirdSome)
+
+    }
 }

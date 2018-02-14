@@ -72,7 +72,7 @@ sealed class Try<T> {
 
     infix fun onSuccess(body: (T) -> Unit) = when(this) {
         is Success -> {
-            if(isSuccess) { body(get()) }
+            body(get())
             this
         }
         is Failure -> this
@@ -88,6 +88,7 @@ sealed class Try<T> {
 
     companion object {
         operator fun <V> invoke(body: () -> V) = create(body)
+        operator fun <V> invoke(throwable: Throwable) = create<V>(throwable)
 
         @JvmStatic
         fun <V> create(body: () -> V): Try<V> = try {
@@ -95,6 +96,9 @@ sealed class Try<T> {
         } catch(v: Throwable) {
             Failure(v)
         }
+
+        @JvmStatic
+        fun <V> create(throwable: Throwable) = Failure<V>(throwable)
     }
 }
 

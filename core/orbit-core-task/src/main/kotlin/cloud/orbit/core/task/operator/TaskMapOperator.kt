@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,11 +26,17 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "retrograde"
+package cloud.orbit.core.task.operator
 
-// Core
-include ":core:orbit-core-exception"
-include ":core:orbit-core-maybe"
-include ":core:orbit-core-try"
-include ":core:orbit-core-concurrent"
-include ":core:orbit-core-task"
+import cloud.orbit.core.tries.Try
+
+internal class TaskMapOperator<I, O>(private val body: (I) -> O): TaskOperator<I, O>() {
+    override fun fulfilled(result: Try<I>) {
+        result onSuccess {
+            value = Try { body(it) }
+        } onFailure {
+            value = Try(it)
+        }
+        triggerListeners()
+    }
+}

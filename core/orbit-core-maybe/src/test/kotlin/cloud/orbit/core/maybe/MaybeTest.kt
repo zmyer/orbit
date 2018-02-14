@@ -51,7 +51,7 @@ class MaybeTest {
         Assertions.assertEquals(25, squared.get())
 
         val emptyMaybe: Maybe<Int> = Maybe.empty()
-        val mapEmpty = emptyMaybe.map { it * it }
+        val mapEmpty = emptyMaybe map { it * it }
         Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
@@ -62,7 +62,7 @@ class MaybeTest {
         Assertions.assertEquals(25, squared.get())
 
         val emptyMaybe: Maybe<Int> = Maybe.empty()
-        val mapEmpty = emptyMaybe.flatMap { Maybe.of(it * it) }
+        val mapEmpty = emptyMaybe flatMap { Maybe.of(it * it) }
         Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
@@ -73,6 +73,19 @@ class MaybeTest {
 
         val testEmptyVal = Maybe.empty()
         Assertions.assertNull(testEmptyVal.orNull())
+    }
+
+    @Test
+    fun forEachTest() {
+        var didRun = false
+        val testRealVal = Maybe.of("testVal")
+        testRealVal forEach { didRun = true }
+        Assertions.assertTrue(didRun)
+
+        didRun = false
+        val testEmptyVal = Maybe.empty()
+        testEmptyVal forEach { didRun = true }
+        Assertions.assertFalse(didRun)
     }
 
     @Test

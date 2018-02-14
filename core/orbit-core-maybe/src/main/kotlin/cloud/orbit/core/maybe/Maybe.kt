@@ -60,6 +60,13 @@ sealed class Maybe<out T> {
         Some(body(get()))
     }
 
+    infix fun forEach(body: (T) -> Unit): Maybe<T> {
+        if(isPresent) {
+            body(get())
+        }
+        return this
+    }
+
     companion object {
         @JvmStatic
         fun empty() = None

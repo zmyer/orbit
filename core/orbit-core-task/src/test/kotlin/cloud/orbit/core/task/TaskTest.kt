@@ -28,6 +28,7 @@
 
 package cloud.orbit.core.task
 
+import cloud.orbit.core.concurrent.JobManagers
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -124,6 +125,31 @@ class TaskTest {
     }
 
     @Test
+    fun forceJobManagerTest() {
+        val newThread = JobManagers.newSingleThread()
+        val dummyThread = JobManagers.newSingleThread()
+        val threadLocal = ThreadLocal<Int>()
+
+        var shouldMatch = false
+        var shouldNotMatch = true
+
+        val task = Task(newThread) {
+            threadLocal.set(42)
+        } forceJobManager {
+            newThread
+        } onSuccess {
+            shouldMatch = (threadLocal.get() == 42)
+        } forceJobManager {
+            dummyThread
+        } onSuccess  {
+            shouldNotMatch = (threadLocal.get() == 42)
+        }
+        task.await()
+        Assertions.assertTrue(shouldMatch)
+        Assertions.assertFalse(shouldNotMatch)
+    }
+
+    @Test
     fun delayedTest() {
         var didFire: Boolean
 
@@ -134,4 +160,6 @@ class TaskTest {
         Assertions.assertTrue(didFire)
 
     }
+
+
 }

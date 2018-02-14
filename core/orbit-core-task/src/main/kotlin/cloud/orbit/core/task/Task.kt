@@ -38,7 +38,7 @@ import cloud.orbit.core.task.operator.TaskMapOperator
 import cloud.orbit.core.task.operator.TaskOnFailureOperator
 import cloud.orbit.core.task.operator.TaskOnSuccessOperator
 import cloud.orbit.core.task.operator.TaskOperator
-import cloud.orbit.core.task.operator.TaskSwitchManagerOperator
+import cloud.orbit.core.task.operator.TaskForceJobManager
 import cloud.orbit.core.tries.Try
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
@@ -96,10 +96,14 @@ abstract class Task<T> {
         return taskOperator
     }
 
-    infix fun switchManager(jobManager: JobManager): Task<T> {
-        val taskOperator = TaskSwitchManagerOperator<T>(jobManager)
+    fun forceJobManager(jobManager: JobManager): Task<T> {
+        val taskOperator = TaskForceJobManager<T>(jobManager)
         addListener(taskOperator)
         return taskOperator
+    }
+
+    infix fun forceJobManager(body: () -> JobManager): Task<T> {
+        return forceJobManager(body())
     }
 
     infix fun <O> map(body: (T) -> O): Task<O> {

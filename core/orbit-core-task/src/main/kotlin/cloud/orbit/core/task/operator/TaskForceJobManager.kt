@@ -31,7 +31,7 @@ package cloud.orbit.core.task.operator
 import cloud.orbit.core.concurrent.JobManager
 import cloud.orbit.core.tries.Try
 
-internal class TaskSwitchManagerOperator<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
+internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
     override fun fulfilled(result: Try<T>) {
         value = result
         triggerListeners()

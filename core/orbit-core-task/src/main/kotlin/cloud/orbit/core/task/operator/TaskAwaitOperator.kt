@@ -29,11 +29,19 @@
 package cloud.orbit.core.task.operator
 
 import cloud.orbit.core.tries.Try
+import java.util.concurrent.CountDownLatch
 
-internal class TaskHandleOperator<I>(private val body: (Try<I>) -> Unit): TaskOperator<I, I>() {
+internal class TaskAwaitOperator<I>: TaskOperator<I, I>() {
+    private val latch = CountDownLatch(1)
+
     override fun fulfilled(result: Try<I>) {
-        body(result)
         value = result
+        latch.countDown()
         triggerListeners()
+    }
+
+    internal fun waitOnLatch(): I {
+        latch.await()
+        return value!!.get()
     }
 }

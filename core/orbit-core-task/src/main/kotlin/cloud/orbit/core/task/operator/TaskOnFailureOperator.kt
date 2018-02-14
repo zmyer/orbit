@@ -28,18 +28,14 @@
 
 package cloud.orbit.core.task.operator
 
-import cloud.orbit.core.concurrent.JobManager
 import cloud.orbit.core.tries.Try
 
-internal class TaskAsyncSwitchOperator<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
+internal class TaskOnFailureOperator<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
     override fun fulfilled(result: Try<T>) {
+        result onFailure  {
+            body(it)
+        }
         value = result
         triggerListeners()
-    }
-
-    override fun triggerListeners() {
-        jobManager.submit {
-            super.triggerListeners()
-        }
     }
 }

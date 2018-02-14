@@ -28,12 +28,25 @@
 
 package cloud.orbit.core.task.operator
 
+import cloud.orbit.core.task.Task
 import cloud.orbit.core.tries.Try
 
-internal class TaskHandleOperator<I>(private val body: (Try<I>) -> Unit): TaskOperator<I, I>() {
+
+internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): TaskOperator<I, O>() {
     override fun fulfilled(result: Try<I>) {
-        body(result)
-        value = result
-        triggerListeners()
+        result onSuccess {
+            try {
+                body(it) handle {
+                    value = it
+                    triggerListeners()
+                }
+            } catch(t: Throwable) {
+                value = Try(t)
+                triggerListeners()
+            }
+        } onFailure {
+            value = Try(it)
+            triggerListeners()
+        }
     }
 }

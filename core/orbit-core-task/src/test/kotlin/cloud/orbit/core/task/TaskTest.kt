@@ -28,11 +28,110 @@
 
 package cloud.orbit.core.task
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TaskTest {
+    private class TaskTestException: RuntimeException() { }
+
+    @Test
+    fun basicTest() {
+        val success = Task { "success" }
+        Assertions.assertEquals("success", success.await())
+
+        val fail = Task { throw TaskTestException() } map {}
+        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+    }
+
     @Test
     fun mapTest() {
-        Task.create { 5 } map { it * it } handle { println(it) }
+        val success = Task { 5 } map { it * it }
+        Assertions.assertEquals(25, success.await())
+
+        val initialFail = Task<Int> { throw TaskTestException() } map { it * it }
+        Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
+
+        val mapFail = Task { 5 } map { throw TaskTestException() }
+        Assertions.assertThrows(TaskTestException::class.java, { mapFail.await() })
+    }
+
+    @Test
+    fun flatMapTest() {
+        val success = Task { 5 } flatMap { x-> Task { x * x }}
+        Assertions.assertEquals(25, success.await())
+
+        val initialFail = Task<Int> { throw TaskTestException() } flatMap { x-> Task { x * x }}
+        Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
+
+        @Suppress("UNREACHABLE_CODE")
+        val flatMapFail = Task { 5 } flatMap { throw TaskTestException(); Task { 5 } }
+        Assertions.assertThrows(TaskTestException::class.java, { flatMapFail.await() })
+
+        @Suppress("UNREACHABLE_CODE")
+        val flatMapNestedFail = Task { 5 } flatMap { Task { throw TaskTestException(); 5 } }
+        Assertions.assertThrows(TaskTestException::class.java, { flatMapNestedFail.await() })
+    }
+
+    @Test
+    fun handleTest() {
+        var didFire: Boolean
+
+        didFire = false
+        val success = Task { "success" }
+        success handle { it onSuccess { didFire = true }}
+        Assertions.assertEquals("success", success.await())
+        Assertions.assertTrue(didFire)
+
+        didFire = false
+        val fail = Task { throw TaskTestException() }
+        fail handle { it onFailure { didFire = true }}
+        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        Assertions.assertTrue(didFire)
+    }
+
+    @Test
+    fun onSuccessTest() {
+        var didFire: Boolean
+
+        didFire = false
+        val success = Task { "success" }
+        success onSuccess { didFire = true }
+        Assertions.assertEquals("success", success.await())
+        Assertions.assertTrue(didFire)
+
+        didFire = false
+        val fail = Task { throw TaskTestException() }
+        fail onSuccess { didFire = true }
+        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        Assertions.assertFalse(didFire)
+    }
+
+    @Test
+    fun onFailureTest() {
+        var didFire: Boolean
+
+        didFire = false
+        val success = Task { "success" }
+        success onFailure  { didFire = true }
+        Assertions.assertEquals("success", success.await())
+        Assertions.assertFalse(didFire)
+
+        didFire = false
+        val fail = Task { throw TaskTestException() }
+        fail onFailure  { didFire = true }
+        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        Assertions.assertTrue(didFire)
+    }
+
+    @Test
+    fun delayedTest() {
+        var didFire: Boolean
+
+        didFire = false
+        val success = Task { "success" }
+        success.await()
+        success onSuccess { didFire = true }
+        Assertions.assertTrue(didFire)
+
     }
 }

@@ -31,10 +31,14 @@ package cloud.orbit.core.task
 import cloud.orbit.core.concurrent.JobManager
 import cloud.orbit.core.concurrent.JobManagers
 import cloud.orbit.core.task.operator.TaskApplyOperator
-import cloud.orbit.core.task.operator.TaskAsyncSwitchOperator
+import cloud.orbit.core.task.operator.TaskAwaitOperator
+import cloud.orbit.core.task.operator.TaskFlatMapOperator
 import cloud.orbit.core.task.operator.TaskHandleOperator
 import cloud.orbit.core.task.operator.TaskMapOperator
+import cloud.orbit.core.task.operator.TaskOnFailureOperator
+import cloud.orbit.core.task.operator.TaskOnSuccessOperator
 import cloud.orbit.core.task.operator.TaskOperator
+import cloud.orbit.core.task.operator.TaskSwitchManagerOperator
 import cloud.orbit.core.tries.Try
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
@@ -80,9 +84,20 @@ abstract class Task<T> {
         return taskOperator
     }
 
+    infix fun onSuccess(body: (T) -> Unit): Task<T> {
+        val taskOperator = TaskOnSuccessOperator(body)
+        addListener(taskOperator)
+        return taskOperator
+    }
 
-    infix fun asyncSwitch(jobManager: JobManager): Task<T> {
-        val taskOperator = TaskAsyncSwitchOperator<T>(jobManager)
+    infix fun onFailure(body: (Throwable) -> Unit): Task<T> {
+        val taskOperator = TaskOnFailureOperator<T>(body)
+        addListener(taskOperator)
+        return taskOperator
+    }
+
+    infix fun switchManager(jobManager: JobManager): Task<T> {
+        val taskOperator = TaskSwitchManagerOperator<T>(jobManager)
         addListener(taskOperator)
         return taskOperator
     }
@@ -93,7 +108,22 @@ abstract class Task<T> {
         return taskOperator
     }
 
+    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> {
+        val taskOperator = TaskFlatMapOperator(body)
+        addListener(taskOperator)
+        return taskOperator
+    }
+
+    fun await(): T {
+        val taskOperator = TaskAwaitOperator<T>()
+        addListener(taskOperator)
+        return taskOperator.waitOnLatch()
+    }
+
     companion object {
+        operator fun <V> invoke(body: () -> V) = create(body)
+        operator fun <V> invoke(jobManager: JobManager, body: () -> V) = create(jobManager, body)
+
         @JvmStatic
         fun <V> create(body: () -> V): Task<V> = create(JobManagers.parallel(), body)
 

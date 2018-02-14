@@ -26,36 +26,8 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
+package cloud.orbit.core.concurrent
 
-object ExceptionUtils {
-    private const val MAX_DEPTH = 128
-
-    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0): T? {
-        return if (chain != null && depth < MAX_DEPTH) {
-            if (cause.isInstance(chain)) {
-                @Suppress("UNCHECKED_CAST")
-                chain as? T
-            } else {
-                checkChainRecursive(cause, chain.cause, depth + 1)
-            }
-        } else {
-            null
-        }
-    }
-
-    inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
-            ExceptionUtils.isCauseInChain(T::class.java, chain)
-
-    inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
-            ExceptionUtils.getCauseInChain(T::class.java, chain)
-
-    @JvmStatic
-    fun <T: Throwable> isCauseInChain(cause: Class<out T>, chain: T?) =
-            checkChainRecursive(cause, chain) != null
-
-    @JvmStatic
-    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): T? =
-            checkChainRecursive(cause, chain)
-
+interface Disposable {
+    fun dispose()
 }

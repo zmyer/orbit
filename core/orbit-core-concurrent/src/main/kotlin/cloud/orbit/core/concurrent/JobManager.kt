@@ -28,6 +28,6 @@
 
 package cloud.orbit.core.concurrent
 
-interface Cancelable {
-    fun cancel()
+interface JobManager : Disposable {
+    fun submit(body: () -> Unit): Disposable
 }

@@ -26,36 +26,44 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
+package cloud.orbit.core.concurrent.impl
 
-object ExceptionUtils {
-    private const val MAX_DEPTH = 128
+import cloud.orbit.core.concurrent.Disposable
+import cloud.orbit.core.concurrent.JobManager
+import cloud.orbit.core.concurrent.JobManagers
+import java.util.concurrent.ExecutorService
 
-    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0): T? {
-        return if (chain != null && depth < MAX_DEPTH) {
-            if (cause.isInstance(chain)) {
-                @Suppress("UNCHECKED_CAST")
-                chain as? T
-            } else {
-                checkChainRecursive(cause, chain.cause, depth + 1)
-            }
-        } else {
-            null
+internal class JavaExecutorJobManager(private val executorService: ExecutorService): JobManager {
+
+    private class JobOffer(private val body: () -> Unit): Disposable {
+
+        @Volatile
+        private var isCanceled = false
+
+        fun run() {
+                if(!isCanceled) {
+                    try {
+                        body()
+                    }catch(t: Throwable) {
+                        JobManagers.handleUncaughtException(t)
+                    }
+                }
+        }
+
+        override fun dispose() {
+            isCanceled = true
         }
     }
 
-    inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
-            ExceptionUtils.isCauseInChain(T::class.java, chain)
+    override fun submit(body: () -> Unit): Disposable {
+        val job = JobOffer(body)
+        executorService.submit( Runnable {
+            job.run()
+        })
+        return job
+    }
 
-    inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
-            ExceptionUtils.getCauseInChain(T::class.java, chain)
-
-    @JvmStatic
-    fun <T: Throwable> isCauseInChain(cause: Class<out T>, chain: T?) =
-            checkChainRecursive(cause, chain) != null
-
-    @JvmStatic
-    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): T? =
-            checkChainRecursive(cause, chain)
-
+    override fun dispose() {
+        executorService.shutdown()
+    }
 }

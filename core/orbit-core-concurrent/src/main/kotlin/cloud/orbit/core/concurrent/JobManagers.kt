@@ -26,36 +26,51 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
+package cloud.orbit.core.concurrent
 
-object ExceptionUtils {
-    private const val MAX_DEPTH = 128
+import cloud.orbit.core.concurrent.impl.BlockingJobManager
+import cloud.orbit.core.concurrent.impl.JavaExecutorJobManager
+import java.util.concurrent.Executors
 
-    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0): T? {
-        return if (chain != null && depth < MAX_DEPTH) {
-            if (cause.isInstance(chain)) {
-                @Suppress("UNCHECKED_CAST")
-                chain as? T
-            } else {
-                checkChainRecursive(cause, chain.cause, depth + 1)
-            }
-        } else {
-            null
-        }
+object JobManagers {
+    private val parallel = newParallel()
+    private val elastic = newElastic()
+    private val blocking = newBlocking()
+
+    internal fun handleUncaughtException(throwable: Throwable) {
+        TODO("Log this properly")
     }
 
-    inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
-            ExceptionUtils.isCauseInChain(T::class.java, chain)
-
-    inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
-            ExceptionUtils.getCauseInChain(T::class.java, chain)
+    @JvmStatic
+    fun parallel() = parallel
 
     @JvmStatic
-    fun <T: Throwable> isCauseInChain(cause: Class<out T>, chain: T?) =
-            checkChainRecursive(cause, chain) != null
+    fun elastic() = elastic
 
     @JvmStatic
-    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): T? =
-            checkChainRecursive(cause, chain)
+    fun blocking() = blocking
+
+    @JvmStatic
+    @JvmOverloads
+    fun newParallel(parallelism: Int = Runtime.getRuntime().availableProcessors()): JobManager {
+        val javaService = Executors.newWorkStealingPool(parallelism)
+        return JavaExecutorJobManager(javaService)
+    }
+
+    @JvmStatic
+    fun newElastic(): JobManager {
+        val javaService = Executors.newCachedThreadPool()
+        return JavaExecutorJobManager(javaService)
+    }
+
+    @JvmStatic
+    fun newBlocking(): JobManager = BlockingJobManager()
+
+    @JvmStatic
+    fun newSingleThread(): JobManager {
+        val javaService = Executors.newSingleThreadExecutor()
+        return JavaExecutorJobManager(javaService)
+    }
+
 
 }

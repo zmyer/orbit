@@ -1,3 +1,9 @@
+import cloud.orbit.core.concurrent.JobManagers
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicBoolean
+
 /*
  Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
@@ -26,36 +32,33 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
-
-object ExceptionUtils {
-    private const val MAX_DEPTH = 128
-
-    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0): T? {
-        return if (chain != null && depth < MAX_DEPTH) {
-            if (cause.isInstance(chain)) {
-                @Suppress("UNCHECKED_CAST")
-                chain as? T
-            } else {
-                checkChainRecursive(cause, chain.cause, depth + 1)
-            }
-        } else {
-            null
+class ConcurrentTest {
+    @Test
+    fun testBlocking() {
+        val executor = JobManagers.blocking()
+        val notSet = AtomicBoolean(false)
+        executor.submit {
+            Thread.sleep(100)
+            notSet.set(true)
         }
+        Assertions.assertTrue(notSet.get())
     }
 
-    inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
-            ExceptionUtils.isCauseInChain(T::class.java, chain)
+    @Test
+    fun testCancel() {
+        val countDownLatch = CountDownLatch(1)
+        val executor = JobManagers.newSingleThread()
+        val notSet = AtomicBoolean(false)
 
-    inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
-            ExceptionUtils.getCauseInChain(T::class.java, chain)
+        executor.submit {
+            Thread.sleep(100)
+            countDownLatch.countDown()
+        }
+        val secondTask = executor.submit { notSet.set(true) }
+        secondTask.dispose()
 
-    @JvmStatic
-    fun <T: Throwable> isCauseInChain(cause: Class<out T>, chain: T?) =
-            checkChainRecursive(cause, chain) != null
+        countDownLatch.await()
 
-    @JvmStatic
-    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): T? =
-            checkChainRecursive(cause, chain)
-
+        Assertions.assertFalse(notSet.get())
+    }
 }

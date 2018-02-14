@@ -28,4 +28,5 @@
 
 package cloud.orbit.core.exception
 
-inline fun <reified T: Throwable>Throwable?.isCauseInChain() = ExceptionUtils.isCauseInChain(T::class.java, this)
+inline fun <reified T: Throwable> Throwable?.isCauseInChain() =
+        ExceptionUtils.isCauseInChain<T>(this)

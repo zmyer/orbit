@@ -36,26 +36,33 @@ def configureProject(final String projectName, final List<List<Project>> toAdd) 
 def withKotlin = []
 def withJava = []
 def withTests = []
+def withDocs = []
 
-configureProject(":core:orbit-core-exception", [withKotlin, withJava, withTests])
-configureProject(":core:orbit-core-maybe", [withKotlin, withJava, withTests])
-configureProject(":core:orbit-core-try", [withKotlin, withJava, withTests])
-configureProject(":core:orbit-core-concurrent", [withKotlin, withJava, withTests])
-configureProject(":core:orbit-core-task", [withKotlin, withJava, withTests])
+configureProject(":core:orbit-core-exception", [withKotlin, withJava, withTests, withDocs])
+configureProject(":core:orbit-core-maybe", [withKotlin, withJava, withTests, withDocs])
+configureProject(":core:orbit-core-try", [withKotlin, withJava, withTests, withDocs])
+configureProject(":core:orbit-core-concurrent", [withKotlin, withJava, withTests, withDocs])
+configureProject(":core:orbit-core-task", [withKotlin, withJava, withTests, withDocs])
 
 
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
     ext.junitPlatformVersion = "1.0.3"
+    ext.dokkaVersion = "0.9.16-eap-3"
 
     repositories {
         mavenCentral()
+        jcenter()
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap"
+        } // TODO: Remove when dokka stable works with Kotlin 1.2
     }
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
     }
 }
 
@@ -143,5 +150,15 @@ configure(withTests) {
     dependencies {
         testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
         testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    }
+}
+
+// Docs
+configure(withDocs) {
+    apply plugin: "org.jetbrains.dokka"
+
+    dokka {
+        outputFormat = "html"
+        outputDirectory = "$buildDir/javadoc"
     }
 }

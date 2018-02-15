@@ -88,7 +88,6 @@ sealed class Try<T> {
 
     companion object {
         operator fun <V> invoke(body: () -> V) = create(body)
-        operator fun <V> invoke(throwable: Throwable) = create<V>(throwable)
 
         @JvmStatic
         fun <V> create(body: () -> V): Try<V> = try {
@@ -98,7 +97,10 @@ sealed class Try<T> {
         }
 
         @JvmStatic
-        fun <V> create(throwable: Throwable) = Failure<V>(throwable)
+        fun <V> success(value: V) = Success(value)
+
+        @JvmStatic
+        fun <V> failed(throwable: Throwable) = Failure<V>(throwable)
     }
 }
 

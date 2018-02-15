@@ -35,7 +35,7 @@ internal class TaskMapOperator<I, O>(private val body: (I) -> O): TaskOperator<I
         result onSuccess {
             value = Try { body(it) }
         } onFailure {
-            value = Try(it)
+            value = Try.failed(it)
         }
         triggerListeners()
     }

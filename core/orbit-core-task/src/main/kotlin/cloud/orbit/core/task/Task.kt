@@ -39,10 +39,16 @@ import cloud.orbit.core.task.operator.TaskOnFailureOperator
 import cloud.orbit.core.task.operator.TaskOnSuccessOperator
 import cloud.orbit.core.task.operator.TaskOperator
 import cloud.orbit.core.task.operator.TaskForceJobManager
+import cloud.orbit.core.task.operator.TaskImmediateValueOperator
 import cloud.orbit.core.tries.Try
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
 
+/**
+ * Represents a promise that a unit of asynchronous work will be completed and the value will be made available in the
+ * future.
+ * [Task]s are guaranteed to complete and may complete successfully or exceptionally.
+ */
 abstract class Task<T> {
     private val listeners = ConcurrentLinkedQueue<TaskOperator<T, *>>()
     private val lock = ReentrantLock()
@@ -78,60 +84,192 @@ abstract class Task<T> {
         triggerListeners()
     }
 
+    /**
+     * Upon this [Task]'s completion, executes the given function and returns a new [Task] with the result of the
+     * original.
+     *
+     * @param body The function to run on completion.
+     * @return The task.
+     */
     infix fun handle(body: (Try<T>) -> Unit): Task<T> {
         val taskOperator = TaskHandleOperator(body)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
+     *
+     * @param body The function to run on success.
+     * @return The task.
+     */
     infix fun onSuccess(body: (T) -> Unit): Task<T> {
         val taskOperator = TaskOnSuccessOperator(body)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
+     *
+     * @param body The function to run on failure.
+     * @return The task.
+     */
     infix fun onFailure(body: (Throwable) -> Unit): Task<T> {
         val taskOperator = TaskOnFailureOperator<T>(body)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
+     * [JobManager].
+     *
+     * CAUTION: Only operators applied directly to this [Task] are guaranteed to run on the specifieid [JobManager].
+     * Further calls are free to run on other threads.
+     *
+     * @param jobManager The target [JobManager].
+     * @return The [Task].
+     */
     fun forceJobManager(jobManager: JobManager): Task<T> {
         val taskOperator = TaskForceJobManager<T>(jobManager)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
+     * [JobManager]
+     *
+     * CAUTION: Only operators applied directly to this [Task] are guaranteed to run on the specifieid [JobManager].
+     * Further calls are free to run on other threads.
+     *
+     * @param body A function which returns the desired target [JobManager].
+     * @return The [Task].
+     */
     infix fun forceJobManager(body: () -> JobManager): Task<T> {
         return forceJobManager(body())
     }
 
+    /**
+     * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
+     *
+     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
+     *
+     * @param body The mapping function.
+     * @return The completed task with the new value.
+     */
     infix fun <O> map(body: (T) -> O): Task<O> {
         val taskOperator = TaskMapOperator(body)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Asynchronously maps the value of this [Task] to another [Task] and flattens the result of the latter.
+     *
+     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
+     *
+     * @param body The mapping function.
+     * @return A new asynchronous [Task] with the mapped value.
+     */
     infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> {
         val taskOperator = TaskFlatMapOperator(body)
         addListener(taskOperator)
         return taskOperator
     }
 
+    /**
+     * Causes the current thread to wait for the [Task] to be completed.
+     *
+     * Upon [Task] completion the successful completion value is returned of the failure [Throwable] is raised.
+     * CAUTION: Use of this method should generally be avoided as it blocks the current thread.
+     *
+     * @return The value of the completed task if successful.
+     * @throws Throwable The [Throwable] of the failed tasked if failed.
+     */
     fun await(): T {
         val taskOperator = TaskAwaitOperator<T>()
         addListener(taskOperator)
         return taskOperator.waitOnLatch()
     }
 
+    /**
+     * Returns true if this [Task] is complete either successfully or exceptionally.
+     *
+     * @return true if this [Task] is complete, otherwise false.
+     */
+    fun isComplete() = value != null
+
     companion object {
+        private val EMPTY_TASK = Task.just(Unit)
+
+        /**
+         * Creates a [Task] which executes on the default [JobManager].
+         *
+         * @param body The function to be executed by the [JobManager].
+         * @return The [Task].
+         */
         operator fun <V> invoke(body: () -> V) = create(body)
+
+        /**
+         * Creates a [Task] which executes on the specified [JobManager].
+         *
+         * @param jobManager The [JobManager] on which this block should be executed.
+         * @return The [Task].
+         * @param body The function to be executed by the [JobManager].
+         */
         operator fun <V> invoke(jobManager: JobManager, body: () -> V) = create(jobManager, body)
 
+        /**
+         * Creates a [Task] which executes on the default [JobManager].
+         *
+         * @param body The function to be executed by the [JobManager].
+         * @return The [Task].
+         */
         @JvmStatic
         fun <V> create(body: () -> V): Task<V> = create(JobManagers.parallel(), body)
 
+        /**
+         * Creates a [Task] which executes on the specified [JobManager].
+         *
+         * @param jobManager The [JobManager] on which this block should be executed
+         * @param body The function to be executed by the [JobManager].
+         * @return The [Task].
+         */
         @JvmStatic
         fun <V> create(jobManager: JobManager, body: () -> V): Task<V> = TaskApplyOperator(jobManager, body)
+
+        /**
+         * Creates a [Task] which is immediately completed with the specified value.
+         *
+         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         *
+         * @param value The value for the [Task] to be resolved with.
+         * @return The completed [Task].
+         */
+        @JvmStatic
+        fun <V> just(value: V): Task<V> = TaskImmediateValueOperator(Try.success(value))
+
+        /**
+         * Creates a [Task] which is immediately failed with the specified value.
+         *
+         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         *
+         * @param t The [Throwable] for the [Task] to be resolved with.
+         * @return The failed [Task].
+         */
+        @JvmStatic
+        fun <V> fail(t: Throwable): Task<V> = TaskImmediateValueOperator(Try.failed(t))
+
+        /**
+         * Returns an empty [Task] that is already completed with an empty result.
+         *
+         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         *
+         * @return The empty [Task].
+         */
+        @JvmStatic
+        fun empty(): Task<Unit> = EMPTY_TASK
     }
 }

@@ -72,6 +72,9 @@ abstract class Task<T> {
                     drainQueue(valResult)
                 } finally {
                     lock.unlock()
+                    if(!listeners.isEmpty()) {
+                        triggerListeners()
+                    }
                 }
             }
         }

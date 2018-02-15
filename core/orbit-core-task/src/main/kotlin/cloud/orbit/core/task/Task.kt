@@ -56,11 +56,11 @@ abstract class Task<T> {
     @Volatile
     internal var value: Try<T>? = null
 
-    internal open fun triggerListeners() {
+    internal fun triggerListeners() {
         tailrec fun drainQueue(opVal: Try<T>) {
             val polled = listeners.poll()
             if(polled != null) {
-                polled.fulfilled(opVal)
+                executeListener(polled, opVal)
                 drainQueue(opVal)
             }
         }
@@ -72,17 +72,24 @@ abstract class Task<T> {
                     drainQueue(valResult)
                 } finally {
                     lock.unlock()
-                    if(!listeners.isEmpty()) {
-                        triggerListeners()
-                    }
                 }
             }
         }
     }
 
+    internal open fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
+        listener.fulfilled(triggerVal)
+    }
+
     private fun addListener(taskOperator: TaskOperator<T, *>) {
-        listeners.add(taskOperator)
-        triggerListeners()
+        val valResult = value
+        if(valResult == null) {
+            listeners.add(taskOperator)
+            triggerListeners()
+        } else {
+            executeListener(taskOperator, valResult)
+        }
+
     }
 
     /**

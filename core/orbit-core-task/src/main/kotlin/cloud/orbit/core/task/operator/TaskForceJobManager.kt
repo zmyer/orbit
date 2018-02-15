@@ -37,9 +37,9 @@ internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskO
         triggerListeners()
     }
 
-    override fun triggerListeners() {
+    override fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
         jobManager.submit {
-            super.triggerListeners()
+            super.executeListener(listener, triggerVal)
         }
     }
 }

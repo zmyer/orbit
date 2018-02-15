@@ -28,7 +28,10 @@
 
 package cloud.orbit.core.exception
 
-
+/**
+ * The base exception type used by Orbit.
+ * All Orbit exceptions derive from this exception.
+ */
 open class OrbitException
     @JvmOverloads
     constructor(message: String? = null, cause: Throwable? = null):

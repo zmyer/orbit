@@ -36,7 +36,7 @@ class MaybeJavaTest {
     @Test
     @SuppressWarnings("unchecked")
     void maybeAPITest() {
-        Maybe<String> some = Maybe.of("some");
+        Maybe<String> some = Maybe.just("some");
         Assertions.assertTrue(some.isPresent());
         Assertions.assertEquals("some", some.get());
 

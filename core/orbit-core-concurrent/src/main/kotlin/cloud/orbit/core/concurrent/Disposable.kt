@@ -28,6 +28,12 @@
 
 package cloud.orbit.core.concurrent
 
+/**
+ * Indicates a resource can be disposed.
+ */
 interface Disposable {
+    /**
+     * Dispose the resource.
+     */
     fun dispose()
 }

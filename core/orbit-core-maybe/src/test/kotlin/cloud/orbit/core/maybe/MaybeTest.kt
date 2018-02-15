@@ -39,14 +39,14 @@ class MaybeTest {
         Assertions.assertTrue(empty.isEmpty)
         Assertions.assertThrows(Throwable::class.java, { empty.get() })
 
-        val value = Maybe.of("valueTest")
+        val value = Maybe.just("valueTest")
         Assertions.assertTrue(value.isPresent)
         Assertions.assertEquals("valueTest", value.get())
     }
 
     @Test
     fun mapTest() {
-        val squared = Maybe.of(5) map { it * it }
+        val squared = Maybe.just(5) map { it * it }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
 
@@ -57,18 +57,18 @@ class MaybeTest {
 
     @Test
     fun flatMapTest() {
-        val squared = Maybe.of(5) flatMap { Maybe.of(it * it) }
+        val squared = Maybe.just(5) flatMap { Maybe.just(it * it) }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
 
         val emptyMaybe: Maybe<Int> = Maybe.empty()
-        val mapEmpty = emptyMaybe flatMap { Maybe.of(it * it) }
+        val mapEmpty = emptyMaybe flatMap { Maybe.just(it * it) }
         Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
     @Test
     fun orNullTest() {
-        val testRealVal = Maybe.of("testVal")
+        val testRealVal = Maybe.just("testVal")
         Assertions.assertNotNull(testRealVal.orNull())
 
         val testEmptyVal = Maybe.empty()
@@ -76,21 +76,34 @@ class MaybeTest {
     }
 
     @Test
-    fun forEachTest() {
+    fun onSomethingTest() {
         var didRun = false
-        val testRealVal = Maybe.of("testVal")
-        testRealVal forEach { didRun = true }
+        val testRealVal = Maybe.just("testVal")
+        testRealVal onSomething { didRun = true }
         Assertions.assertTrue(didRun)
 
         didRun = false
         val testEmptyVal = Maybe.empty()
-        testEmptyVal forEach { didRun = true }
+        testEmptyVal onSomething { didRun = true }
+        Assertions.assertFalse(didRun)
+    }
+
+    @Test
+    fun onNothingTest() {
+        var didRun = false
+        val testRealVal = Maybe.empty()
+        testRealVal onNothing { didRun = true }
+        Assertions.assertTrue(didRun)
+
+        didRun = false
+        val testEmptyVal = Maybe.just("something")
+        testEmptyVal onNothing { didRun = true }
         Assertions.assertFalse(didRun)
     }
 
     @Test
     fun optionalConversionTest() {
-        val maybeSomeOptional = Maybe.of("maybeSomeOptional").toOptional()
+        val maybeSomeOptional = Maybe.just("maybeSomeOptional").toOptional()
         Assertions.assertTrue(maybeSomeOptional.isPresent)
         Assertions.assertEquals("maybeSomeOptional", maybeSomeOptional.get())
 
@@ -107,9 +120,9 @@ class MaybeTest {
 
     @Test
     fun equalityTest() {
-        val firstSome = Maybe.of("match")
-        val secondSome = Maybe.of("match")
-        val thirdSome = Maybe.of("dontMatch")
+        val firstSome = Maybe.just("match")
+        val secondSome = Maybe.just("match")
+        val thirdSome = Maybe.just("dontMatch")
         Assertions.assertEquals(firstSome, firstSome)
         Assertions.assertEquals(firstSome, secondSome)
         Assertions.assertNotEquals(firstSome, thirdSome)

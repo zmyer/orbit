@@ -28,6 +28,15 @@
 
 package cloud.orbit.core.concurrent
 
+/**
+ * A manager to execute asynchronous jobs.
+ */
 interface JobManager : Disposable {
+    /**
+     * Submits a function to the underlying manager to be executed.
+     *
+     * @param body The function to be executed.
+     * @return A disposable resource representing the job.
+     */
     fun submit(body: () -> Unit): Disposable
 }

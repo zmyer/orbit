@@ -30,10 +30,20 @@ package cloud.orbit.core.maybe
 
 import java.util.Optional
 
+/**
+ * Converts any value to a [Maybe]. If null the [Maybe] will be nothing otherwise it will have a computed value.
+ *
+ * @return The [Maybe].
+ */
 fun <T> T?.toMaybe() = if(this == null) {
     Maybe.empty()
 } else {
-    Maybe.of(this)
+    Maybe.just(this)
 }
 
+/**
+ * Converts a Java [Optional] to an Orbit [Maybe].
+ *
+ * @return The [Maybe].
+ */
 fun <T> Optional<T>.toMaybe() = Maybe.fromOptional(this)

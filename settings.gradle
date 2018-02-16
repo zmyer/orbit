@@ -30,7 +30,7 @@ rootProject.name = "retrograde"
 
 // Core
 include ":framework:orbit-concurrent"
+include ":framework:orbit-util"
 
-include ":framework:orbit-core-exception"
 include ":framework:orbit-core-maybe"
 include ":framework:orbit-core-try"

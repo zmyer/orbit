@@ -26,27 +26,22 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception;
+package orbit.util.exception
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+/**
+ * Checks whether the specified exception type (cause) is in the chain of this exception.
+ *
+ * @param T The type of exception to check for.
+ * @return true if cause is in chain otherwise false.
+ */
+inline fun <reified T: Throwable> Throwable?.isCauseInChain() =
+        ExceptionUtils.isCauseInChain<T>(this)
 
-class OrbitExceptionJavaTest {
-    @Test
-    void orbitExceptionJavaAPITest() {
-        final OrbitException blankOrbitException = new OrbitException();
-        Assertions.assertNull(blankOrbitException.getMessage());
-        Assertions.assertNull(blankOrbitException.getCause());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, blankOrbitException));
-
-        final OrbitException textOrbitException = new OrbitException("textOrbitException");
-        Assertions.assertEquals("textOrbitException", textOrbitException.getMessage());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, textOrbitException));
-
-        final OrbitException nullOrbitException = null;
-        Assertions.assertFalse(ExceptionUtils.isCauseInChain(OrbitException.class, nullOrbitException));
-
-        final RuntimeException nestedOrbitException = new RuntimeException("nested", new OrbitException());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
-    }
-}
+/**
+ * Gets the specified exception type (cause) if it is in the chain of this exception.
+ *
+ * @param T The type of exception to check for.
+ * @return The discovered exception, otherwise null.
+ */
+inline fun <reified T: Throwable> Throwable?.getCauseInChain() =
+        ExceptionUtils.getCauseInChain<T>(this)

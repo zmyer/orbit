@@ -26,22 +26,13 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
+package orbit.util.exception
 
 /**
- * Checks whether the specified exception type (cause) is in the chain of this exception.
- *
- * @param T The type of exception to check for.
- * @return true if cause is in chain otherwise false.
+ * The base exception type used by Orbit.
+ * All Orbit exceptions derive from this exception.
  */
-inline fun <reified T: Throwable> Throwable?.isCauseInChain() =
-        ExceptionUtils.isCauseInChain<T>(this)
-
-/**
- * Gets the specified exception type (cause) if it is in the chain of this exception.
- *
- * @param T The type of exception to check for.
- * @return The discovered exception, otherwise null.
- */
-inline fun <reified T: Throwable> Throwable?.getCauseInChain() =
-        ExceptionUtils.getCauseInChain<T>(this)
+open class OrbitException
+    @JvmOverloads
+    constructor(message: String? = null, cause: Throwable? = null):
+        RuntimeException(message, cause)

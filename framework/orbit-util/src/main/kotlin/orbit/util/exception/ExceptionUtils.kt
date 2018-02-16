@@ -26,7 +26,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.exception
+package orbit.util.exception
 
 object ExceptionUtils {
     private const val MAX_DEPTH = 128
@@ -52,7 +52,7 @@ object ExceptionUtils {
      * @return true if cause is in chain otherwise false.
      */
     inline fun <reified T: Throwable> isCauseInChain(chain: Throwable?) =
-            ExceptionUtils.isCauseInChain(T::class.java, chain)
+            isCauseInChain(T::class.java, chain)
 
     /**
      * Gets the specified exception type (cause) if it is in the chain of exceptions provided.
@@ -62,7 +62,7 @@ object ExceptionUtils {
      * @return The discovered exception, otherwise null.
      */
     inline fun <reified T: Throwable> getCauseInChain(chain: Throwable?) =
-            ExceptionUtils.getCauseInChain(T::class.java, chain)
+            getCauseInChain(T::class.java, chain)
 
     /**
      * Checks whether the specified exception type (cause) is in the chain of exceptions provided.

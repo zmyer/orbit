@@ -29,7 +29,7 @@
 package orbit.util
 
 import orbit.util.maybe.Maybe
-import orbit.util.maybe.toMaybe
+import orbit.util.maybe.asMaybe
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.Optional
@@ -105,18 +105,18 @@ class MaybeTest {
 
     @Test
     fun testOptionalConversion() {
-        val maybeSomeOptional = Maybe.just("maybeSomeOptional").toOptional()
+        val maybeSomeOptional = Maybe.just("maybeSomeOptional").asOptional()
         Assertions.assertTrue(maybeSomeOptional.isPresent)
         Assertions.assertEquals("maybeSomeOptional", maybeSomeOptional.get())
 
-        val maybeNoneOptional = Maybe.empty().toOptional()
+        val maybeNoneOptional = Maybe.empty().asOptional()
         Assertions.assertFalse(maybeNoneOptional.isPresent)
 
-        val optionalSomeMaybe = Optional.of("optionalSomeMaybe").toMaybe()
+        val optionalSomeMaybe = Optional.of("optionalSomeMaybe").asMaybe()
         Assertions.assertTrue(optionalSomeMaybe.isPresent)
         Assertions.assertEquals("optionalSomeMaybe", optionalSomeMaybe.get())
 
-        val optionalNoneMaybe = Optional.empty<String>().toMaybe()
+        val optionalNoneMaybe = Optional.empty<String>().asMaybe()
         Assertions.assertTrue(optionalNoneMaybe.isEmpty)
     }
 

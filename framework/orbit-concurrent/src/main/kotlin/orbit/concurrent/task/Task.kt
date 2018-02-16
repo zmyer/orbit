@@ -209,7 +209,7 @@ abstract class Task<T> {
      *
      * @return A Java [CompletableFuture].
      */
-    fun toCompletableFuture(): CompletableFuture<T> {
+    fun asCompletableFuture(): CompletableFuture<T> {
         val cf = CompletableFuture<T>()
         handle { result ->
             result onSuccess { rawValue ->

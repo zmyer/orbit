@@ -60,12 +60,12 @@ class TryJavaTest {
     @Test
     void testTryJavaOptionalConversions() {
         final Try<String> stringTry = Try.create(() -> "stringTry");
-        final Optional<String> javaStringOptional = stringTry.toOptional();
+        final Optional<String> javaStringOptional = stringTry.asOptional();
         Assertions.assertTrue(javaStringOptional.isPresent());
         Assertions.assertEquals("stringTry", javaStringOptional.get());
 
         final Try<String> throwableTry = Try.create(() -> { throw new TryJavaTestException(); });
-        final Optional<String> javaEmptyOptional = throwableTry.toOptional();
+        final Optional<String> javaEmptyOptional = throwableTry.asOptional();
         Assertions.assertFalse(javaEmptyOptional.isPresent());
     }
 }

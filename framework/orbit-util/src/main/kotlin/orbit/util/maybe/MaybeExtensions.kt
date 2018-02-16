@@ -35,7 +35,7 @@ import java.util.Optional
  *
  * @return The [Maybe].
  */
-fun <T> T?.toMaybe() = if(this == null) {
+fun <T> T?.asMaybe() = if(this == null) {
     Maybe.empty()
 } else {
     Maybe.just(this)
@@ -46,4 +46,4 @@ fun <T> T?.toMaybe() = if(this == null) {
  *
  * @return The [Maybe].
  */
-fun <T> Optional<T>.toMaybe() = Maybe.fromOptional(this)
+fun <T> Optional<T>.asMaybe() = Maybe.fromOptional(this)

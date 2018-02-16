@@ -59,7 +59,7 @@ sealed class Try<T> {
      *
      * @return The Java [Optional].
      */
-    fun toOptional() = when(this) {
+    fun asOptional() = when(this) {
         is Success -> Optional.of(get())
         is Failure -> Optional.empty()
     }
@@ -69,7 +69,7 @@ sealed class Try<T> {
      *
      * @return The Orbit [Maybe].
      */
-    fun toMaybe() = when(this) {
+    fun asMaybe() = when(this) {
         is Success -> Maybe.just(get())
         is Failure -> Maybe.empty()
     }

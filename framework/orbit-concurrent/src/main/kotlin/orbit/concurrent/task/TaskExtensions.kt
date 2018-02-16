@@ -35,4 +35,4 @@ import java.util.concurrent.CompletableFuture
  *
  * @return The new [Task].
  */
-fun <T> CompletableFuture<T>.toTask(): Task<T> = Task.fromCompletableFuture(this)
+fun <T> CompletableFuture<T>.asTask(): Task<T> = Task.fromCompletableFuture(this)

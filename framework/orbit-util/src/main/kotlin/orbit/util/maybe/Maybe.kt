@@ -42,7 +42,7 @@ sealed class Maybe<out T> {
     /**
      * Converts the [Maybe] to a Java [Optional].
      */
-    fun toOptional(): Optional<out T> = if(isEmpty) {
+    fun asOptional(): Optional<out T> = if(isEmpty) {
         Optional.empty()
     } else {
         Optional.of(get())

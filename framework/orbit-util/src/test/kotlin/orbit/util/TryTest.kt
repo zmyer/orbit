@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TryTest {
-    class TryTestException(): RuntimeException("TryTestException")
+    class TryTestException: RuntimeException("TryTestException")
 
     @Test
     fun testBasicSuccess() {
@@ -129,21 +129,21 @@ class TryTest {
 
     @Test
     fun testMaybeConversion() {
-        val maybeSuccess = Try { "trySuccess" }.toMaybe()
+        val maybeSuccess = Try { "trySuccess" }.asMaybe()
         Assertions.assertTrue(maybeSuccess.isPresent)
         Assertions.assertEquals("trySuccess", maybeSuccess.get())
 
-        val maybeFail = Try { throw TryTestException() }.toMaybe()
+        val maybeFail = Try { throw TryTestException() }.asMaybe()
         Assertions.assertTrue(maybeFail.isEmpty)
     }
 
     @Test
     fun testOptionalConversion() {
-        val optionalSuccess = Try { "trySuccess" }.toOptional()
+        val optionalSuccess = Try { "trySuccess" }.asOptional()
         Assertions.assertTrue(optionalSuccess.isPresent)
         Assertions.assertEquals("trySuccess", optionalSuccess.get())
 
-        val optionalFailure = Try { throw TryTestException() }.toOptional()
+        val optionalFailure = Try { throw TryTestException() }.asOptional()
         Assertions.assertFalse(optionalFailure.isPresent)
     }
 }

@@ -37,14 +37,14 @@ import java.util.concurrent.ExecutionException;
 
 class TaskJavaTest {
     @Test
-    void testToCompletableFuture() {
+    void testAsCompletableFuture() {
         try {
             final Task<Integer> successTask = Task.just(42);
-            final CompletableFuture<Integer> successCf = successTask.toCompletableFuture();
+            final CompletableFuture<Integer> successCf = successTask.asCompletableFuture();
             Assertions.assertEquals(42, successCf.get().intValue());
 
             final Task<Integer> failTask = Task.fail(new RuntimeException());
-            final CompletableFuture<Integer> failCf = failTask.toCompletableFuture();
+            final CompletableFuture<Integer> failCf = failTask.asCompletableFuture();
             Assertions.assertThrows(ExecutionException.class, failCf::get);
 
         } catch(Exception e) {

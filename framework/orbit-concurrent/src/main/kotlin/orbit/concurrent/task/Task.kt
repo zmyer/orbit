@@ -26,21 +26,21 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task
+package orbit.concurrent.task
 
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
-import cloud.orbit.core.task.operator.TaskApplyOperator
-import cloud.orbit.core.task.operator.TaskAwaitOperator
-import cloud.orbit.core.task.operator.TaskFromCompletableFutureOperator
-import cloud.orbit.core.task.operator.TaskFlatMapOperator
-import cloud.orbit.core.task.operator.TaskHandleOperator
-import cloud.orbit.core.task.operator.TaskMapOperator
-import cloud.orbit.core.task.operator.TaskOnFailureOperator
-import cloud.orbit.core.task.operator.TaskOnSuccessOperator
-import cloud.orbit.core.task.operator.TaskOperator
-import cloud.orbit.core.task.operator.TaskForceJobManager
-import cloud.orbit.core.task.operator.TaskImmediateValueOperator
+import orbit.concurrent.task.operator.TaskApplyOperator
+import orbit.concurrent.task.operator.TaskAwaitOperator
+import orbit.concurrent.task.operator.TaskFromCompletableFutureOperator
+import orbit.concurrent.task.operator.TaskFlatMapOperator
+import orbit.concurrent.task.operator.TaskHandleOperator
+import orbit.concurrent.task.operator.TaskMapOperator
+import orbit.concurrent.task.operator.TaskOnFailureOperator
+import orbit.concurrent.task.operator.TaskOnSuccessOperator
+import orbit.concurrent.task.operator.TaskOperator
+import orbit.concurrent.task.operator.TaskForceJobManager
+import orbit.concurrent.task.operator.TaskImmediateValueOperator
 import cloud.orbit.core.tries.Try
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -229,7 +229,7 @@ abstract class Task<T> {
     fun isComplete() = value != null
 
     companion object {
-        private val EMPTY_TASK = Task.just(Unit)
+        private val EMPTY_TASK = just(Unit)
 
         /**
          * Creates a [Task] which executes on the default [JobManager].

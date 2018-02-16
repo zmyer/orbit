@@ -26,13 +26,14 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task
+package orbit.concurrent.task.operator
 
-import java.util.concurrent.CompletableFuture
+import cloud.orbit.core.tries.Try
 
-/**
- * Creates a [Task] which is completed based on the result of a [CompletableFuture].
- *
- * @return The new [Task].
- */
-fun <T> CompletableFuture<T>.toTask(): Task<T> = Task.fromCompletableFuture(this)
+internal class TaskHandleOperator<I>(private val body: (Try<I>) -> Unit): TaskOperator<I, I>() {
+    override fun fulfilled(result: Try<I>) {
+        body(result)
+        value = result
+        triggerListeners()
+    }
+}

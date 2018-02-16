@@ -26,20 +26,22 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task.operator
+package orbit.concurrent.task.operator
 
-import orbit.concurrent.job.JobManager
 import cloud.orbit.core.tries.Try
+import java.util.concurrent.CountDownLatch
 
-internal class TaskApplyOperator<T>(jobManager: JobManager, body: () -> T): TaskOperator<T, T>() {
-    init {
-        jobManager.submit {
-            fulfilled(Try{ body() })
-        }
+internal class TaskAwaitOperator<I>: TaskOperator<I, I>() {
+    private val latch = CountDownLatch(1)
+
+    override fun fulfilled(result: Try<I>) {
+        value = result
+        latch.countDown()
+        triggerListeners()
     }
 
-    override fun fulfilled(result: Try<T>) {
-        value = result
-        triggerListeners()
+    internal fun waitOnLatch(): I {
+        latch.await()
+        return value!!.get()
     }
 }

@@ -26,20 +26,16 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task.operator
+package orbit.concurrent.task.operator
 
-import orbit.concurrent.job.JobManager
 import cloud.orbit.core.tries.Try
 
-internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
+internal class TaskOnFailureOperator<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
     override fun fulfilled(result: Try<T>) {
+        result onFailure  {
+            body(it)
+        }
         value = result
         triggerListeners()
-    }
-
-    override fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
-        jobManager.submit {
-            super.executeListener(listener, triggerVal)
-        }
     }
 }

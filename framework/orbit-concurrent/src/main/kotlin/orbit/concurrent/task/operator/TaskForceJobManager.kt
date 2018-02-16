@@ -26,41 +26,20 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task;
+package orbit.concurrent.task.operator
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import orbit.concurrent.job.JobManager
+import cloud.orbit.core.tries.Try
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
-
-class TaskJavaTest {
-    @Test
-    void toCompletableFutureTest() {
-        try {
-            final Task<Integer> successTask = Task.just(42);
-            final CompletableFuture<Integer> successCf = successTask.toCompletableFuture();
-            Assertions.assertEquals(42, successCf.get().intValue());
-
-            final Task<Integer> failTask = Task.fail(new RuntimeException());
-            final CompletableFuture<Integer> failCf = failTask.toCompletableFuture();
-            Assertions.assertThrows(ExecutionException.class, failCf::get);
-
-        } catch(Exception e) {
-
-        }
+internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
+    override fun fulfilled(result: Try<T>) {
+        value = result
+        triggerListeners()
     }
 
-    @Test
-    void fromCompletableFutureTest() {
-        final CompletableFuture<Integer> successCf = CompletableFuture.completedFuture(42);
-        final Task<Integer> successTask = Task.fromCompletableFuture(successCf);
-        Assertions.assertEquals(42, successTask.await().intValue());
-
-        final CompletableFuture<Integer> failCf = new CompletableFuture<>();
-        failCf.completeExceptionally(new RuntimeException());
-        final Task<Integer> failTask = Task.fromCompletableFuture(failCf);
-        Assertions.assertThrows(RuntimeException.class, failTask::await);
+    override fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
+        jobManager.submit {
+            super.executeListener(listener, triggerVal)
+        }
     }
 }

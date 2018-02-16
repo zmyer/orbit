@@ -41,7 +41,6 @@ configureProject(":framework:orbit-core-exception", [withKotlin, withJava, withT
 configureProject(":framework:orbit-core-maybe", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-core-try", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests])
-configureProject(":framework:orbit-core-task", [withKotlin, withJava, withTests])
 
 
 buildscript {

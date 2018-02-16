@@ -26,11 +26,13 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task.operator
+package orbit.concurrent.task
 
-import cloud.orbit.core.task.Task
-import cloud.orbit.core.tries.Try
+import java.util.concurrent.CompletableFuture
 
-internal abstract class TaskOperator<I, O>: Task<O>() {
-     internal abstract fun fulfilled(result: Try<I>)
-}
+/**
+ * Creates a [Task] which is completed based on the result of a [CompletableFuture].
+ *
+ * @return The new [Task].
+ */
+fun <T> CompletableFuture<T>.toTask(): Task<T> = Task.fromCompletableFuture(this)

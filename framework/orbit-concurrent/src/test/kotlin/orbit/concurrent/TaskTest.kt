@@ -26,9 +26,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task
+package orbit.concurrent
 
 import orbit.concurrent.job.JobManagers
+import orbit.concurrent.task.Task
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -58,10 +59,10 @@ class TaskTest {
 
     @Test
     fun flatMapTest() {
-        val success = Task { 5 } flatMap { x-> Task { x * x }}
+        val success = Task { 5 } flatMap { x-> Task { x * x } }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TaskTestException() } flatMap { x-> Task { x * x }}
+        val initialFail = Task<Int> { throw TaskTestException() } flatMap { x-> Task { x * x } }
         Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
 
         @Suppress("UNREACHABLE_CODE")

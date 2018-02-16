@@ -26,25 +26,17 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task.operator
+package orbit.concurrent.task.operator
 
 import cloud.orbit.core.tries.Try
-import java.util.concurrent.CompletableFuture
 
-
-internal class TaskFromCompletableFutureOperator<T>(completableFuture: CompletableFuture<T>): TaskOperator<T, T>() {
-    init {
-        completableFuture.handle { v, t ->
-            if (t != null) {
-                fulfilled(Try.failed(t))
-            } else {
-                fulfilled(Try.success(v!!))
-            }
+internal class TaskMapOperator<I, O>(private val body: (I) -> O): TaskOperator<I, O>() {
+    override fun fulfilled(result: Try<I>) {
+        result onSuccess {
+            value = Try { body(it) }
+        } onFailure {
+            value = Try.failed(it)
         }
-    }
-
-    override fun fulfilled(result: Try<T>) {
-        value = result
         triggerListeners()
     }
 }

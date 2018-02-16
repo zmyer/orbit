@@ -26,15 +26,16 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task.operator
+package orbit.concurrent.task.operator
 
 import cloud.orbit.core.tries.Try
 
-internal class TaskOnSuccessOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
+internal class TaskImmediateValueOperator<T>(immediateValue: Try<T>): TaskOperator<T, T>() {
+    init {
+        fulfilled(immediateValue)
+    }
+
     override fun fulfilled(result: Try<T>) {
-        result onSuccess {
-            body(it)
-        }
         value = result
         triggerListeners()
     }

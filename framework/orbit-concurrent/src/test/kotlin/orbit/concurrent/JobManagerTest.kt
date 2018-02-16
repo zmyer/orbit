@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicBoolean
 
-class ConcurrentTest {
+class JobManagerTest {
     @Test
     fun testBlocking() {
         val executor = JobManagers.blocking()

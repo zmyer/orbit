@@ -28,7 +28,7 @@
 
 package orbit.concurrent.task.operator
 
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 
 internal class TaskHandleOperator<I>(private val body: (Try<I>) -> Unit): TaskOperator<I, I>() {
     override fun fulfilled(result: Try<I>) {

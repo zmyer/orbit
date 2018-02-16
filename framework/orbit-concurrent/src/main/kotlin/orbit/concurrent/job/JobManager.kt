@@ -28,7 +28,7 @@
 
 package orbit.concurrent.job
 
-import orbit.concurrent.Disposable
+import orbit.util.misc.Disposable
 
 /**
  * A manager to execute asynchronous jobs.

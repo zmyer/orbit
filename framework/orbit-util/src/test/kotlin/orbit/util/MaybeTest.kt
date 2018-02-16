@@ -26,8 +26,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.maybe
+package orbit.util
 
+import orbit.util.maybe.Maybe
+import orbit.util.maybe.toMaybe
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.Optional

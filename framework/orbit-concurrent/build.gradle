@@ -27,5 +27,5 @@
  */
 
 dependencies {
-    compile(project(":framework:orbit-core-try"))
+    compile(project(":framework:orbit-util"))
 }

@@ -28,7 +28,7 @@
 
 package orbit.concurrent.task.operator
 
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
 
 

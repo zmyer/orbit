@@ -26,8 +26,9 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.tries
+package orbit.util
 
+import orbit.util.tries.Try
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

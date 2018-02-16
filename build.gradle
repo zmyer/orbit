@@ -40,11 +40,6 @@ def withTests = []
 configureProject(":framework:orbit-util", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests])
 
-configureProject(":framework:orbit-core-maybe", [withKotlin, withJava, withTests])
-configureProject(":framework:orbit-core-try", [withKotlin, withJava, withTests])
-
-
-
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
     ext.junitPlatformVersion = "1.0.3"

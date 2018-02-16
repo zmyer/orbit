@@ -29,7 +29,7 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.Task
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 
 internal abstract class TaskOperator<I, O>: Task<O>() {
      internal abstract fun fulfilled(result: Try<I>)

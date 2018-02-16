@@ -29,7 +29,7 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.job.JobManager
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 
 internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
     override fun fulfilled(result: Try<T>) {

@@ -26,12 +26,15 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.util.exception
+package orbit.util
 
+import orbit.util.exception.ExceptionUtils
+import orbit.util.exception.OrbitException
+import orbit.util.exception.isCauseInChain
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class OrbitExceptionTest {
+class ExceptionTest {
     @Test
     fun basicTest() {
         val blankException = OrbitException()

@@ -26,9 +26,9 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.tries
+package orbit.util.tries
 
-import cloud.orbit.core.maybe.Maybe
+import orbit.util.maybe.Maybe
 import java.util.Optional
 
 /**

@@ -41,7 +41,7 @@ import orbit.concurrent.task.operator.TaskOnSuccessOperator
 import orbit.concurrent.task.operator.TaskOperator
 import orbit.concurrent.task.operator.TaskForceJobManager
 import orbit.concurrent.task.operator.TaskImmediateValueOperator
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock

@@ -26,6 +26,24 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-dependencies {
-    compile(project(":framework:orbit-core-maybe"))
+package orbit.util.maybe
+
+import java.util.Optional
+
+/**
+ * Converts any value to a [Maybe]. If null the [Maybe] will be nothing otherwise it will have a computed value.
+ *
+ * @return The [Maybe].
+ */
+fun <T> T?.toMaybe() = if(this == null) {
+    Maybe.empty()
+} else {
+    Maybe.just(this)
 }
+
+/**
+ * Converts a Java [Optional] to an Orbit [Maybe].
+ *
+ * @return The [Maybe].
+ */
+fun <T> Optional<T>.toMaybe() = Maybe.fromOptional(this)

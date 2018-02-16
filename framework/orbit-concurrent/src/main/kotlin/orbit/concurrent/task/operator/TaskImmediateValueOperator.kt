@@ -28,7 +28,7 @@
 
 package orbit.concurrent.task.operator
 
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 
 internal class TaskImmediateValueOperator<T>(immediateValue: Try<T>): TaskOperator<T, T>() {
     init {

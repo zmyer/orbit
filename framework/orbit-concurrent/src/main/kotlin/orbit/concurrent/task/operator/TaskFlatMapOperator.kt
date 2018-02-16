@@ -29,7 +29,7 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.Task
-import cloud.orbit.core.tries.Try
+import orbit.util.tries.Try
 
 
 internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): TaskOperator<I, O>() {

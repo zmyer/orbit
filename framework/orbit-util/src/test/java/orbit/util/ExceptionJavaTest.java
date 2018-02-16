@@ -26,22 +26,29 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.maybe;
+package orbit.util;
 
+import orbit.util.exception.ExceptionUtils;
+import orbit.util.exception.OrbitException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class MaybeJavaTest {
-
+class ExceptionJavaTest {
     @Test
-    @SuppressWarnings("unchecked")
-    void maybeAPITest() {
-        Maybe<String> some = Maybe.just("some");
-        Assertions.assertTrue(some.isPresent());
-        Assertions.assertEquals("some", some.get());
+    void orbitExceptionJavaAPITest() {
+        final OrbitException blankOrbitException = new OrbitException();
+        Assertions.assertNull(blankOrbitException.getMessage());
+        Assertions.assertNull(blankOrbitException.getCause());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, blankOrbitException));
 
-        Maybe<String> none = Maybe.empty();
-        Assertions.assertTrue(none.isEmpty());
-        Assertions.assertThrows(Throwable.class, none::get);
+        final OrbitException textOrbitException = new OrbitException("textOrbitException");
+        Assertions.assertEquals("textOrbitException", textOrbitException.getMessage());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, textOrbitException));
+
+        final OrbitException nullOrbitException = null;
+        Assertions.assertFalse(ExceptionUtils.isCauseInChain(OrbitException.class, nullOrbitException));
+
+        final RuntimeException nestedOrbitException = new RuntimeException("nested", new OrbitException());
+        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
     }
 }

@@ -28,7 +28,7 @@
 
 package orbit.concurrent.job.impl
 
-import orbit.concurrent.Disposable
+import orbit.util.misc.Disposable
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
 import java.util.concurrent.ExecutorService

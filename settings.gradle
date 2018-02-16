@@ -28,9 +28,6 @@
 
 rootProject.name = "retrograde"
 
-// Core
-include ":framework:orbit-concurrent"
+// Framework
 include ":framework:orbit-util"
-
-include ":framework:orbit-core-maybe"
-include ":framework:orbit-core-try"
+include ":framework:orbit-concurrent"

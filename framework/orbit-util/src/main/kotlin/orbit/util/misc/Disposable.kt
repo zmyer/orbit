@@ -26,27 +26,14 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.util.exception;
+package orbit.util.misc
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-class OrbitExceptionJavaTest {
-    @Test
-    void orbitExceptionJavaAPITest() {
-        final OrbitException blankOrbitException = new OrbitException();
-        Assertions.assertNull(blankOrbitException.getMessage());
-        Assertions.assertNull(blankOrbitException.getCause());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, blankOrbitException));
-
-        final OrbitException textOrbitException = new OrbitException("textOrbitException");
-        Assertions.assertEquals("textOrbitException", textOrbitException.getMessage());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, textOrbitException));
-
-        final OrbitException nullOrbitException = null;
-        Assertions.assertFalse(ExceptionUtils.isCauseInChain(OrbitException.class, nullOrbitException));
-
-        final RuntimeException nestedOrbitException = new RuntimeException("nested", new OrbitException());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
-    }
+/**
+ * Indicates a resource can be disposed.
+ */
+interface Disposable {
+    /**
+     * Dispose the resource.
+     */
+    fun dispose()
 }

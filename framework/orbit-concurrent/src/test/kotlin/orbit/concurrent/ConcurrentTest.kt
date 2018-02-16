@@ -26,24 +26,41 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.concurrent.impl
+package orbit.concurrent
 
-import cloud.orbit.core.concurrent.Disposable
-import cloud.orbit.core.concurrent.JobManager
+import orbit.concurrent.job.JobManagers
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicBoolean
 
-internal class BlockingJobManager : JobManager {
-    private object DummyDisposable : Disposable {
-        override fun dispose() {
-
+class ConcurrentTest {
+    @Test
+    fun testBlocking() {
+        val executor = JobManagers.blocking()
+        val notSet = AtomicBoolean(false)
+        executor.submit {
+            Thread.sleep(100)
+            notSet.set(true)
         }
+        Assertions.assertTrue(notSet.get())
     }
 
-    override fun submit(body: () -> Unit): Disposable {
-        body()
-        return DummyDisposable
-    }
+    @Test
+    fun testCancel() {
+        val countDownLatch = CountDownLatch(1)
+        val executor = JobManagers.newSingleThread()
+        val notSet = AtomicBoolean(false)
 
-    override fun dispose() {
+        executor.submit {
+            Thread.sleep(100)
+            countDownLatch.countDown()
+        }
+        val secondTask = executor.submit { notSet.set(true) }
+        secondTask.dispose()
 
+        countDownLatch.await()
+
+        Assertions.assertFalse(notSet.get())
     }
 }

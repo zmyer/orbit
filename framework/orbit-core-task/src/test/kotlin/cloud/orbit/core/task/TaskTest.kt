@@ -28,7 +28,7 @@
 
 package cloud.orbit.core.task
 
-import cloud.orbit.core.concurrent.JobManagers
+import orbit.concurrent.job.JobManagers
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

@@ -26,7 +26,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.concurrent
+package orbit.concurrent
 
 /**
  * Indicates a resource can be disposed.

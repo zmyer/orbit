@@ -1,9 +1,3 @@
-import cloud.orbit.core.concurrent.JobManagers
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.atomic.AtomicBoolean
-
 /*
  Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
@@ -32,33 +26,24 @@ import java.util.concurrent.atomic.AtomicBoolean
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class ConcurrentTest {
-    @Test
-    fun testBlocking() {
-        val executor = JobManagers.blocking()
-        val notSet = AtomicBoolean(false)
-        executor.submit {
-            Thread.sleep(100)
-            notSet.set(true)
+package orbit.concurrent.job.impl
+
+import orbit.concurrent.Disposable
+import orbit.concurrent.job.JobManager
+
+internal class BlockingJobManager : JobManager {
+    private object DummyDisposable : Disposable {
+        override fun dispose() {
+
         }
-        Assertions.assertTrue(notSet.get())
     }
 
-    @Test
-    fun testCancel() {
-        val countDownLatch = CountDownLatch(1)
-        val executor = JobManagers.newSingleThread()
-        val notSet = AtomicBoolean(false)
+    override fun submit(body: () -> Unit): Disposable {
+        body()
+        return DummyDisposable
+    }
 
-        executor.submit {
-            Thread.sleep(100)
-            countDownLatch.countDown()
-        }
-        val secondTask = executor.submit { notSet.set(true) }
-        secondTask.dispose()
+    override fun dispose() {
 
-        countDownLatch.await()
-
-        Assertions.assertFalse(notSet.get())
     }
 }

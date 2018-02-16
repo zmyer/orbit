@@ -28,7 +28,7 @@
 
 package cloud.orbit.core.task.operator
 
-import cloud.orbit.core.concurrent.JobManager
+import orbit.concurrent.job.JobManager
 import cloud.orbit.core.tries.Try
 
 internal class TaskApplyOperator<T>(jobManager: JobManager, body: () -> T): TaskOperator<T, T>() {

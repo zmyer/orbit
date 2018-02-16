@@ -26,17 +26,44 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.concurrent
+package orbit.concurrent.job.impl
 
-/**
- * A manager to execute asynchronous jobs.
- */
-interface JobManager : Disposable {
-    /**
-     * Submits a function to the underlying manager to be executed.
-     *
-     * @param body The function to be executed.
-     * @return A disposable resource representing the job.
-     */
-    fun submit(body: () -> Unit): Disposable
+import orbit.concurrent.Disposable
+import orbit.concurrent.job.JobManager
+import orbit.concurrent.job.JobManagers
+import java.util.concurrent.ExecutorService
+
+internal class JavaExecutorJobManager(private val executorService: ExecutorService): JobManager {
+
+    private class JobOffer(private val body: () -> Unit): Disposable {
+
+        @Volatile
+        private var isCanceled = false
+
+        fun run() {
+                if(!isCanceled) {
+                    try {
+                        body()
+                    }catch(t: Throwable) {
+                        JobManagers.handleUncaughtException(t)
+                    }
+                }
+        }
+
+        override fun dispose() {
+            isCanceled = true
+        }
+    }
+
+    override fun submit(body: () -> Unit): Disposable {
+        val job = JobOffer(body)
+        executorService.submit( Runnable {
+            job.run()
+        })
+        return job
+    }
+
+    override fun dispose() {
+        executorService.shutdown()
+    }
 }

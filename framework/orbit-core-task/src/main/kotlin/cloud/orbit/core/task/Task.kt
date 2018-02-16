@@ -28,8 +28,8 @@
 
 package cloud.orbit.core.task
 
-import cloud.orbit.core.concurrent.JobManager
-import cloud.orbit.core.concurrent.JobManagers
+import orbit.concurrent.job.JobManager
+import orbit.concurrent.job.JobManagers
 import cloud.orbit.core.task.operator.TaskApplyOperator
 import cloud.orbit.core.task.operator.TaskAwaitOperator
 import cloud.orbit.core.task.operator.TaskFromCompletableFutureOperator

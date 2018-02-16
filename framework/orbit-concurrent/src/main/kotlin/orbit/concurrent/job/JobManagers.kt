@@ -26,10 +26,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.concurrent
+package orbit.concurrent.job
 
-import cloud.orbit.core.concurrent.impl.BlockingJobManager
-import cloud.orbit.core.concurrent.impl.JavaExecutorJobManager
+import orbit.concurrent.job.impl.BlockingJobManager
+import orbit.concurrent.job.impl.JavaExecutorJobManager
 import java.util.concurrent.Executors
 
 /**

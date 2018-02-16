@@ -27,6 +27,6 @@
  */
 
 dependencies {
-    compile(project(":framework:orbit-core-concurrent"))
+    compile(project(":framework:orbit-concurrent"))
     compile(project(":framework:orbit-core-try"))
 }

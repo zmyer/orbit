@@ -27,5 +27,5 @@
  */
 
 dependencies {
-    compile(project(":core:orbit-core-maybe"))
+    compile(project(":framework:orbit-core-maybe"))
 }

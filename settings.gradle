@@ -29,8 +29,8 @@
 rootProject.name = "retrograde"
 
 // Core
-include ":core:orbit-core-exception"
-include ":core:orbit-core-maybe"
-include ":core:orbit-core-try"
-include ":core:orbit-core-concurrent"
-include ":core:orbit-core-task"
+include ":framework:orbit-core-exception"
+include ":framework:orbit-core-maybe"
+include ":framework:orbit-core-try"
+include ":framework:orbit-core-concurrent"
+include ":framework:orbit-core-task"

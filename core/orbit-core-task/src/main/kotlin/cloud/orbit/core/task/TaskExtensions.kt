@@ -26,41 +26,13 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package cloud.orbit.core.task;
+package cloud.orbit.core.task
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.util.concurrent.CompletableFuture
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
-
-class TaskJavaTest {
-    @Test
-    void toCompletableFutureTest() {
-        try {
-            final Task<Integer> successTask = Task.just(42);
-            final CompletableFuture<Integer> successCf = successTask.toCompletableFuture();
-            Assertions.assertEquals(42, successCf.get().intValue());
-
-            final Task<Integer> failTask = Task.fail(new RuntimeException());
-            final CompletableFuture<Integer> failCf = failTask.toCompletableFuture();
-            Assertions.assertThrows(ExecutionException.class, failCf::get);
-
-        } catch(Exception e) {
-
-        }
-    }
-
-    @Test
-    void fromCompletableFutureTest() {
-        final CompletableFuture<Integer> successCf = CompletableFuture.completedFuture(42);
-        final Task<Integer> successTask = Task.fromCompletableFuture(successCf);
-        Assertions.assertEquals(42, successTask.await().intValue());
-
-        final CompletableFuture<Integer> failCf = new CompletableFuture<>();
-        failCf.completeExceptionally(new RuntimeException());
-        final Task<Integer> failTask = Task.fromCompletableFuture(failCf);
-        Assertions.assertThrows(RuntimeException.class, failTask::await);
-    }
-}
+/**
+ * Creates a [Task] which is completed based on the result of a [CompletableFuture].
+ *
+ * @return The new [Task].
+ */
+fun <T> CompletableFuture<T>.toTask(): Task<T> = Task.fromCompletableFuture(this)

@@ -32,6 +32,7 @@ import cloud.orbit.core.concurrent.JobManager
 import cloud.orbit.core.concurrent.JobManagers
 import cloud.orbit.core.task.operator.TaskApplyOperator
 import cloud.orbit.core.task.operator.TaskAwaitOperator
+import cloud.orbit.core.task.operator.TaskFromCompletableFutureOperator
 import cloud.orbit.core.task.operator.TaskFlatMapOperator
 import cloud.orbit.core.task.operator.TaskHandleOperator
 import cloud.orbit.core.task.operator.TaskMapOperator
@@ -41,6 +42,7 @@ import cloud.orbit.core.task.operator.TaskOperator
 import cloud.orbit.core.task.operator.TaskForceJobManager
 import cloud.orbit.core.task.operator.TaskImmediateValueOperator
 import cloud.orbit.core.tries.Try
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
 
@@ -203,6 +205,23 @@ abstract class Task<T> {
     }
 
     /**
+     * Converts this task into a Java [CompletableFuture] which is resolved based on the [Task] result.
+     *
+     * @return A Java [CompletableFuture].
+     */
+    fun toCompletableFuture(): CompletableFuture<T> {
+        val cf = CompletableFuture<T>()
+        handle { result ->
+            result onSuccess { rawValue ->
+                cf.complete(rawValue)
+            } onFailure { throwable ->
+                cf.completeExceptionally(throwable)
+            }
+        }
+        return cf
+    }
+
+    /**
      * Returns true if this [Task] is complete either successfully or exceptionally.
      *
      * @return true if this [Task] is complete, otherwise false.
@@ -279,5 +298,14 @@ abstract class Task<T> {
          */
         @JvmStatic
         fun empty(): Task<Unit> = EMPTY_TASK
+
+        /**
+         * Creates a [Task] which is completed based on the result of a [CompletableFuture].
+         *
+         * @param cf The [CompletableFuture] to listen on.
+         * @return The new [Task].
+         */
+        @JvmStatic
+        fun <V> fromCompletableFuture(cf: CompletableFuture<V>): Task<V> = TaskFromCompletableFutureOperator(cf)
     }
 }

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 class ExceptionJavaTest {
     @Test
-    void orbitExceptionJavaAPITest() {
+    void testExceptionJavaAPI() {
         final OrbitException blankOrbitException = new OrbitException();
         Assertions.assertNull(blankOrbitException.getMessage());
         Assertions.assertNull(blankOrbitException.getCause());

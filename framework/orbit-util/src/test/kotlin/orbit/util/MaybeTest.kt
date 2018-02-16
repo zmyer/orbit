@@ -36,7 +36,7 @@ import java.util.Optional
 
 class MaybeTest {
     @Test
-    fun simpleTest() {
+    fun testBasic() {
         val empty: Maybe<String> = Maybe.empty()
         Assertions.assertTrue(empty.isEmpty)
         Assertions.assertThrows(Throwable::class.java, { empty.get() })
@@ -47,7 +47,7 @@ class MaybeTest {
     }
 
     @Test
-    fun mapTest() {
+    fun testMap() {
         val squared = Maybe.just(5) map { it * it }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
@@ -58,7 +58,7 @@ class MaybeTest {
     }
 
     @Test
-    fun flatMapTest() {
+    fun testFlatMap() {
         val squared = Maybe.just(5) flatMap { Maybe.just(it * it) }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
@@ -69,7 +69,7 @@ class MaybeTest {
     }
 
     @Test
-    fun orNullTest() {
+    fun testOnNull() {
         val testRealVal = Maybe.just("testVal")
         Assertions.assertNotNull(testRealVal.orNull())
 
@@ -78,7 +78,7 @@ class MaybeTest {
     }
 
     @Test
-    fun onSomethingTest() {
+    fun testOnSomething() {
         var didRun = false
         val testRealVal = Maybe.just("testVal")
         testRealVal onSomething { didRun = true }
@@ -91,7 +91,7 @@ class MaybeTest {
     }
 
     @Test
-    fun onNothingTest() {
+    fun testOnNothing() {
         var didRun = false
         val testRealVal = Maybe.empty()
         testRealVal onNothing { didRun = true }
@@ -104,7 +104,7 @@ class MaybeTest {
     }
 
     @Test
-    fun optionalConversionTest() {
+    fun testOptionalConversion() {
         val maybeSomeOptional = Maybe.just("maybeSomeOptional").toOptional()
         Assertions.assertTrue(maybeSomeOptional.isPresent)
         Assertions.assertEquals("maybeSomeOptional", maybeSomeOptional.get())
@@ -121,7 +121,7 @@ class MaybeTest {
     }
 
     @Test
-    fun equalityTest() {
+    fun testEquality() {
         val firstSome = Maybe.just("match")
         val secondSome = Maybe.just("match")
         val thirdSome = Maybe.just("dontMatch")

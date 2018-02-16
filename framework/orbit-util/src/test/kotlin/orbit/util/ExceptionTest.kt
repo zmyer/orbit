@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test
 
 class ExceptionTest {
     @Test
-    fun basicTest() {
+    fun testBasic() {
         val blankException = OrbitException()
         Assertions.assertNull(blankException.message)
         Assertions.assertNull(blankException.cause)
@@ -51,7 +51,7 @@ class ExceptionTest {
     }
 
     @Test
-    fun extensionsTest() {
+    fun testExtensions() {
         val blankRuntimeException = RuntimeException("runtimeException")
         Assertions.assertFalse(blankRuntimeException.isCauseInChain<OrbitException>())
 
@@ -63,7 +63,7 @@ class ExceptionTest {
     }
 
     @Test
-    fun utilsTest() {
+    fun testUtils() {
         val nullException: OrbitException? = null
         Assertions.assertFalse(ExceptionUtils.isCauseInChain<OrbitException>(nullException))
         Assertions.assertNull(ExceptionUtils.getCauseInChain<OrbitException>(nullException))

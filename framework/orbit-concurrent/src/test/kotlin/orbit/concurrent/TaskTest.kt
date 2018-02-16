@@ -37,7 +37,7 @@ class TaskTest {
     private class TaskTestException: RuntimeException() { }
 
     @Test
-    fun basicTest() {
+    fun testBasic() {
         val success = Task { "success" }
         Assertions.assertEquals("success", success.await())
 
@@ -46,7 +46,7 @@ class TaskTest {
     }
 
     @Test
-    fun mapTest() {
+    fun testMap() {
         val success = Task { 5 } map { it * it }
         Assertions.assertEquals(25, success.await())
 
@@ -58,7 +58,7 @@ class TaskTest {
     }
 
     @Test
-    fun flatMapTest() {
+    fun testFlatMap() {
         val success = Task { 5 } flatMap { x-> Task { x * x } }
         Assertions.assertEquals(25, success.await())
 
@@ -75,7 +75,7 @@ class TaskTest {
     }
 
     @Test
-    fun handleTest() {
+    fun testHandle() {
         var didFire: Boolean
 
         didFire = false
@@ -90,7 +90,7 @@ class TaskTest {
     }
 
     @Test
-    fun onSuccessTest() {
+    fun testOnSuccess() {
         var didFire: Boolean
 
         didFire = false
@@ -105,7 +105,7 @@ class TaskTest {
     }
 
     @Test
-    fun onFailureTest() {
+    fun testOnFailure() {
         var didFire: Boolean
 
         didFire = false
@@ -121,7 +121,7 @@ class TaskTest {
     }
 
     @Test
-    fun forceJobManagerTest() {
+    fun testForceJobManager() {
         val newThread = JobManagers.newSingleThread()
         val dummyThread = JobManagers.newSingleThread()
         val threadLocal = ThreadLocal<Int>()
@@ -146,7 +146,7 @@ class TaskTest {
     }
 
     @Test
-    fun delayedTest() {
+    fun testDelayedExecution() {
         var didFire: Boolean
 
         didFire = false
@@ -158,7 +158,7 @@ class TaskTest {
     }
 
     @Test
-    fun justTest() {
+    fun testJust() {
         var didTrigger = false
         val just = Task.just(42) onSuccess { didTrigger = true }
         Assertions.assertEquals(42, just.await())
@@ -166,7 +166,7 @@ class TaskTest {
     }
 
     @Test
-    fun emptyTest() {
+    fun testEmpty() {
         var didTrigger = false
         val empty = Task.empty() onSuccess { didTrigger = true }
         empty.await()
@@ -174,7 +174,7 @@ class TaskTest {
     }
 
     @Test
-    fun failTest() {
+    fun testFail() {
         var didTrigger = false
         val empty = Task.fail<Int>(TaskTestException()) onFailure { didTrigger = true }
         Assertions.assertThrows(TaskTestException::class.java, { empty.await() })

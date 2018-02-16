@@ -36,13 +36,11 @@ import java.util.Optional;
 
 class TryJavaTest {
     private static class TryJavaTestException extends RuntimeException {
-        public TryJavaTestException() {
-            super("TryJavaTestException");
-        }
+
     }
 
     @Test
-    void tryJavaAPITest() {
+    void testTryJavaAPI() {
         // Basic success
         final Try<String> success = Try.create(() -> "success");
         Assertions.assertTrue(success.isSuccess());
@@ -60,7 +58,7 @@ class TryJavaTest {
     }
 
     @Test
-    void tryJavaOptionalConversions() {
+    void testTryJavaOptionalConversions() {
         final Try<String> stringTry = Try.create(() -> "stringTry");
         final Optional<String> javaStringOptional = stringTry.toOptional();
         Assertions.assertTrue(javaStringOptional.isPresent());

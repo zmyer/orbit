@@ -37,7 +37,7 @@ import java.util.concurrent.ExecutionException;
 
 class TaskJavaTest {
     @Test
-    void toCompletableFutureTest() {
+    void testToCompletableFuture() {
         try {
             final Task<Integer> successTask = Task.just(42);
             final CompletableFuture<Integer> successCf = successTask.toCompletableFuture();
@@ -53,7 +53,7 @@ class TaskJavaTest {
     }
 
     @Test
-    void fromCompletableFutureTest() {
+    void testFromCompletableFuture() {
         final CompletableFuture<Integer> successCf = CompletableFuture.completedFuture(42);
         final Task<Integer> successTask = Task.fromCompletableFuture(successCf);
         Assertions.assertEquals(42, successTask.await().intValue());

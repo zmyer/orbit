@@ -36,21 +36,21 @@ class TryTest {
     class TryTestException(): RuntimeException("TryTestException")
 
     @Test
-    fun validateBasicSuccess() {
+    fun testBasicSuccess() {
         val success = Try  { "success"}
         Assertions.assertTrue(success.isSuccess)
         Assertions.assertEquals("success", success.get())
     }
 
     @Test
-    fun validateBasicFailure() {
+    fun testBasicFailure() {
         val fail = Try  { throw TryTestException() }
         Assertions.assertTrue(fail.isFailure)
         Assertions.assertThrows(TryTestException::class.java, fail::get)
     }
 
     @Test
-    fun getOrElseTest() {
+    fun testGetOrElse() {
         val success = Try { "get" } getOrElse { "else" }
         Assertions.assertEquals("get", success)
 
@@ -59,7 +59,7 @@ class TryTest {
     }
 
     @Test
-    fun orNullTest() {
+    fun testOrNull() {
         val success = Try { "get" }.orNull()
         Assertions.assertEquals("get", success)
 
@@ -68,7 +68,7 @@ class TryTest {
     }
 
     @Test
-    fun mapTest() {
+    fun testMap() {
         val square = Try { 5 } map { it * it }
         Assertions.assertEquals(25, square.get())
 
@@ -80,7 +80,7 @@ class TryTest {
     }
 
     @Test
-    fun flatMapTest() {
+    fun testFlatMap() {
         val square = Try { 5 } flatMap { Try { it * it } }
         Assertions.assertEquals(25, square.get())
 
@@ -92,21 +92,21 @@ class TryTest {
     }
 
     @Test
-    fun onSuccessTest() {
+    fun testOnSuccess() {
         var didTrigger = false
         Try { 5 * 5 } onSuccess { didTrigger = true }
         Assertions.assertTrue(didTrigger)
     }
 
     @Test
-    fun onFailureTest() {
+    fun testOnFailure() {
         var didTrigger = false
         Try { throw TryTestException() } onFailure { didTrigger = true }
         Assertions.assertTrue(didTrigger)
     }
 
     @Test
-    fun equalityTest() {
+    fun testEquality() {
         val firstSuccess = Try { 5 }
         val secondSuccess = Try { 5 }
         val thirdSuccess = Try { 10 }
@@ -128,7 +128,7 @@ class TryTest {
     }
 
     @Test
-    fun maybeConversionTest() {
+    fun testMaybeConversion() {
         val maybeSuccess = Try { "trySuccess" }.toMaybe()
         Assertions.assertTrue(maybeSuccess.isPresent)
         Assertions.assertEquals("trySuccess", maybeSuccess.get())
@@ -138,7 +138,7 @@ class TryTest {
     }
 
     @Test
-    fun optionalConversionTest() {
+    fun testOptionalConversion() {
         val optionalSuccess = Try { "trySuccess" }.toOptional()
         Assertions.assertTrue(optionalSuccess.isPresent)
         Assertions.assertEquals("trySuccess", optionalSuccess.get())

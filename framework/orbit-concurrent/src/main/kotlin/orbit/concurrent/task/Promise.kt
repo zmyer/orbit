@@ -30,11 +30,14 @@ package orbit.concurrent.task
 
 import orbit.concurrent.exception.PromiseCompletionException
 import orbit.util.tries.Try
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Represents a [Task] that must be completed externally.
  */
 class Promise<T>: Task<T>() {
+    val hasFired = AtomicBoolean(false)
+
     /**
      * Completes the [Promise] successfully with the supplied result.
      *
@@ -42,9 +45,12 @@ class Promise<T>: Task<T>() {
      * @throws PromiseCompletionException If the promise has already been completed.
      */
     fun complete(result: T) {
-        if(value != null) throw PromiseCompletionException()
-        value = Try.success(result)
-        triggerListeners()
+        if(hasFired.compareAndSet(false, true)) {
+            value = Try.success(result)
+            triggerListeners()
+        } else {
+            throw PromiseCompletionException()
+        }
     }
 
     /**
@@ -54,8 +60,11 @@ class Promise<T>: Task<T>() {
      * @throws PromiseCompletionException If the promise has already been completed.
      */
     fun completeExceptionally(result: Throwable) {
-        if(value != null) throw PromiseCompletionException()
-        value = Try.failed(result)
-        triggerListeners()
+        if(hasFired.compareAndSet(false, true)) {
+            value = Try.failed(result)
+            triggerListeners()
+        } else {
+            throw PromiseCompletionException()
+        }
     }
 }

@@ -30,6 +30,8 @@ package orbit.concurrent.task
 
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
+import orbit.concurrent.task.operator.TaskAllOfOperator
+import orbit.concurrent.task.operator.TaskAnyOfOperator
 import orbit.concurrent.task.operator.TaskApplyOperator
 import orbit.concurrent.task.operator.TaskAwaitOperator
 import orbit.concurrent.task.operator.TaskFromCompletableFutureOperator
@@ -41,14 +43,15 @@ import orbit.concurrent.task.operator.TaskOnSuccessOperator
 import orbit.concurrent.task.operator.TaskOperator
 import orbit.concurrent.task.operator.TaskForceJobManager
 import orbit.concurrent.task.operator.TaskImmediateValueOperator
+import orbit.util.tries.Failure
+import orbit.util.tries.Success
 import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
 
 /**
- * Represents a promise that a unit of asynchronous work will be completed and the value will be made available in the
- * future.
+ * Represents that a unit of asynchronous work will be completed and the value will be made available in the future.
  * [Task]s are guaranteed to complete and may complete successfully or exceptionally.
  */
 abstract class Task<T> {
@@ -228,6 +231,30 @@ abstract class Task<T> {
      */
     fun isComplete() = value != null
 
+    /**
+     * Returns true if this [Task] completed successfully. Returns false if the [Task] completed exceptionally
+     * or is not yet completed.
+     *
+     * @return true if this [Task] was successful, otherwise false.
+     */
+    fun isSuccessful() = when(value) {
+        is Success -> true
+        is Failure -> false
+        null -> false
+    }
+
+    /**
+     * Returns true if this [Task] completed exceptionally. Returns false if the [Task] completed successfully
+     * or is not yet completed.
+     *
+     * @return true if this [Task] was exceptional, otherwise false.
+     */
+    fun isExceptional() = when(value) {
+        is Failure -> true
+        is Success -> false
+        null -> false
+    }
+
     companion object {
         private val EMPTY_TASK = just(Unit)
 
@@ -298,6 +325,50 @@ abstract class Task<T> {
          */
         @JvmStatic
         fun empty(): Task<Unit> = EMPTY_TASK
+
+        /**
+         * Returns a new [Task] that is completed when all of the supplied [Task]s are completed.
+         * If any of the supplied [Task]s complete exceptionally then the new [Task] is completed with one of those
+         * exceptions, otherwise it is completed with [Unit].
+         *
+         * @param tasks The [Task]s.
+         * @return The new [Task].
+         */
+        @JvmStatic
+        fun allOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAllOfOperator(tasks)
+
+        /**
+         * Returns a new [Task] that is completed when all of the supplied [Task]s are completed.
+         * If any of the supplied [Task]s complete exceptionally then the new [Task] is completed with one of those
+         * exceptions, otherwise it is completed with [Unit].
+         *
+         * @param tasks The [Task]s.
+         * @return The new [Task].
+         */
+        @JvmStatic
+        fun allOf(vararg tasks: Task<*>) = allOf(tasks.asIterable())
+
+        /**
+         * Returns a new [Task] that is completed when any of the supplied [Task]s are completed.
+         * The new [Task] is always completed successfully even if the first supplied [Task] to complete completed
+         * exceptionally.
+         *
+         * @param tasks The [Task]s.
+         * @return The new [Task].
+         */
+        @JvmStatic
+        fun anyOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAnyOfOperator(tasks)
+
+        /**
+         * Returns a new [Task] that is completed when any of the supplied [Task]s are completed.
+         * The new [Task] is always completed successfully even if the first supplied [Task] to complete completed
+         * exceptionally.
+         *
+         * @param tasks The [Task]s.
+         * @return The new [Task].
+         */
+        @JvmStatic
+        fun anyOf(vararg tasks: Task<*>): Task<Unit> = anyOf(tasks.asIterable())
 
         /**
          * Creates a [Task] which is completed based on the result of a [CompletableFuture].

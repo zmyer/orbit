@@ -29,6 +29,7 @@
 package orbit.concurrent
 
 import orbit.concurrent.job.JobManagers
+import orbit.concurrent.task.Promise
 import orbit.concurrent.task.Task
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -179,6 +180,66 @@ class TaskTest {
         val empty = Task.fail<Int>(TaskTestException()) onFailure { didTrigger = true }
         Assertions.assertThrows(TaskTestException::class.java, { empty.await() })
         Assertions.assertTrue(didTrigger)
+    }
+
+    @Test
+    fun testPromise() {
+        val successPromise = Promise<Int>()
+        Assertions.assertFalse(successPromise.isComplete())
+        Assertions.assertFalse(successPromise.isSuccessful())
+        successPromise.complete(42)
+        Assertions.assertTrue(successPromise.isComplete())
+        Assertions.assertTrue (successPromise.isSuccessful())
+        Assertions.assertEquals(42, successPromise.await())
+
+        val failPromise = Promise<Int>()
+        Assertions.assertFalse(failPromise.isComplete())
+        Assertions.assertFalse(failPromise.isExceptional())
+        failPromise.completeExceptionally(TaskTestException())
+        Assertions.assertTrue(failPromise.isComplete())
+        Assertions.assertTrue (failPromise.isExceptional())
+        Assertions.assertThrows(TaskTestException::class.java, { failPromise.await() })
+    }
+
+    @Test
+    fun testAllOf() {
+        // Success
+        val successPromise1 = Promise<Unit>()
+        val successPromise2 = Promise<Unit>()
+        val successAllOf = Task.allOf(successPromise1, successPromise2)
+
+        Assertions.assertFalse(successAllOf.isComplete())
+        successPromise1.complete(Unit)
+        Assertions.assertFalse(successAllOf.isComplete())
+        successPromise2.complete(Unit)
+        Assertions.assertTrue(successAllOf.isComplete())
+        Assertions.assertTrue(successAllOf.isSuccessful())
+
+        // Fail
+        val failPromise1 = Promise<Unit>()
+        val failPromise2 = Promise<Unit>()
+        val failAllOf = Task.allOf(failPromise1, failPromise2)
+
+        Assertions.assertFalse(failAllOf.isComplete())
+        failPromise1.complete(Unit)
+        Assertions.assertFalse(failAllOf.isComplete())
+        failPromise2.completeExceptionally(TaskTestException())
+        Assertions.assertTrue(failAllOf.isComplete())
+        Assertions.assertTrue(failAllOf.isExceptional())
+    }
+
+    @Test
+    fun testAnyOf() {
+        val successPromise1 = Promise<Unit>()
+        val successPromise2 = Promise<Unit>()
+        val successAllOf = Task.anyOf(successPromise1, successPromise2)
+
+        Assertions.assertFalse(successAllOf.isComplete())
+        successPromise1.complete(Unit)
+        Assertions.assertTrue(successAllOf.isComplete())
+        successPromise2.complete(Unit)
+        Assertions.assertTrue(successAllOf.isComplete())
+        Assertions.assertTrue(successAllOf.isSuccessful())
     }
 
 

@@ -26,42 +26,28 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.concurrent;
+package orbit.concurrent.task.operator
 
-import orbit.concurrent.task.Task;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import orbit.concurrent.task.Task
+import orbit.util.tries.Try
+import java.util.concurrent.atomic.AtomicBoolean
 
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, Unit>() {
+    init {
+        val completed = AtomicBoolean(false)
 
-class TaskJavaTest {
-    @Test
-    void testAsCompletableFuture() {
-        try {
-            final Task<Integer> successTask = Task.just(42);
-            final CompletableFuture<Integer> successCf = successTask.asCompletableFuture();
-            Assertions.assertEquals(42, successCf.get().intValue());
-
-            final Task<Integer> failTask = Task.fail(new RuntimeException());
-            final CompletableFuture<Integer> failCf = failTask.asCompletableFuture();
-            Assertions.assertThrows(ExecutionException.class, failCf::get);
-
-        } catch(Exception e) {
-
+        tasks.forEach { task ->
+            task handle {
+                if(completed.compareAndSet(false, true))
+                {
+                    fulfilled(Try.success(Unit))
+                }
+            }
         }
     }
 
-    @Test
-    void testFromCompletableFuture() {
-        final CompletableFuture<Integer> successCf = CompletableFuture.completedFuture(42);
-        final Task<Integer> successTask = Task.fromCompletableFuture(successCf);
-        Assertions.assertEquals(42, successTask.await().intValue());
-
-        final CompletableFuture<Integer> failCf = new CompletableFuture<>();
-        failCf.completeExceptionally(new RuntimeException());
-        final Task<Integer> failTask = Task.fromCompletableFuture(failCf);
-        Assertions.assertThrows(RuntimeException.class, failTask::await);
+    override fun fulfilled(result: Try<Unit>) {
+        value = result
+        triggerListeners()
     }
 }

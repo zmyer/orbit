@@ -215,6 +215,8 @@ data class Failure<T>(private val value: Throwable): Try<T>() {
 
     override fun get() = throw throwable
 
+    fun getThrowable(): Throwable = throwable
+
     internal val throwable
         get() = value
 }

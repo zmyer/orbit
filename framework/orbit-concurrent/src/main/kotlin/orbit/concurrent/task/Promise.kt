@@ -26,42 +26,36 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.concurrent;
+package orbit.concurrent.task
 
-import orbit.concurrent.task.Task;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import orbit.concurrent.exception.PromiseCompletionException
+import orbit.util.tries.Try
 
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-class TaskJavaTest {
-    @Test
-    void testAsCompletableFuture() {
-        try {
-            final Task<Integer> successTask = Task.just(42);
-            final CompletableFuture<Integer> successCf = successTask.asCompletableFuture();
-            Assertions.assertEquals(42, successCf.get().intValue());
-
-            final Task<Integer> failTask = Task.fail(new RuntimeException());
-            final CompletableFuture<Integer> failCf = failTask.asCompletableFuture();
-            Assertions.assertThrows(ExecutionException.class, failCf::get);
-
-        } catch(Exception e) {
-
-        }
+/**
+ * Represents a [Task] that must be completed externally.
+ */
+class Promise<T>: Task<T>() {
+    /**
+     * Completes the [Promise] successfully with the supplied result.
+     *
+     * @param result The result to complete with.
+     * @throws PromiseCompletionException If the promise has already been completed.
+     */
+    fun complete(result: T) {
+        if(value != null) throw PromiseCompletionException()
+        value = Try.success(result)
+        triggerListeners()
     }
 
-    @Test
-    void testFromCompletableFuture() {
-        final CompletableFuture<Integer> successCf = CompletableFuture.completedFuture(42);
-        final Task<Integer> successTask = Task.fromCompletableFuture(successCf);
-        Assertions.assertEquals(42, successTask.await().intValue());
-
-        final CompletableFuture<Integer> failCf = new CompletableFuture<>();
-        failCf.completeExceptionally(new RuntimeException());
-        final Task<Integer> failTask = Task.fromCompletableFuture(failCf);
-        Assertions.assertThrows(RuntimeException.class, failTask::await);
+    /**
+     * Completes the [Promise] exceptionally with the supplied result.
+     *
+     * @param result The result to complete with.
+     * @throws PromiseCompletionException If the promise has already been completed.
+     */
+    fun completeExceptionally(result: Throwable) {
+        if(value != null) throw PromiseCompletionException()
+        value = Try.failed(result)
+        triggerListeners()
     }
 }

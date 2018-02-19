@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Represents a [Task] that must be completed externally.
  */
 class Promise<T>: Task<T>() {
-    val hasFired = AtomicBoolean(false)
+    private val hasFired = AtomicBoolean(false)
 
     /**
      * Completes the [Promise] successfully with the supplied result.

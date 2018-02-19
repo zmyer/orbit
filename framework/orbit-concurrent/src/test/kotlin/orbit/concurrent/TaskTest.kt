@@ -230,16 +230,29 @@ class TaskTest {
 
     @Test
     fun testAnyOf() {
+        // Success
         val successPromise1 = Promise<Unit>()
         val successPromise2 = Promise<Unit>()
-        val successAllOf = Task.anyOf(successPromise1, successPromise2)
+        val successAnyOf = Task.anyOf(successPromise1, successPromise2)
 
-        Assertions.assertFalse(successAllOf.isComplete())
+        Assertions.assertFalse(successAnyOf.isComplete())
         successPromise1.complete(Unit)
-        Assertions.assertTrue(successAllOf.isComplete())
+        Assertions.assertTrue(successAnyOf.isComplete())
         successPromise2.complete(Unit)
-        Assertions.assertTrue(successAllOf.isComplete())
-        Assertions.assertTrue(successAllOf.isSuccessful())
+        Assertions.assertTrue(successAnyOf.isComplete())
+        Assertions.assertTrue(successAnyOf.isSuccessful())
+
+        // Fail
+        val failPromise1 = Promise<Unit>()
+        val failPromise2 = Promise<Unit>()
+        val failAnyOf = Task.anyOf(failPromise1, failPromise2)
+
+        Assertions.assertFalse(failAnyOf.isComplete())
+        failPromise1.complete(Unit)
+        Assertions.assertTrue(failAnyOf.isComplete())
+        failPromise2.completeExceptionally(TaskTestException())
+        Assertions.assertTrue(failAnyOf.isComplete())
+        Assertions.assertTrue(failAnyOf.isSuccessful())
     }
 
 

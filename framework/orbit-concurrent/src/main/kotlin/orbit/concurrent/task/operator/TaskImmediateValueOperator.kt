@@ -32,10 +32,10 @@ import orbit.util.tries.Try
 
 internal class TaskImmediateValueOperator<T>(immediateValue: Try<T>): TaskOperator<T, T>() {
     init {
-        fulfilled(immediateValue)
+        onFulfilled(immediateValue)
     }
 
-    override fun fulfilled(result: Try<T>) {
+    override fun onFulfilled(result: Try<T>) {
         value = result
         triggerListeners()
     }

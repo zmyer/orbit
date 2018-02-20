@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2017 Electronic Arts Inc.  All rights reserved.
+ Copyright (C) 2018 Electronic Arts Inc.  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -26,9 +26,11 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "retrograde"
+package orbit.concurrent.pipeline.operator
 
-// Framework
-include ":framework:orbit-logging"
-include ":framework:orbit-util"
-include ":framework:orbit-concurrent"
+import orbit.concurrent.pipeline.Pipeline
+import orbit.util.tries.Try
+
+abstract class PipelineOperator<I, O>: Pipeline<O>() {
+    internal abstract fun onNext(result: Try<I>)
+}

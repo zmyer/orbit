@@ -31,7 +31,7 @@ package orbit.concurrent.task.operator
 import orbit.util.tries.Try
 
 internal class TaskOnFailureOperator<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
-    override fun fulfilled(result: Try<T>) {
+    override fun onFulfilled(result: Try<T>) {
         result onFailure  {
             body(it)
         }

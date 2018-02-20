@@ -32,5 +32,5 @@ import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 
 internal abstract class TaskOperator<I, O>: Task<O>() {
-     internal abstract fun fulfilled(result: Try<I>)
+     internal abstract fun onFulfilled(result: Try<I>)
 }

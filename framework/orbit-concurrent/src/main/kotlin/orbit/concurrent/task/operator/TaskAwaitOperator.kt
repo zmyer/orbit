@@ -34,7 +34,7 @@ import java.util.concurrent.CountDownLatch
 internal class TaskAwaitOperator<I>: TaskOperator<I, I>() {
     private val latch = CountDownLatch(1)
 
-    override fun fulfilled(result: Try<I>) {
+    override fun onFulfilled(result: Try<I>) {
         value = result
         latch.countDown()
         triggerListeners()

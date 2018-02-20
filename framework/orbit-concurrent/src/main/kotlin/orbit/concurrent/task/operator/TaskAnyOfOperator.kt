@@ -40,13 +40,13 @@ internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
             task handle {
                 if(completed.compareAndSet(false, true))
                 {
-                    fulfilled(Try.success(Unit))
+                    onFulfilled(Try.success(Unit))
                 }
             }
         }
     }
 
-    override fun fulfilled(result: Try<Unit>) {
+    override fun onFulfilled(result: Try<Unit>) {
         value = result
         triggerListeners()
     }

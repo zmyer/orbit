@@ -34,11 +34,11 @@ import orbit.util.tries.Try
 internal class TaskApplyOperator<T>(jobManager: JobManager, body: () -> T): TaskOperator<T, T>() {
     init {
         jobManager.submit {
-            fulfilled(Try{ body() })
+            onFulfilled(Try{ body() })
         }
     }
 
-    override fun fulfilled(result: Try<T>) {
+    override fun onFulfilled(result: Try<T>) {
         value = result
         triggerListeners()
     }

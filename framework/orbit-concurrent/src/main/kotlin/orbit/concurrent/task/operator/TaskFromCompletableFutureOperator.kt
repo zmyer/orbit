@@ -36,14 +36,14 @@ internal class TaskFromCompletableFutureOperator<T>(completableFuture: Completab
     init {
         completableFuture.handle { v, t ->
             if (t != null) {
-                fulfilled(Try.failed(t))
+                onFulfilled(Try.failed(t))
             } else {
-                fulfilled(Try.success(v!!))
+                onFulfilled(Try.success(v!!))
             }
         }
     }
 
-    override fun fulfilled(result: Try<T>) {
+    override fun onFulfilled(result: Try<T>) {
         value = result
         triggerListeners()
     }

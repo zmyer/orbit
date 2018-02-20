@@ -30,18 +30,22 @@ package orbit.concurrent.job
 
 import orbit.concurrent.job.impl.BlockingJobManager
 import orbit.concurrent.job.impl.JavaExecutorJobManager
+import orbit.logging.Loggers
 import java.util.concurrent.Executors
 
 /**
  * Helper methods for working with the default [JobManager]s and creating new ones.
  */
 object JobManagers {
+    private val logger = Loggers.getLogger<JobManagers>()
+
     private val parallel = newParallel()
     private val elastic = newElastic()
     private val blocking = newBlocking()
 
+
     internal fun handleUncaughtException(throwable: Throwable) {
-        TODO("Log this properly")
+        logger.error("Uncaught exception in JobManager.", throwable)
     }
 
     /**

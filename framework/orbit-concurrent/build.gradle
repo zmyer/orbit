@@ -27,5 +27,6 @@
  */
 
 dependencies {
+    compile(project(":framework:orbit-logging"))
     compile(project(":framework:orbit-util"))
 }

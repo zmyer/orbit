@@ -83,7 +83,7 @@ abstract class Task<T> {
     }
 
     internal open fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
-        listener.fulfilled(triggerVal)
+        listener.onFulfilled(triggerVal)
     }
 
     private fun addListener(taskOperator: TaskOperator<T, *>) {

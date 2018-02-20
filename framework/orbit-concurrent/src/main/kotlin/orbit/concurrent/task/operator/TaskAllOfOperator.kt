@@ -47,13 +47,13 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
                 }
 
                 if(countdown.decrementAndGet() == 0){
-                    fulfilled(resultHolder)
+                    onFulfilled(resultHolder)
                 }
             }
         }
     }
 
-    override fun fulfilled(result: Try<Unit>) {
+    override fun onFulfilled(result: Try<Unit>) {
         value = result
         triggerListeners()
     }

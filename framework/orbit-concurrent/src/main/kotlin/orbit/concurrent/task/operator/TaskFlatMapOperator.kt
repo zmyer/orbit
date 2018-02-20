@@ -33,7 +33,7 @@ import orbit.util.tries.Try
 
 
 internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): TaskOperator<I, O>() {
-    override fun fulfilled(result: Try<I>) {
+    override fun onFulfilled(result: Try<I>) {
         result onSuccess {
             try {
                 body(it) handle {

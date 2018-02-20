@@ -31,7 +31,7 @@ package orbit.concurrent.task.operator
 import orbit.concurrent.job.JobManager
 import orbit.util.tries.Try
 
-internal class TaskForceJobManager<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
+internal class TaskRunOnOperator<T>(private val jobManager: JobManager): TaskOperator<T, T>() {
     override fun onFulfilled(result: Try<T>) {
         value = result
         triggerListeners()

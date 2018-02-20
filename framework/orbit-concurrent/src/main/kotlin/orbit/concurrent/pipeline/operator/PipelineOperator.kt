@@ -32,5 +32,5 @@ import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
 abstract class PipelineOperator<I, O>: Pipeline<O>() {
-    internal abstract fun onNext(result: Try<I>)
+    internal abstract fun onNext(value: Try<I>)
 }

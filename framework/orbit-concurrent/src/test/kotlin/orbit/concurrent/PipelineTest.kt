@@ -26,18 +26,17 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.concurrent.task.operator
+package orbit.concurrent
 
-import orbit.util.tries.Try
+import orbit.concurrent.pipeline.PipelineSink
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
-internal class TaskOnSuccessOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
-    override fun onFulfilled(result: Try<T>) {
-        result onSuccess {
-            Try {
-                body(it)
-            }
-        }
-        value = result
-        triggerListeners()
+class PipelineTest {
+    @Test
+    fun testMap() {
+        val pipeline = PipelineSink<Int>()
+        pipeline map { it * it } onValue { Assertions.assertEquals(25, it)}
+        pipeline.sink(5)
     }
 }

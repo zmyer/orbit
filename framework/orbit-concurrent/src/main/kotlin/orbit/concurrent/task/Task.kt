@@ -41,7 +41,7 @@ import orbit.concurrent.task.operator.TaskMapOperator
 import orbit.concurrent.task.operator.TaskOnFailureOperator
 import orbit.concurrent.task.operator.TaskOnSuccessOperator
 import orbit.concurrent.task.operator.TaskOperator
-import orbit.concurrent.task.operator.TaskForceJobManager
+import orbit.concurrent.task.operator.TaskRunOnOperator
 import orbit.concurrent.task.operator.TaskImmediateValueOperator
 import orbit.util.tries.Failure
 import orbit.util.tries.Success
@@ -104,11 +104,8 @@ abstract class Task<T> {
      * @param body The function to run on completion.
      * @return The task.
      */
-    infix fun handle(body: (Try<T>) -> Unit): Task<T> {
-        val taskOperator = TaskHandleOperator(body)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    infix fun handle(body: (Try<T>) -> Unit): Task<T> =
+            TaskHandleOperator(body).apply { addListener(this) }
 
     /**
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
@@ -116,11 +113,8 @@ abstract class Task<T> {
      * @param body The function to run on success.
      * @return The task.
      */
-    infix fun onSuccess(body: (T) -> Unit): Task<T> {
-        val taskOperator = TaskOnSuccessOperator(body)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    infix fun onSuccess(body: (T) -> Unit): Task<T> =
+            TaskOnSuccessOperator(body).apply { addListener(this) }
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -128,11 +122,8 @@ abstract class Task<T> {
      * @param body The function to run on failure.
      * @return The task.
      */
-    infix fun onFailure(body: (Throwable) -> Unit): Task<T> {
-        val taskOperator = TaskOnFailureOperator<T>(body)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    infix fun onFailure(body: (Throwable) -> Unit): Task<T> =
+            TaskOnFailureOperator<T>(body).apply { addListener(this) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -144,11 +135,8 @@ abstract class Task<T> {
      * @param jobManager The target [JobManager].
      * @return The [Task].
      */
-    fun forceJobManager(jobManager: JobManager): Task<T> {
-        val taskOperator = TaskForceJobManager<T>(jobManager)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    fun runOn(jobManager: JobManager): Task<T> =
+            TaskRunOnOperator<T>(jobManager).apply { addListener(this) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -160,9 +148,7 @@ abstract class Task<T> {
      * @param body A function which returns the desired target [JobManager].
      * @return The [Task].
      */
-    infix fun forceJobManager(body: () -> JobManager): Task<T> {
-        return forceJobManager(body())
-    }
+    infix fun forceJobManager(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
      * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
@@ -172,11 +158,8 @@ abstract class Task<T> {
      * @param body The mapping function.
      * @return The completed task with the new value.
      */
-    infix fun <O> map(body: (T) -> O): Task<O> {
-        val taskOperator = TaskMapOperator(body)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    infix fun <O> map(body: (T) -> O): Task<O> =
+            TaskMapOperator(body).apply { addListener(this) }
 
     /**
      * Asynchronously maps the value of this [Task] to another [Task] and flattens the result of the latter.
@@ -186,11 +169,8 @@ abstract class Task<T> {
      * @param body The mapping function.
      * @return A new asynchronous [Task] with the mapped value.
      */
-    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> {
-        val taskOperator = TaskFlatMapOperator(body)
-        addListener(taskOperator)
-        return taskOperator
-    }
+    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
+            TaskFlatMapOperator(body).apply { addListener(this) }
 
     /**
      * Causes the current thread to wait for the [Task] to be completed.
@@ -201,11 +181,8 @@ abstract class Task<T> {
      * @return The value of the completed task if successful.
      * @throws Throwable The [Throwable] of the failed tasked if failed.
      */
-    fun await(): T {
-        val taskOperator = TaskAwaitOperator<T>()
-        addListener(taskOperator)
-        return taskOperator.waitOnLatch()
-    }
+    fun await(): T =
+            TaskAwaitOperator<T>().apply { addListener(this) }.waitOnLatch()
 
     /**
      * Converts this task into a Java [CompletableFuture] which is resolved based on the [Task] result.

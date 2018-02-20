@@ -28,6 +28,42 @@
 
 package orbit.concurrent.pipeline
 
-abstract class Pipeline<T> {
+import orbit.concurrent.pipeline.operator.PipelineHandleOperator
+import orbit.concurrent.pipeline.operator.PipelineMapOperator
+import orbit.concurrent.pipeline.operator.PipelineOnErrorOperator
+import orbit.concurrent.pipeline.operator.PipelineOnValueOperator
+import orbit.concurrent.pipeline.operator.PipelineOperator
+import orbit.util.tries.Try
+import java.util.concurrent.atomic.AtomicReference
 
+abstract class Pipeline<T> {
+    private val listeners = AtomicReference(listOf<PipelineOperator<T, *>>())
+
+    private fun addListener(pipelineOperator: PipelineOperator<T, *>) {
+        while(true) {
+            val listenerList = listeners.get()
+            val newList = listenerList + pipelineOperator
+            if (listeners.compareAndSet(listenerList, newList)) {
+                break
+            }
+        }
+    }
+
+    internal fun triggerListeners(value: Try<T>) {
+        listeners.get().forEach {
+            it.onNext(value)
+        }
+    }
+
+    infix fun handle(body: (Try<T>) -> Unit): Pipeline<T> =
+            PipelineHandleOperator(body).apply { addListener(this) }
+
+    infix fun onValue(body: (T) -> Unit): Pipeline<T> =
+            PipelineOnValueOperator(body).apply { addListener(this) }
+
+    infix fun onError(body: (Throwable) -> Unit): Pipeline<T> =
+            PipelineOnErrorOperator<T>(body).apply { addListener(this) }
+
+    infix fun <V> map(body: (T) -> V): Pipeline<V> =
+            PipelineMapOperator(body).apply { addListener(this) }
 }

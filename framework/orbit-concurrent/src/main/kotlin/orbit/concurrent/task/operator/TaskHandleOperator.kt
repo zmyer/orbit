@@ -32,7 +32,9 @@ import orbit.util.tries.Try
 
 internal class TaskHandleOperator<I>(private val body: (Try<I>) -> Unit): TaskOperator<I, I>() {
     override fun onFulfilled(result: Try<I>) {
-        body(result)
+        Try {
+            body(result)
+        }
         value = result
         triggerListeners()
     }

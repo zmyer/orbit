@@ -33,7 +33,9 @@ import orbit.util.tries.Try
 internal class TaskOnFailureOperator<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
     override fun onFulfilled(result: Try<T>) {
         result onFailure  {
-            body(it)
+            Try {
+                body(it)
+            }
         }
         value = result
         triggerListeners()

@@ -26,13 +26,9 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.logging
-
-import org.slf4j.Logger
+package orbit.util.exception
 
 /**
- * The Orbit Logging API.
- *
- * This is a simple wrapper around the SLF4J logger.
+ * Exception thrown when a supplied argument is invalid.
  */
-interface Logger : Logger
+class InvalidArgumentException(description: String): OrbitException(description)

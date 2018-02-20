@@ -26,13 +26,9 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.logging
-
-import org.slf4j.Logger
+package orbit.util.exception
 
 /**
- * The Orbit Logging API.
- *
- * This is a simple wrapper around the SLF4J logger.
+ * Exception thrown when a system is in an invalid state for the call.
  */
-interface Logger : Logger
+class InvalidStateException(message: String): OrbitException(message)

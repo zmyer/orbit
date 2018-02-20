@@ -26,13 +26,18 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.logging
+package orbit.util
 
-import org.slf4j.Logger
+import orbit.util.misc.StringUtils
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
-/**
- * The Orbit Logging API.
- *
- * This is a simple wrapper around the SLF4J logger.
- */
-interface Logger : Logger
+class StringUtilsTest {
+    @Test
+    fun testSecureRandom() {
+        val firstString = StringUtils.secureRandomString()
+        val secondString = StringUtils.secureRandomString()
+        Assertions.assertTrue(firstString.isNotEmpty())
+        Assertions.assertNotEquals(firstString, secondString)
+    }
+}

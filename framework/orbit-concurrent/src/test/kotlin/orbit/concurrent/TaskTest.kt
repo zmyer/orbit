@@ -35,15 +35,14 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TaskTest {
-    private class TaskTestException: RuntimeException() { }
 
     @Test
     fun testBasic() {
         val success = Task { "success" }
         Assertions.assertEquals("success", success.await())
 
-        val fail = Task { throw TaskTestException() }.map {}
-        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        val fail = Task { throw TestException() }.map {}
+        Assertions.assertThrows(TestException::class.java, { fail.await() })
     }
 
     @Test
@@ -51,11 +50,11 @@ class TaskTest {
         val success = Task { 5 }.map { it * it }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TaskTestException() }.map { it * it }
-        Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
+        val initialFail = Task<Int> { throw TestException() }.map { it * it }
+        Assertions.assertThrows(TestException::class.java, { initialFail.await() })
 
-        val mapFail = Task { 5 }.map { throw TaskTestException() }
-        Assertions.assertThrows(TaskTestException::class.java, { mapFail.await() })
+        val mapFail = Task { 5 }.map { throw TestException() }
+        Assertions.assertThrows(TestException::class.java, { mapFail.await() })
     }
 
     @Test
@@ -63,16 +62,16 @@ class TaskTest {
         val success = Task { 5 }.flatMap { x-> Task { x * x } }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TaskTestException() }.flatMap { x-> Task { x * x } }
-        Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
+        val initialFail = Task<Int> { throw TestException() }.flatMap { x-> Task { x * x } }
+        Assertions.assertThrows(TestException::class.java, { initialFail.await() })
 
         @Suppress("UNREACHABLE_CODE")
-        val flatMapFail = Task { 5 }.flatMap { throw TaskTestException(); Task { 5 } }
-        Assertions.assertThrows(TaskTestException::class.java, { flatMapFail.await() })
+        val flatMapFail = Task { 5 }.flatMap { throw TestException(); Task { 5 } }
+        Assertions.assertThrows(TestException::class.java, { flatMapFail.await() })
 
         @Suppress("UNREACHABLE_CODE")
-        val flatMapNestedFail = Task { 5 }.flatMap { Task { throw TaskTestException(); 5 } }
-        Assertions.assertThrows(TaskTestException::class.java, { flatMapNestedFail.await() })
+        val flatMapNestedFail = Task { 5 }.flatMap { Task { throw TestException(); 5 } }
+        Assertions.assertThrows(TestException::class.java, { flatMapNestedFail.await() })
     }
 
     @Test
@@ -85,8 +84,8 @@ class TaskTest {
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() }.doAlways { it.onFailure { didFire = true }}
-        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        val fail = Task { throw TestException() }.doAlways { it.onFailure { didFire = true }}
+        Assertions.assertThrows(TestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
 
@@ -100,8 +99,8 @@ class TaskTest {
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() }.doOnValue { didFire = true }
-        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        val fail = Task { throw TestException() }.doOnValue { didFire = true }
+        Assertions.assertThrows(TestException::class.java, { fail.await() })
         Assertions.assertFalse(didFire)
     }
 
@@ -116,8 +115,8 @@ class TaskTest {
         Assertions.assertFalse(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() }.doOnError { didFire = true }
-        Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
+        val fail = Task { throw TestException() }.doOnError { didFire = true }
+        Assertions.assertThrows(TestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
 
@@ -177,8 +176,8 @@ class TaskTest {
     @Test
     fun testFail() {
         var didTrigger = false
-        val empty = Task.fail<Int>(TaskTestException()).doOnError { didTrigger = true }
-        Assertions.assertThrows(TaskTestException::class.java, { empty.await() })
+        val empty = Task.fail<Int>(TestException()).doOnError { didTrigger = true }
+        Assertions.assertThrows(TestException::class.java, { empty.await() })
         Assertions.assertTrue(didTrigger)
     }
 
@@ -195,10 +194,10 @@ class TaskTest {
         val failPromise = Promise<Int>()
         Assertions.assertFalse(failPromise.isComplete())
         Assertions.assertFalse(failPromise.isExceptional())
-        failPromise.completeExceptionally(TaskTestException())
+        failPromise.completeExceptionally(TestException())
         Assertions.assertTrue(failPromise.isComplete())
         Assertions.assertTrue (failPromise.isExceptional())
-        Assertions.assertThrows(TaskTestException::class.java, { failPromise.await() })
+        Assertions.assertThrows(TestException::class.java, { failPromise.await() })
     }
 
     @Test
@@ -223,7 +222,7 @@ class TaskTest {
         Assertions.assertFalse(failAllOf.isComplete())
         failPromise1.complete(Unit)
         Assertions.assertFalse(failAllOf.isComplete())
-        failPromise2.completeExceptionally(TaskTestException())
+        failPromise2.completeExceptionally(TestException())
         Assertions.assertTrue(failAllOf.isComplete())
         Assertions.assertTrue(failAllOf.isExceptional())
     }
@@ -250,7 +249,7 @@ class TaskTest {
         Assertions.assertFalse(failAnyOf.isComplete())
         failPromise1.complete(Unit)
         Assertions.assertTrue(failAnyOf.isComplete())
-        failPromise2.completeExceptionally(TaskTestException())
+        failPromise2.completeExceptionally(TestException())
         Assertions.assertTrue(failAnyOf.isComplete())
         Assertions.assertTrue(failAnyOf.isSuccessful())
     }

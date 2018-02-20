@@ -30,6 +30,7 @@ package orbit.concurrent
 
 import orbit.concurrent.job.JobManagers
 import orbit.concurrent.pipeline.Pipeline
+import orbit.util.tries.Try
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
@@ -45,7 +46,7 @@ class PipelineTest {
                 counter.incrementAndGet()
             }
 
-        pipeline.sinkError(RuntimeException())
+        pipeline.sinkError(TestException())
         pipeline.sinkValue(5)
         Assertions.assertEquals(2, counter.get())
     }
@@ -59,7 +60,7 @@ class PipelineTest {
                 counter.incrementAndGet()
             }
 
-        pipeline.sinkError(RuntimeException())
+        pipeline.sinkError(TestException())
         pipeline.sinkValue(5)
         Assertions.assertEquals(1, counter.get())
     }
@@ -73,36 +74,9 @@ class PipelineTest {
                 counter.incrementAndGet()
             }
 
-        pipeline.sinkError(RuntimeException())
+        pipeline.sinkError(TestException())
         pipeline.sinkValue(5)
         Assertions.assertEquals(1, counter.get())
-    }
-
-    @Test
-    fun testMap() {
-        val successPipeline = Pipeline.create<Int>()
-            .map {
-                it * it
-            }.doOnValue {
-                Assertions.assertEquals(25, it)
-            }
-        successPipeline.sinkValue(5)
-
-        val initialFailPipeline = Pipeline.create<Int>()
-            .map {
-                it * it
-            }.doOnValue {
-                Assertions.fail("doOnValueRan - Should have failed.")
-            }
-        initialFailPipeline.sinkError(RuntimeException())
-
-        val duringMapFailPipeline = Pipeline.create<Int>()
-            .map {
-                it * it
-            }.doOnValue {
-                Assertions.fail("doOnValueRan - Should have failed.")
-            }
-        duringMapFailPipeline.sinkError(RuntimeException())
     }
 
     @Test
@@ -122,5 +96,79 @@ class PipelineTest {
         pipeline.sinkValue(42)
         latch.await()
         Assertions.assertEquals(0, specialValue.get())
+    }
+
+    @Test
+    fun testMap() {
+        var tempResult: Try<Int> = Try.success(0)
+        val successPipeline = Pipeline.create<Int>()
+            .map {
+                it * it
+            }.doAlways {
+                tempResult = it
+
+            }
+        successPipeline.sinkValue(5)
+        Assertions.assertEquals(25, tempResult.get())
+
+        val initialFailPipeline = Pipeline.create<Int>()
+            .map {
+                it * it
+            }.doAlways {
+                tempResult = it
+            }
+        initialFailPipeline.sinkError(TestException())
+        Assertions.assertThrows(TestException::class.java, { tempResult.get() })
+
+        val duringMapFailPipeline = Pipeline.create<Int>()
+            .map {
+                it * it
+            }.doAlways {
+                tempResult = it
+            }
+        duringMapFailPipeline.sinkError(TestException())
+        Assertions.assertThrows(TestException::class.java, { tempResult.get() })
+    }
+
+    @Test
+    fun testFlatMap() {
+        var tempResult: Try<Int> = Try.success(0)
+
+        val addOne = Pipeline.create<Int>()
+            .map {
+                it + 1
+            }
+
+        val successPipeline = Pipeline.create<Int>()
+            .map {
+                it * it
+            }.flatMap {
+                addOne
+            }.doAlways {
+                tempResult = it
+            }
+
+        successPipeline.sinkValue(5)
+        Assertions.assertEquals(26, tempResult.get())
+
+        successPipeline.sinkError(TestException())
+        Assertions.assertThrows(TestException::class.java, { tempResult.get() })
+
+        val errorPipeline = Pipeline.create<Int>()
+            .map {
+                it * it
+            }.flatMap {
+                Pipeline.create<Int>()
+                    .map {
+                        throw TestException()
+                        @Suppress("UNREACHABLE_CODE")
+                        it * it
+                    }
+            }.doAlways {
+                tempResult = it
+            }
+
+        errorPipeline.sinkValue(5)
+        Assertions.assertThrows(TestException::class.java, { tempResult.get() })
     }
 }

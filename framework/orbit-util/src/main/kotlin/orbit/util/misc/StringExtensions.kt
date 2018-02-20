@@ -28,15 +28,8 @@
 
 package orbit.util.misc
 
-import orbit.util.exception.InvalidArgumentException
-
 /**
- * Generates a secure random string with the specified number of bits.
- *
- * This method uses SecureRandom and a 128-bit string generated with this is as unique as a UUID.
- *
- * @param numBits The number of bits of randomness.
- * @throws InvalidArgumentException if numBits is not > 0.
- * @return The secure random string.
+ * Alias for [IdentityUtils.secureRandomString].
+ * @see [IdentityUtils.secureRandomString].
  */
 fun String.Companion.secureRandom(numBits: Int = 128) = StringUtils.secureRandomString(numBits)

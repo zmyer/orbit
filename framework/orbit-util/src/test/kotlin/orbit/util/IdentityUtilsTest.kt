@@ -28,16 +28,23 @@
 
 package orbit.util
 
-import orbit.util.misc.StringUtils
+import orbit.util.misc.IdentityUtils
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class StringUtilsTest {
+class IdentityUtilsTest {
     @Test
     fun testSecureRandom() {
-        val firstString = StringUtils.secureRandomString()
-        val secondString = StringUtils.secureRandomString()
+        val firstString = IdentityUtils.secureRandomString()
+        val secondString = IdentityUtils.secureRandomString()
         Assertions.assertTrue(firstString.isNotEmpty())
         Assertions.assertNotEquals(firstString, secondString)
+    }
+
+    @Test
+    fun testSequentialId() {
+        val first = IdentityUtils.sequentialId()
+        val second = IdentityUtils.sequentialId()
+        Assertions.assertNotEquals(first, second)
     }
 }

@@ -33,6 +33,7 @@ import orbit.util.tries.Try
 
 internal class PipelineDoOnErrorOperator<S, T>(parent: Pipeline<S, T>, private val body: (Throwable) -> Unit):
         PipelineOperator<S, T, T>(parent) {
+
     override fun onNext(value: Try<T>) {
         value.onFailure(body)
         triggerListeners(value)

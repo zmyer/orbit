@@ -38,8 +38,8 @@ import orbit.concurrent.task.operator.TaskDoAlwaysOperator
 import orbit.concurrent.task.operator.TaskFromCompletableFutureOperator
 import orbit.concurrent.task.operator.TaskFlatMapOperator
 import orbit.concurrent.task.operator.TaskMapOperator
-import orbit.concurrent.task.operator.TaskDoOnFailureOperator
-import orbit.concurrent.task.operator.TaskDoOnSuccessOperator
+import orbit.concurrent.task.operator.TaskDoOnErrorOperator
+import orbit.concurrent.task.operator.TaskDoOnValueOperator
 import orbit.concurrent.task.operator.TaskOperator
 import orbit.concurrent.task.operator.TaskRunOnOperator
 import orbit.concurrent.task.operator.TaskImmediateValueOperator
@@ -114,7 +114,7 @@ abstract class Task<T> {
      * @return The task.
      */
     infix fun doOnValue(body: (T) -> Unit): Task<T> =
-            TaskDoOnSuccessOperator(body).apply { addListener(this) }
+            TaskDoOnValueOperator(body).apply { addListener(this) }
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -123,7 +123,7 @@ abstract class Task<T> {
      * @return The task.
      */
     infix fun doOnError(body: (Throwable) -> Unit): Task<T> =
-            TaskDoOnFailureOperator<T>(body).apply { addListener(this) }
+            TaskDoOnErrorOperator<T>(body).apply { addListener(this) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified

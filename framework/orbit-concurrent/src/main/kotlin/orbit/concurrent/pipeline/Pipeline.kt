@@ -28,11 +28,13 @@
 
 package orbit.concurrent.pipeline
 
+import orbit.concurrent.job.JobManager
 import orbit.concurrent.pipeline.operator.PipelineDoAlwaysOperator
 import orbit.concurrent.pipeline.operator.PipelineMapOperator
 import orbit.concurrent.pipeline.operator.PipelineDoOnErrorOperator
 import orbit.concurrent.pipeline.operator.PipelineDoOnValueOperator
 import orbit.concurrent.pipeline.operator.PipelineOperator
+import orbit.concurrent.pipeline.operator.PipelineRunOnOperator
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicReference
 
@@ -80,7 +82,12 @@ abstract class Pipeline<S, T> {
             PipelineDoOnErrorOperator(this, body).apply { addListener(this) }
 
     infix fun <V> map(body: (T) -> V): Pipeline<S, V> =
-            PipelineMapOperator<S, T, V>(this, body).apply { addListener(this) }
+            PipelineMapOperator(this, body).apply { addListener(this) }
+
+    fun runOn(jobManager: JobManager): Pipeline<S, T> =
+            PipelineRunOnOperator(this, jobManager).apply { addListener(this) }
+
+    infix fun runOn(body: () -> JobManager): Pipeline<S, T> = runOn(body())
 
     companion object {
         @JvmStatic

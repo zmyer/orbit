@@ -28,14 +28,16 @@
 
 package orbit.concurrent.pipeline.operator
 
+import orbit.concurrent.job.JobManager
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineDoOnValueOperator<S, T>(parent: Pipeline<S, T>, private val body: (T) -> Unit):
+internal class PipelineRunOnOperator<S, T>(parent: Pipeline<S, T>, private val jobManager: JobManager):
         PipelineOperator<S, T, T>(parent) {
 
     override fun onNext(value: Try<T>) {
-        value.onSuccess(body)
-        triggerListeners(value)
+        jobManager.submit {
+            triggerListeners(value)
+        }
     }
 }

@@ -35,13 +35,28 @@ import org.junit.jupiter.api.Test
 class PipelineTest {
     @Test
     fun testMap() {
-        val pipeline =
+        val successPipeline =
                 Pipeline.create<Int>() map {
                     it * it
                 } doOnValue {
                     Assertions.assertEquals(25, it)
                 }
-        pipeline.sinkValue(5)
+        successPipeline.sinkValue(5)
 
+        val initialFailPipeline =
+                Pipeline.create<Int>() map {
+                    it * it
+                } doOnValue {
+                    Assertions.fail("doOnValueRan - Should have failed.")
+                }
+        initialFailPipeline.sinkError(RuntimeException())
+
+        val duringMapFailPipeline =
+                Pipeline.create<Int>() map {
+                    it * it
+                } doOnValue {
+                    Assertions.fail("doOnValueRan - Should have failed.")
+                }
+        duringMapFailPipeline.sinkError(RuntimeException())
     }
 }

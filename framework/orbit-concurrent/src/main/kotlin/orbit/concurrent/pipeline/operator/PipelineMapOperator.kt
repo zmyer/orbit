@@ -33,6 +33,7 @@ import orbit.util.tries.Try
 
 internal class PipelineMapOperator<S, I, O>(parent: Pipeline<S, I>, private val body: (I) -> O):
         PipelineOperator<S, I, O>(parent) {
+
     override fun onNext(value: Try<I>) {
         value onSuccess {
             triggerListeners(Try { body(it) })

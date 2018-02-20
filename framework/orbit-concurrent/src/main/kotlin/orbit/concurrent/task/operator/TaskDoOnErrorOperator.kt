@@ -30,9 +30,9 @@ package orbit.concurrent.task.operator
 
 import orbit.util.tries.Try
 
-internal class TaskDoOnSuccessOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
+internal class TaskDoOnErrorOperator<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
     override fun onFulfilled(result: Try<T>) {
-        result.onSuccess(body)
+        result.onFailure(body)
         value = result
         triggerListeners()
     }

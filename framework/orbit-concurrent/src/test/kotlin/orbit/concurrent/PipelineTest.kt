@@ -171,4 +171,21 @@ class PipelineTest {
         errorPipeline.sinkValue(5)
         Assertions.assertThrows(TestException::class.java, { tempResult.get() })
     }
+
+    @Test
+    fun testFilter() {
+        val counter = AtomicInteger(0)
+        val pipeline = Pipeline.create<Int>()
+            .filter {
+                it > 0
+            }.doOnValue {
+                counter.incrementAndGet()
+            }
+
+        pipeline.sinkValue(0)
+        pipeline.sinkValue(1)
+        pipeline.sinkError(TestException())
+        Assertions.assertEquals(1, counter.get())
+
+    }
 }

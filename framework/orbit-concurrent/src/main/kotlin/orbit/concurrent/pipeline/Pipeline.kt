@@ -28,18 +28,20 @@
 
 package orbit.concurrent.pipeline
 
-import orbit.concurrent.pipeline.operator.PipelineHandleOperator
+import orbit.concurrent.pipeline.operator.PipelineDoAlwaysOperator
 import orbit.concurrent.pipeline.operator.PipelineMapOperator
-import orbit.concurrent.pipeline.operator.PipelineOnErrorOperator
-import orbit.concurrent.pipeline.operator.PipelineOnValueOperator
+import orbit.concurrent.pipeline.operator.PipelineDoOnErrorOperator
+import orbit.concurrent.pipeline.operator.PipelineDoOnValueOperator
 import orbit.concurrent.pipeline.operator.PipelineOperator
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class Pipeline<T> {
-    private val listeners = AtomicReference(listOf<PipelineOperator<T, *>>())
+abstract class Pipeline<S, T> {
+    private class Sink<X>: Pipeline<X, X>()
 
-    private fun addListener(pipelineOperator: PipelineOperator<T, *>) {
+    private val listeners = AtomicReference(listOf<PipelineOperator<S, T, *>>())
+
+    private fun addListener(pipelineOperator: PipelineOperator<S, T, *>) {
         while(true) {
             val listenerList = listeners.get()
             val newList = listenerList + pipelineOperator
@@ -55,15 +57,33 @@ abstract class Pipeline<T> {
         }
     }
 
-    infix fun handle(body: (Try<T>) -> Unit): Pipeline<T> =
-            PipelineHandleOperator(body).apply { addListener(this) }
+    internal open fun onSink(value: Try<S>) {
+        @Suppress("UNCHECKED_CAST")
+        triggerListeners(value as Try<T>)
+    }
 
-    infix fun onValue(body: (T) -> Unit): Pipeline<T> =
-            PipelineOnValueOperator(body).apply { addListener(this) }
+    fun sinkValue(value: S) {
+        onSink(Try.success(value))
+    }
 
-    infix fun onError(body: (Throwable) -> Unit): Pipeline<T> =
-            PipelineOnErrorOperator<T>(body).apply { addListener(this) }
+    fun sinkError(throwable: Throwable) {
+        onSink(Try.failed(throwable))
+    }
 
-    infix fun <V> map(body: (T) -> V): Pipeline<V> =
-            PipelineMapOperator(body).apply { addListener(this) }
+    infix fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
+            PipelineDoAlwaysOperator(this, body).apply { addListener(this) }
+
+    infix fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
+            PipelineDoOnValueOperator(this, body).apply { addListener(this) }
+
+    infix fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
+            PipelineDoOnErrorOperator(this, body).apply { addListener(this) }
+
+    infix fun <V> map(body: (T) -> V): Pipeline<S, V> =
+            PipelineMapOperator<S, T, V>(this, body).apply { addListener(this) }
+
+    companion object {
+        @JvmStatic
+        fun <V> create(): Pipeline<V, V> = Sink()
+    }
 }

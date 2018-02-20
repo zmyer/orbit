@@ -76,53 +76,53 @@ class TaskTest {
     }
 
     @Test
-    fun testHandle() {
+    fun testDoAlways() {
         var didFire: Boolean
 
         didFire = false
-        val success = Task { "success" } handle { it onSuccess { didFire = true }}
+        val success = Task { "success" } doAlways { it onSuccess { didFire = true }}
         Assertions.assertEquals("success", success.await())
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } handle { it onFailure { didFire = true }}
+        val fail = Task { throw TaskTestException() } doAlways { it onFailure { didFire = true }}
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
 
     @Test
-    fun testOnSuccess() {
+    fun testDoOnValue() {
         var didFire: Boolean
 
         didFire = false
-        val success = Task { "success" } onSuccess { didFire = true }
+        val success = Task { "success" } doOnValue { didFire = true }
         Assertions.assertEquals("success", success.await())
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } onSuccess { didFire = true }
+        val fail = Task { throw TaskTestException() } doOnValue { didFire = true }
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertFalse(didFire)
     }
 
     @Test
-    fun testOnFailure() {
+    fun testDoOnError() {
         var didFire: Boolean
 
         didFire = false
         val success = Task { "success" }
-        success onFailure  { didFire = true }
+        success doOnError { didFire = true }
         Assertions.assertEquals("success", success.await())
         Assertions.assertFalse(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } onFailure { didFire = true }
+        val fail = Task { throw TaskTestException() } doOnError { didFire = true }
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
 
     @Test
-    fun testForceJobManager() {
+    fun testRunOn() {
         val newThread = JobManagers.newSingleThread()
         val dummyThread = JobManagers.newSingleThread()
         val threadLocal = ThreadLocal<Int>()
@@ -132,13 +132,13 @@ class TaskTest {
 
         val task = Task(newThread) {
             threadLocal.set(42)
-        } forceJobManager {
+        } runOn {
             newThread
-        } onSuccess {
+        } doOnValue  {
             shouldMatch = (threadLocal.get() == 42)
-        } forceJobManager {
+        } runOn {
             dummyThread
-        } onSuccess  {
+        } doOnValue  {
             shouldNotMatch = (threadLocal.get() == 42)
         }
         task.await()
@@ -153,7 +153,7 @@ class TaskTest {
         didFire = false
         val success = Task { "success" }
         success.await()
-        success onSuccess { didFire = true }
+        success doOnValue { didFire = true }
         Assertions.assertTrue(didFire)
 
     }
@@ -161,7 +161,7 @@ class TaskTest {
     @Test
     fun testJust() {
         var didTrigger = false
-        val just = Task.just(42) onSuccess { didTrigger = true }
+        val just = Task.just(42) doOnValue { didTrigger = true }
         Assertions.assertEquals(42, just.await())
         Assertions.assertTrue(didTrigger)
     }
@@ -169,7 +169,7 @@ class TaskTest {
     @Test
     fun testEmpty() {
         var didTrigger = false
-        val empty = Task.empty() onSuccess { didTrigger = true }
+        val empty = Task.empty() doOnValue { didTrigger = true }
         empty.await()
         Assertions.assertTrue(didTrigger)
     }
@@ -177,7 +177,7 @@ class TaskTest {
     @Test
     fun testFail() {
         var didTrigger = false
-        val empty = Task.fail<Int>(TaskTestException()) onFailure { didTrigger = true }
+        val empty = Task.fail<Int>(TaskTestException()) doOnError { didTrigger = true }
         Assertions.assertThrows(TaskTestException::class.java, { empty.await() })
         Assertions.assertTrue(didTrigger)
     }

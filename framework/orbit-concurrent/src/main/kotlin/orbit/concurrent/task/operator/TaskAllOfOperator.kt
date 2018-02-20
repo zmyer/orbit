@@ -41,12 +41,12 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
         val countdown = AtomicInteger(tasks.count())
 
         tasks.forEach { task ->
-            task handle { result ->
-                when(result) {
-                    is Failure -> resultHolder = Try.failed(result.getThrowable())
+            task doAlways {
+                when(it) {
+                    is Failure -> resultHolder = Try.failed(it.getThrowable())
                 }
 
-                if(countdown.decrementAndGet() == 0){
+                if (countdown.decrementAndGet() == 0) {
                     onFulfilled(resultHolder)
                 }
             }

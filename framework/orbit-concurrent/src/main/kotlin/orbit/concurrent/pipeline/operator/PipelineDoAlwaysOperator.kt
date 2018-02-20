@@ -26,18 +26,16 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.concurrent.task.operator
+package orbit.concurrent.pipeline.operator
 
+import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class TaskOnSuccessOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
-    override fun onFulfilled(result: Try<T>) {
-        result onSuccess {
-            Try {
-                body(it)
-            }
-        }
-        value = result
-        triggerListeners()
+internal class PipelineDoAlwaysOperator<S, T>(parent: Pipeline<S, T>, private val body: (Try<T>) -> Unit):
+        PipelineOperator<S, T, T>(parent) {
+
+    override fun onNext(value: Try<T>) {
+        body(value)
+        triggerListeners(value)
     }
 }

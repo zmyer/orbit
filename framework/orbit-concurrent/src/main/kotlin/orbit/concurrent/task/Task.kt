@@ -34,12 +34,12 @@ import orbit.concurrent.task.operator.TaskAllOfOperator
 import orbit.concurrent.task.operator.TaskAnyOfOperator
 import orbit.concurrent.task.operator.TaskApplyOperator
 import orbit.concurrent.task.operator.TaskAwaitOperator
+import orbit.concurrent.task.operator.TaskDoAlwaysOperator
 import orbit.concurrent.task.operator.TaskFromCompletableFutureOperator
 import orbit.concurrent.task.operator.TaskFlatMapOperator
-import orbit.concurrent.task.operator.TaskHandleOperator
 import orbit.concurrent.task.operator.TaskMapOperator
-import orbit.concurrent.task.operator.TaskOnFailureOperator
-import orbit.concurrent.task.operator.TaskOnSuccessOperator
+import orbit.concurrent.task.operator.TaskDoOnFailureOperator
+import orbit.concurrent.task.operator.TaskDoOnSuccessOperator
 import orbit.concurrent.task.operator.TaskOperator
 import orbit.concurrent.task.operator.TaskRunOnOperator
 import orbit.concurrent.task.operator.TaskImmediateValueOperator
@@ -101,11 +101,11 @@ abstract class Task<T> {
      * Upon this [Task]'s completion, executes the given function and returns a new [Task] with the result of the
      * original.
      *
-     * @param body The function to run on completion.
+     * @param body The function to run.
      * @return The task.
      */
-    infix fun handle(body: (Try<T>) -> Unit): Task<T> =
-            TaskHandleOperator(body).apply { addListener(this) }
+    infix fun doAlways(body: (Try<T>) -> Unit): Task<T> =
+            TaskDoAlwaysOperator(body).apply { addListener(this) }
 
     /**
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
@@ -113,8 +113,8 @@ abstract class Task<T> {
      * @param body The function to run on success.
      * @return The task.
      */
-    infix fun onSuccess(body: (T) -> Unit): Task<T> =
-            TaskOnSuccessOperator(body).apply { addListener(this) }
+    infix fun doOnValue(body: (T) -> Unit): Task<T> =
+            TaskDoOnSuccessOperator(body).apply { addListener(this) }
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -122,8 +122,8 @@ abstract class Task<T> {
      * @param body The function to run on failure.
      * @return The task.
      */
-    infix fun onFailure(body: (Throwable) -> Unit): Task<T> =
-            TaskOnFailureOperator<T>(body).apply { addListener(this) }
+    infix fun doOnError(body: (Throwable) -> Unit): Task<T> =
+            TaskDoOnFailureOperator<T>(body).apply { addListener(this) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -148,7 +148,7 @@ abstract class Task<T> {
      * @param body A function which returns the desired target [JobManager].
      * @return The [Task].
      */
-    infix fun forceJobManager(body: () -> JobManager): Task<T> = runOn(body())
+    infix fun runOn(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
      * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
@@ -191,13 +191,13 @@ abstract class Task<T> {
      */
     fun asCompletableFuture(): CompletableFuture<T> {
         val cf = CompletableFuture<T>()
-        handle { result ->
-            result onSuccess { rawValue ->
-                cf.complete(rawValue)
-            } onFailure { throwable ->
-                cf.completeExceptionally(throwable)
-            }
+
+        this doOnValue {
+            cf.complete(it)
+        } doOnError {
+            cf.completeExceptionally(it)
         }
+
         return cf
     }
 

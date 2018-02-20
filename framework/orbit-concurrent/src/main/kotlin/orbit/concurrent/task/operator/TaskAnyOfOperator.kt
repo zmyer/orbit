@@ -37,7 +37,7 @@ internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
         val completed = AtomicBoolean(false)
 
         tasks.forEach { task ->
-            task handle {
+            task doAlways  {
                 if(completed.compareAndSet(false, true))
                 {
                     onFulfilled(Try.success(Unit))

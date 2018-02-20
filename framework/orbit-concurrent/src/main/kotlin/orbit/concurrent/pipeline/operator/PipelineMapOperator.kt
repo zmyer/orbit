@@ -28,9 +28,11 @@
 
 package orbit.concurrent.pipeline.operator
 
+import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineMapOperator<I, O>(private val body: (I) -> O): PipelineOperator<I, O>() {
+internal class PipelineMapOperator<S, I, O>(parent: Pipeline<S, I>, private val body: (I) -> O):
+        PipelineOperator<S, I, O>(parent) {
     override fun onNext(value: Try<I>) {
         value onSuccess {
             triggerListeners(Try { body(it) })

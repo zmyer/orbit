@@ -28,15 +28,20 @@
 
 package orbit.concurrent
 
-import orbit.concurrent.pipeline.PipelineSink
+import orbit.concurrent.pipeline.Pipeline
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class PipelineTest {
     @Test
     fun testMap() {
-        val pipeline = PipelineSink<Int>()
-        pipeline map { it * it } onValue { Assertions.assertEquals(25, it)}
-        pipeline.sink(5)
+        val pipeline =
+                Pipeline.create<Int>() map {
+                    it * it
+                } doOnValue {
+                    Assertions.assertEquals(25, it)
+                }
+        pipeline.sinkValue(5)
+
     }
 }

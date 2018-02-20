@@ -36,7 +36,7 @@ internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): Task
     override fun onFulfilled(result: Try<I>) {
         result onSuccess {
             try {
-                body(it) handle {
+                body(it) doAlways {
                     value = it
                     triggerListeners()
                 }

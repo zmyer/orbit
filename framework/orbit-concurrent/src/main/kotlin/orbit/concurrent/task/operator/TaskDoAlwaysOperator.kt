@@ -32,8 +32,12 @@ import orbit.util.tries.Try
 
 internal class TaskDoAlwaysOperator<T>(private val body: (Try<T>) -> Unit): TaskOperator<T, T>() {
     override fun onFulfilled(result: Try<T>) {
-        body(result)
-        value = result
+        value = try {
+            body(result)
+            result
+        } catch(throwable: Throwable) {
+            Try.failed(throwable)
+        }
         triggerListeners()
     }
 }

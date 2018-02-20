@@ -34,9 +34,9 @@ import orbit.util.tries.Try
 
 internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): TaskOperator<I, O>() {
     override fun onFulfilled(result: Try<I>) {
-        result onSuccess {
+        result.onSuccess {
             try {
-                body(it) doAlways {
+                body(it).doAlways {
                     value = it
                     triggerListeners()
                 }
@@ -44,7 +44,7 @@ internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): Task
                 value = Try.failed(t)
                 triggerListeners()
             }
-        } onFailure {
+        }.onFailure {
             value = Try.failed(it)
             triggerListeners()
         }

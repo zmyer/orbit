@@ -51,10 +51,10 @@ class TryTest {
 
     @Test
     fun testGetOrElse() {
-        val success = Try { "get" } getOrElse { "else" }
+        val success = Try { "get" }.getOrElse { "else" }
         Assertions.assertEquals("get", success)
 
-        val fail = Try<String> { throw TryTestException() } getOrElse { "else" }
+        val fail = Try<String> { throw TryTestException() }.getOrElse { "else" }
         Assertions.assertEquals("else", fail)
     }
 
@@ -69,39 +69,39 @@ class TryTest {
 
     @Test
     fun testMap() {
-        val square = Try { 5 } map { it * it }
+        val square = Try { 5 }.map { it * it }
         Assertions.assertEquals(25, square.get())
 
-        val failInTry = Try<Int> { throw TryTestException() } map { it * it }
+        val failInTry = Try<Int> { throw TryTestException() }.map { it * it }
         Assertions.assertTrue(failInTry.isFailure)
 
-        val failInMap = Try { 5 } map { throw TryTestException() }
+        val failInMap = Try { 5 }.map { throw TryTestException() }
         Assertions.assertTrue(failInMap.isFailure)
     }
 
     @Test
     fun testFlatMap() {
-        val square = Try { 5 } flatMap { Try { it * it } }
+        val square = Try { 5 }.flatMap { Try { it * it } }
         Assertions.assertEquals(25, square.get())
 
-        val failInTry = Try<Int> { throw TryTestException() } flatMap { Try{ it * it}  }
+        val failInTry = Try<Int> { throw TryTestException() }.flatMap { Try{ it * it}  }
         Assertions.assertTrue(failInTry.isFailure)
 
-        val failInMap = Try { 5 } flatMap { Try { throw TryTestException() } }
+        val failInMap = Try { 5 }.flatMap { Try { throw TryTestException() } }
         Assertions.assertTrue(failInMap.isFailure)
     }
 
     @Test
     fun testOnSuccess() {
         var didTrigger = false
-        Try { 5 * 5 } onSuccess { didTrigger = true }
+        Try { 5 * 5 }.onSuccess { didTrigger = true }
         Assertions.assertTrue(didTrigger)
     }
 
     @Test
     fun testOnFailure() {
         var didTrigger = false
-        Try { throw TryTestException() } onFailure { didTrigger = true }
+        Try { throw TryTestException() }.onFailure { didTrigger = true }
         Assertions.assertTrue(didTrigger)
     }
 

@@ -48,23 +48,23 @@ class MaybeTest {
 
     @Test
     fun testMap() {
-        val squared = Maybe.just(5) map { it * it }
+        val squared = Maybe.just(5).map { it * it }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
 
         val emptyMaybe: Maybe<Int> = Maybe.empty()
-        val mapEmpty = emptyMaybe map { it * it }
+        val mapEmpty = emptyMaybe.map { it * it }
         Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
     @Test
     fun testFlatMap() {
-        val squared = Maybe.just(5) flatMap { Maybe.just(it * it) }
+        val squared = Maybe.just(5).flatMap { Maybe.just(it * it) }
         Assertions.assertTrue(squared.isPresent)
         Assertions.assertEquals(25, squared.get())
 
         val emptyMaybe: Maybe<Int> = Maybe.empty()
-        val mapEmpty = emptyMaybe flatMap { Maybe.just(it * it) }
+        val mapEmpty = emptyMaybe.flatMap { Maybe.just(it * it) }
         Assertions.assertTrue(mapEmpty.isEmpty)
     }
 
@@ -81,12 +81,12 @@ class MaybeTest {
     fun testOnSomething() {
         var didRun = false
         val testRealVal = Maybe.just("testVal")
-        testRealVal onSomething { didRun = true }
+        testRealVal.onSomething { didRun = true }
         Assertions.assertTrue(didRun)
 
         didRun = false
         val testEmptyVal = Maybe.empty()
-        testEmptyVal onSomething { didRun = true }
+        testEmptyVal.onSomething { didRun = true }
         Assertions.assertFalse(didRun)
     }
 
@@ -94,12 +94,12 @@ class MaybeTest {
     fun testOnNothing() {
         var didRun = false
         val testRealVal = Maybe.empty()
-        testRealVal onNothing { didRun = true }
+        testRealVal.onNothing { didRun = true }
         Assertions.assertTrue(didRun)
 
         didRun = false
         val testEmptyVal = Maybe.just("something")
-        testEmptyVal onNothing { didRun = true }
+        testEmptyVal.onNothing { didRun = true }
         Assertions.assertFalse(didRun)
     }
 

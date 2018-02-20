@@ -42,36 +42,36 @@ class TaskTest {
         val success = Task { "success" }
         Assertions.assertEquals("success", success.await())
 
-        val fail = Task { throw TaskTestException() } map {}
+        val fail = Task { throw TaskTestException() }.map {}
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
     }
 
     @Test
     fun testMap() {
-        val success = Task { 5 } map { it * it }
+        val success = Task { 5 }.map { it * it }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TaskTestException() } map { it * it }
+        val initialFail = Task<Int> { throw TaskTestException() }.map { it * it }
         Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
 
-        val mapFail = Task { 5 } map { throw TaskTestException() }
+        val mapFail = Task { 5 }.map { throw TaskTestException() }
         Assertions.assertThrows(TaskTestException::class.java, { mapFail.await() })
     }
 
     @Test
     fun testFlatMap() {
-        val success = Task { 5 } flatMap { x-> Task { x * x } }
+        val success = Task { 5 }.flatMap { x-> Task { x * x } }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TaskTestException() } flatMap { x-> Task { x * x } }
+        val initialFail = Task<Int> { throw TaskTestException() }.flatMap { x-> Task { x * x } }
         Assertions.assertThrows(TaskTestException::class.java, { initialFail.await() })
 
         @Suppress("UNREACHABLE_CODE")
-        val flatMapFail = Task { 5 } flatMap { throw TaskTestException(); Task { 5 } }
+        val flatMapFail = Task { 5 }.flatMap { throw TaskTestException(); Task { 5 } }
         Assertions.assertThrows(TaskTestException::class.java, { flatMapFail.await() })
 
         @Suppress("UNREACHABLE_CODE")
-        val flatMapNestedFail = Task { 5 } flatMap { Task { throw TaskTestException(); 5 } }
+        val flatMapNestedFail = Task { 5 }.flatMap { Task { throw TaskTestException(); 5 } }
         Assertions.assertThrows(TaskTestException::class.java, { flatMapNestedFail.await() })
     }
 
@@ -80,12 +80,12 @@ class TaskTest {
         var didFire: Boolean
 
         didFire = false
-        val success = Task { "success" } doAlways { it onSuccess { didFire = true }}
+        val success = Task { "success" }.doAlways { it.onSuccess { didFire = true }}
         Assertions.assertEquals("success", success.await())
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } doAlways { it onFailure { didFire = true }}
+        val fail = Task { throw TaskTestException() }.doAlways { it.onFailure { didFire = true }}
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
@@ -95,12 +95,12 @@ class TaskTest {
         var didFire: Boolean
 
         didFire = false
-        val success = Task { "success" } doOnValue { didFire = true }
+        val success = Task { "success" }.doOnValue { didFire = true }
         Assertions.assertEquals("success", success.await())
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } doOnValue { didFire = true }
+        val fail = Task { throw TaskTestException() }.doOnValue { didFire = true }
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertFalse(didFire)
     }
@@ -111,12 +111,12 @@ class TaskTest {
 
         didFire = false
         val success = Task { "success" }
-        success doOnError { didFire = true }
+        success.doOnError { didFire = true }
         Assertions.assertEquals("success", success.await())
         Assertions.assertFalse(didFire)
 
         didFire = false
-        val fail = Task { throw TaskTestException() } doOnError { didFire = true }
+        val fail = Task { throw TaskTestException() }.doOnError { didFire = true }
         Assertions.assertThrows(TaskTestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
@@ -132,13 +132,13 @@ class TaskTest {
 
         val task = Task(newThread) {
             threadLocal.set(42)
-        } runOn {
+        }.runOn {
             newThread
-        } doOnValue  {
+        }.doOnValue {
             shouldMatch = (threadLocal.get() == 42)
-        } runOn {
+        }.runOn {
             dummyThread
-        } doOnValue  {
+        }.doOnValue {
             shouldNotMatch = (threadLocal.get() == 42)
         }
         task.await()
@@ -153,7 +153,7 @@ class TaskTest {
         didFire = false
         val success = Task { "success" }
         success.await()
-        success doOnValue { didFire = true }
+        success.doOnValue { didFire = true }
         Assertions.assertTrue(didFire)
 
     }
@@ -161,7 +161,7 @@ class TaskTest {
     @Test
     fun testJust() {
         var didTrigger = false
-        val just = Task.just(42) doOnValue { didTrigger = true }
+        val just = Task.just(42).doOnValue { didTrigger = true }
         Assertions.assertEquals(42, just.await())
         Assertions.assertTrue(didTrigger)
     }
@@ -169,7 +169,7 @@ class TaskTest {
     @Test
     fun testEmpty() {
         var didTrigger = false
-        val empty = Task.empty() doOnValue { didTrigger = true }
+        val empty = Task.empty().doOnValue { didTrigger = true }
         empty.await()
         Assertions.assertTrue(didTrigger)
     }
@@ -177,7 +177,7 @@ class TaskTest {
     @Test
     fun testFail() {
         var didTrigger = false
-        val empty = Task.fail<Int>(TaskTestException()) doOnError { didTrigger = true }
+        val empty = Task.fail<Int>(TaskTestException()).doOnError { didTrigger = true }
         Assertions.assertThrows(TaskTestException::class.java, { empty.await() })
         Assertions.assertTrue(didTrigger)
     }

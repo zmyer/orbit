@@ -81,7 +81,7 @@ sealed class Try<T> {
      * @param body The computation to perform if the [Try] is an exception.
      * @return The computed value or the result of the provided function.
      */
-    infix fun getOrElse(body: () -> T): T = when(this) {
+    fun getOrElse(body: () -> T): T = when(this) {
         is Success -> get()
         is Failure -> body()
     }
@@ -105,7 +105,7 @@ sealed class Try<T> {
      * @param body The mapping function.
      * @return The new [Try].
      */
-    infix fun <Z> flatMap(body: (T) -> Try<Z>) = when(this) {
+    fun <Z> flatMap(body: (T) -> Try<Z>) = when(this) {
         is Success -> try {
             body(get())
         } catch(t: Throwable) {
@@ -122,7 +122,7 @@ sealed class Try<T> {
      * @param body The mapping function.
      * @return The new [Try].
      */
-    infix fun <Z> map(body: (T) -> Z) = flatMap { Success(body(it)) }
+    fun <Z> map(body: (T) -> Z) = flatMap { Success(body(it)) }
 
     /**
      * Executes the function only if the [Try] is a computed value.
@@ -131,7 +131,7 @@ sealed class Try<T> {
      * @param body The function to execute if a computer value.
      * @return The current [Try].
      */
-    infix fun onSuccess(body: (T) -> Unit) = when(this) {
+    fun onSuccess(body: (T) -> Unit) = when(this) {
         is Success -> {
             body(get())
             this
@@ -146,7 +146,7 @@ sealed class Try<T> {
      * @param body The function to execute if an exception.
      * @return The current [Try].
      */
-    infix fun onFailure(body: (Throwable) -> Unit) = when(this) {
+    fun onFailure(body: (Throwable) -> Unit) = when(this) {
         is Success -> this
         is Failure -> {
             body(throwable)

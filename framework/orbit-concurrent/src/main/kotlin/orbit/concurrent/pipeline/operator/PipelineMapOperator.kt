@@ -35,9 +35,9 @@ internal class PipelineMapOperator<S, I, O>(parent: Pipeline<S, I>, private val 
         PipelineOperator<S, I, O>(parent) {
 
     override fun onNext(value: Try<I>) {
-        value onSuccess {
+        value.onSuccess {
             triggerListeners(Try { body(it) })
-        } onFailure {
+        }.onFailure {
             triggerListeners(Try.failed(it))
         }
     }

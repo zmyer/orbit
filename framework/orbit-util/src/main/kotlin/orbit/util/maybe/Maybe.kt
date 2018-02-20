@@ -67,7 +67,7 @@ sealed class Maybe<out T> {
      * @param body The mapping function.
      * @return The new [Maybe].
      */
-    infix fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if(isEmpty) {
+    fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if(isEmpty) {
         None
     } else {
         body(get())
@@ -81,7 +81,7 @@ sealed class Maybe<out T> {
      * @param body The mapping function.
      * @return The new [Maybe].
      */
-    infix fun <V> map(body: (T) -> V): Maybe<V> = if(isEmpty) {
+    fun <V> map(body: (T) -> V): Maybe<V> = if(isEmpty) {
         None
     } else {
         Some(body(get()))
@@ -93,7 +93,7 @@ sealed class Maybe<out T> {
      * @param body The function to execute.
      * @return The original [Maybe] for chaining purposes.
      */
-    infix fun onSomething(body: (T) -> Unit): Maybe<T> {
+    fun onSomething(body: (T) -> Unit): Maybe<T> {
         if(isPresent) {
             body(get())
         }
@@ -106,7 +106,7 @@ sealed class Maybe<out T> {
      * @param body The function to execute.
      * @return The original [Maybe] for chaining purposes.
      */
-    infix fun onNothing(body: () -> Unit): Maybe<T> {
+    fun onNothing(body: () -> Unit): Maybe<T> {
         if(isEmpty) {
             body()
         }

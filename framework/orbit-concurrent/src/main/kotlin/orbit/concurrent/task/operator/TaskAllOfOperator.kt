@@ -41,7 +41,7 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
         val countdown = AtomicInteger(tasks.count())
 
         tasks.forEach { task ->
-            task doAlways {
+            task.doAlways {
                 when(it) {
                     is Failure -> resultHolder = Try.failed(it.getThrowable())
                 }

@@ -28,35 +28,100 @@
 
 package orbit.concurrent
 
+import orbit.concurrent.job.JobManagers
 import orbit.concurrent.pipeline.Pipeline
+import orbit.concurrent.task.Promise
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
 
 class PipelineTest {
     @Test
+    fun testDoAlways() {
+        val counter = AtomicInteger(0)
+
+        val pipeline =
+                Pipeline.create<Int>().doAlways {
+                    counter.incrementAndGet()
+                }
+
+        pipeline.sinkError(RuntimeException())
+        pipeline.sinkValue(5)
+        Assertions.assertEquals(2, counter.get())
+    }
+
+    @Test
+    fun testDoOnValue() {
+        val counter = AtomicInteger(0)
+
+        val pipeline =
+                Pipeline.create<Int>().doOnValue {
+                    counter.incrementAndGet()
+                }
+
+        pipeline.sinkError(RuntimeException())
+        pipeline.sinkValue(5)
+        Assertions.assertEquals(1, counter.get())
+    }
+
+    @Test
+    fun testDoOnError() {
+        val counter = AtomicInteger(0)
+
+        val pipeline =
+                Pipeline.create<Int>().doOnError {
+                    counter.incrementAndGet()
+                }
+
+        pipeline.sinkError(RuntimeException())
+        pipeline.sinkValue(5)
+        Assertions.assertEquals(1, counter.get())
+    }
+
+    @Test
     fun testMap() {
         val successPipeline =
-                Pipeline.create<Int>() map {
+                Pipeline.create<Int>().map {
                     it * it
-                } doOnValue {
+                }.doOnValue {
                     Assertions.assertEquals(25, it)
                 }
         successPipeline.sinkValue(5)
 
         val initialFailPipeline =
-                Pipeline.create<Int>() map {
+                Pipeline.create<Int>().map {
                     it * it
-                } doOnValue {
+                }.doOnValue {
                     Assertions.fail("doOnValueRan - Should have failed.")
                 }
         initialFailPipeline.sinkError(RuntimeException())
 
         val duringMapFailPipeline =
-                Pipeline.create<Int>() map {
+                Pipeline.create<Int>().map {
                     it * it
-                } doOnValue {
+                }.doOnValue {
                     Assertions.fail("doOnValueRan - Should have failed.")
                 }
         duringMapFailPipeline.sinkError(RuntimeException())
+    }
+
+    @Test
+    fun testRunOn() {
+        val latch = CountDownLatch(1)
+        val specialValue = ThreadLocal<Int>()
+        specialValue.set(0)
+
+        val pipeline =
+                Pipeline.create<Int>().runOn {
+                    JobManagers.parallel()
+                }.doOnValue {
+                    specialValue.set(it)
+                    latch.countDown()
+                }
+
+        pipeline.sinkValue(42)
+        latch.await()
+        Assertions.assertEquals(0, specialValue.get())
     }
 }

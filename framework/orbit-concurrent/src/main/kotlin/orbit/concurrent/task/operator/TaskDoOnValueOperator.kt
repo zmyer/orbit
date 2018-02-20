@@ -32,8 +32,12 @@ import orbit.util.tries.Try
 
 internal class TaskDoOnValueOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
     override fun onFulfilled(result: Try<T>) {
-        result.onSuccess(body)
-        value = result
+        value = try {
+            result.onSuccess(body)
+            result
+        } catch(throwable: Throwable) {
+            Try.failed(throwable)
+        }
         triggerListeners()
     }
 }

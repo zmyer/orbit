@@ -59,8 +59,9 @@ abstract class Task<T> {
     private val lock = ReentrantLock()
 
     @Volatile
-    internal var value: Try<T>? = null
+    protected var value: Try<T>? = null
 
+    @JvmSynthetic
     internal fun triggerListeners() {
         tailrec fun drainQueue(opVal: Try<T>) {
             val polled = listeners.poll()
@@ -82,6 +83,7 @@ abstract class Task<T> {
         }
     }
 
+    @JvmSynthetic
     internal open fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
         listener.onFulfilled(triggerVal)
     }
@@ -104,7 +106,7 @@ abstract class Task<T> {
      * @param body The function to run.
      * @return The task.
      */
-    infix fun doAlways(body: (Try<T>) -> Unit): Task<T> =
+    fun doAlways(body: (Try<T>) -> Unit): Task<T> =
             TaskDoAlwaysOperator(body).apply { addListener(this) }
 
     /**
@@ -113,7 +115,7 @@ abstract class Task<T> {
      * @param body The function to run on success.
      * @return The task.
      */
-    infix fun doOnValue(body: (T) -> Unit): Task<T> =
+    fun doOnValue(body: (T) -> Unit): Task<T> =
             TaskDoOnValueOperator(body).apply { addListener(this) }
 
     /**
@@ -122,7 +124,7 @@ abstract class Task<T> {
      * @param body The function to run on failure.
      * @return The task.
      */
-    infix fun doOnError(body: (Throwable) -> Unit): Task<T> =
+    fun doOnError(body: (Throwable) -> Unit): Task<T> =
             TaskDoOnErrorOperator<T>(body).apply { addListener(this) }
 
     /**
@@ -148,7 +150,7 @@ abstract class Task<T> {
      * @param body A function which returns the desired target [JobManager].
      * @return The [Task].
      */
-    infix fun runOn(body: () -> JobManager): Task<T> = runOn(body())
+    fun runOn(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
      * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
@@ -158,7 +160,7 @@ abstract class Task<T> {
      * @param body The mapping function.
      * @return The completed task with the new value.
      */
-    infix fun <O> map(body: (T) -> O): Task<O> =
+    fun <O> map(body: (T) -> O): Task<O> =
             TaskMapOperator(body).apply { addListener(this) }
 
     /**
@@ -169,7 +171,7 @@ abstract class Task<T> {
      * @param body The mapping function.
      * @return A new asynchronous [Task] with the mapped value.
      */
-    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
+    fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
             TaskFlatMapOperator(body).apply { addListener(this) }
 
     /**
@@ -192,9 +194,9 @@ abstract class Task<T> {
     fun asCompletableFuture(): CompletableFuture<T> {
         val cf = CompletableFuture<T>()
 
-        this doOnValue {
+        this.doOnValue {
             cf.complete(it)
-        } doOnError {
+        }.doOnError {
             cf.completeExceptionally(it)
         }
 

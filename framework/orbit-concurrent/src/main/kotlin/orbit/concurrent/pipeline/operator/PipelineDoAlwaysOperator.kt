@@ -35,7 +35,12 @@ internal class PipelineDoAlwaysOperator<S, T>(parent: Pipeline<S, T>, private va
         PipelineOperator<S, T, T>(parent) {
 
     override fun onNext(value: Try<T>) {
-        body(value)
-        triggerListeners(value)
+        try {
+            body(value)
+            triggerListeners(value)
+        } catch(throwable: Throwable) {
+            triggerListeners(Try.failed(throwable))
+        }
+
     }
 }

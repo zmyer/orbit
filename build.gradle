@@ -72,11 +72,11 @@ ext {
     orgName = "Electronic Arts"
     orgUrl = "http://www.ea.com"
 
-    javaTargetVersion = "1.8"
-    javaSourceVersion = "1.8"
+    javaTargetVersion = "9"
+    javaSourceVersion = "9"
     kotlinTargetVersion = "1.8"
 
-    junitJupiterVersion = "5.0.3"
+    junitJupiterVersion = "5.1.0"
     slf4jVersion = "1.7.25"
 }
 
@@ -96,6 +96,7 @@ configure(withKotlin) {
     compileKotlin {
         kotlinOptions {
             jvmTarget = kotlinTargetVersion
+            compileKotlin.destinationDir = compileJava.destinationDir
         }
     }
 
@@ -118,6 +119,13 @@ configure(withJava) {
     compileJava   {
         sourceCompatibility = javaSourceVersion
         targetCompatibility = javaTargetVersion
+
+        doFirst {
+            options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+            ]
+            classpath = files()
+        }
     }
 
     compileTestJava {
@@ -126,6 +134,8 @@ configure(withJava) {
     }
 
     jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
         manifest {
             attributes(
                     "Name": project.name,

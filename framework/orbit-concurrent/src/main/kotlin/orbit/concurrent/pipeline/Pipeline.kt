@@ -43,14 +43,10 @@ abstract class Pipeline<S, T> {
 
     private val listeners = AtomicReference(listOf<PipelineOperator<S, T, *>>())
 
-    private fun addListener(pipelineOperator: PipelineOperator<S, T, *>) {
-        while(true) {
+    private fun addListener(listener: PipelineOperator<S, T, *>) {
+        do {
             val listenerList = listeners.get()
-            val newList = listenerList + pipelineOperator
-            if (listeners.compareAndSet(listenerList, newList)) {
-                break
-            }
-        }
+        } while(!listeners.compareAndSet(listenerList, listenerList + listener))
     }
 
     internal fun triggerListeners(value: Try<T>) {

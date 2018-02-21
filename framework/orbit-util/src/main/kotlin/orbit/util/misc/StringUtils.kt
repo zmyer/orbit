@@ -28,6 +28,9 @@
 
 package orbit.util.misc
 
+/**
+ * Utilities for working with [String]s.
+ */
 object StringUtils {
     /**
      * Alias for [IdentityUtils.secureRandomString].
@@ -36,4 +39,12 @@ object StringUtils {
     @JvmOverloads
     @JvmStatic
     fun secureRandomString(numBits: Int = 128): String = IdentityUtils.secureRandomString(numBits)
+
+    /**
+     * Alias for [IdentityUtils.pseudoRandomString].
+     * @see [IdentityUtils.pseudoRandomString].
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun pseudoRandomString(numBits: Int = 128): String = IdentityUtils.pseudoRandomString(numBits)
 }

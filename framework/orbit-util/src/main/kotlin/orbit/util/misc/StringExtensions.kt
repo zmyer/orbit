@@ -33,3 +33,9 @@ package orbit.util.misc
  * @see [IdentityUtils.secureRandomString].
  */
 fun String.Companion.secureRandom(numBits: Int = 128) = StringUtils.secureRandomString(numBits)
+
+/**
+ * Alias for [IdentityUtils.pseudoRandomString].
+ * @see [IdentityUtils.pseudoRandomString].
+ */
+fun String.Companion.pseudoRandom(numBits: Int = 128) = StringUtils.pseudoRandomString(numBits)

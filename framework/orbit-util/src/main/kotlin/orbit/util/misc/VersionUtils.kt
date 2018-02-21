@@ -26,35 +26,31 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package orbit.util
+package orbit.util.misc
 
-import orbit.util.misc.IdentityUtils
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+/**
+ * Utilities for determining versions.
+ */
+object VersionUtils {
+    /**
+     * The codename for the current version of Orbit.
+     */
+    @JvmStatic
+    val orbitCodename
+        get() = javaClass.`package`.implementationTitle ?: "Orbit"
 
-class IdentityUtilsTest {
-    @Test
-    fun testSecureRandom() {
-        val firstString = IdentityUtils.secureRandomString()
-        val secondString = IdentityUtils.secureRandomString()
-        Assertions.assertTrue(firstString.isNotEmpty())
-        Assertions.assertTrue(secondString.isNotEmpty())
-        Assertions.assertNotEquals(firstString, secondString)
-    }
+    /**
+     * The current version of Orbit.
+     */
+    @JvmStatic
+    val orbitVersion
+        get() = javaClass.`package`.implementationVersion ?: "dev"
 
-    @Test
-    fun testPseudoRandom() {
-        val firstString = IdentityUtils.pseudoRandomString()
-        val secondString = IdentityUtils.pseudoRandomString()
-        Assertions.assertTrue(firstString.isNotEmpty())
-        Assertions.assertTrue(secondString.isNotEmpty())
-        Assertions.assertNotEquals(firstString, secondString)
-    }
+    /**
+     * The current compatibility version of Orbit.
+     */
+    @JvmStatic
+    val orbitCompatibilityVersion
+        get() = javaClass.`package`.specificationVersion ?: "dev"
 
-    @Test
-    fun testSequentialId() {
-        val first = IdentityUtils.sequentialId()
-        val second = IdentityUtils.sequentialId()
-        Assertions.assertNotEquals(first, second)
-    }
 }

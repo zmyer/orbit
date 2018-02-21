@@ -30,8 +30,13 @@ package orbit.util.misc
 
 import orbit.util.exception.InvalidArgumentException
 import java.security.SecureRandom
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
 
+/**
+ * Utilities for generating identities.
+ */
 object IdentityUtils {
     private val base64Chars = charArrayOf(
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -39,8 +44,25 @@ object IdentityUtils {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_')
-    private val secureRng = SecureRandom()
+
+    private val secureRNG = SecureRandom()
+    private val pseudoRNG get() = ThreadLocalRandom.current()
+
     private val sequentialLongId = AtomicLong(0)
+
+    private fun generateRandomString(numBits: Int, random: Random): String {
+        tailrec fun internalGenerate(bitsLeft: Int, target: StringBuilder, random: Random) {
+            val rangeMax = if(bitsLeft > 6) 64 else 1 shl bitsLeft
+            target.append(base64Chars[random.nextInt(rangeMax)])
+            val remaining = bitsLeft - 6
+            if(remaining > 0) internalGenerate(remaining, target, random)
+        }
+
+        if(numBits <= 0) throw InvalidArgumentException("numBits must be > 0.")
+        val targetString = StringBuilder(1 + (numBits / 6))
+        internalGenerate(numBits, targetString, random)
+        return targetString.toString()
+    }
 
     /**
      * Generates a secure random string with the specified number of bits.
@@ -53,20 +75,20 @@ object IdentityUtils {
      */
     @JvmOverloads
     @JvmStatic
-    fun secureRandomString(numBits: Int = 128): String {
-        if(numBits <= 0) throw InvalidArgumentException("numBits must be > 0.")
+    fun secureRandomString(numBits: Int = 128) = generateRandomString(numBits, secureRNG)
 
-        tailrec fun generateString(target: StringBuilder, bitsLeft: Int) {
-            val rangeMax = if(bitsLeft > 6) 64 else 1 shl bitsLeft
-            target.append(base64Chars[secureRng.nextInt(rangeMax)])
-            val remaining = bitsLeft - 6
-            if(remaining > 0) generateString(target, remaining)
-        }
-
-        val targetString = StringBuilder(1 + (numBits / 6))
-        generateString(targetString, numBits)
-        return targetString.toString()
-    }
+    /**
+     * Generates a pseudo random string with the specified number of bits.
+     *
+     * This method should not be considered secure.
+     *
+     * @param numBits The number of bits of randomness.
+     * @throws InvalidArgumentException if numBits is not > 0.
+     * @return The secure random string.
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun pseudoRandomString(numBits: Int = 128) = generateRandomString(numBits, pseudoRNG)
 
     /**
      * Generates a [Long] ID unique to this virtual machine.

@@ -134,12 +134,12 @@ class TaskTest {
         }.runOn {
             newThread
         }.doOnValue {
-            shouldMatch = (threadLocal.get() == 42)
-        }.runOn {
-            dummyThread
-        }.doOnValue {
-            shouldNotMatch = (threadLocal.get() == 42)
-        }
+                shouldMatch = (threadLocal.get() == 42)
+            }.runOn {
+                dummyThread
+            }.doOnValue {
+                shouldNotMatch = (threadLocal.get() == 42)
+            }
         task.await()
         Assertions.assertTrue(shouldMatch)
         Assertions.assertFalse(shouldNotMatch)

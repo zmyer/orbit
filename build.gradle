@@ -22,7 +22,6 @@ configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
     ext.junitPlatformVersion = "1.0.3"
-    ext.dokkaVersion = "0.9.16-eap-3"
 
     repositories {
         mavenCentral()
@@ -36,7 +35,6 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
     }
 }
 

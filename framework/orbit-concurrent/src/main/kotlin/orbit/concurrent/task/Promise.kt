@@ -6,7 +6,6 @@
 
 package orbit.concurrent.task
 
-import orbit.util.exception.InvalidStateException
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -20,14 +19,14 @@ class Promise<T>: Task<T>() {
      * Completes the [Promise] successfully with the supplied result.
      *
      * @param result The result to complete with.
-     * @throws InvalidStateException If the promise has already been completed.
+     * @throws IllegalStateException If the promise has already been completed.
      */
     fun complete(result: T) {
         if(hasFired.compareAndSet(false, true)) {
             value = Try.success(result)
             triggerListeners()
         } else {
-            throw InvalidStateException("Promise has already been completed. A promise may only be completed once.")
+            throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")
         }
     }
 
@@ -35,14 +34,14 @@ class Promise<T>: Task<T>() {
      * Completes the [Promise] exceptionally with the supplied result.
      *
      * @param result The result to complete with.
-     * @throws InvalidStateException If the promise has already been completed.
+     * @throws IllegalStateException If the promise has already been completed.
      */
     fun completeExceptionally(result: Throwable) {
         if(hasFired.compareAndSet(false, true)) {
             value = Try.failed(result)
             triggerListeners()
         } else {
-            throw InvalidStateException("Promise has already been completed. A promise may only be completed once.")
+            throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")
         }
     }
 }

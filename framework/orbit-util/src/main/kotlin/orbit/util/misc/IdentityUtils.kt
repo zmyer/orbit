@@ -6,9 +6,8 @@
 
 package orbit.util.misc
 
-import orbit.util.exception.InvalidArgumentException
 import java.security.SecureRandom
-import java.util.*
+import java.util.Random
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
 
@@ -36,7 +35,7 @@ object IdentityUtils {
             if(remaining > 0) internalGenerate(remaining, target, random)
         }
 
-        if(numBits <= 0) throw InvalidArgumentException("numBits must be > 0.")
+        if(numBits <= 0) throw IllegalArgumentException("numBits must be > 0.")
         val targetString = StringBuilder(1 + (numBits / 6))
         internalGenerate(numBits, targetString, random)
         return targetString.toString()
@@ -48,7 +47,7 @@ object IdentityUtils {
      * This method uses SecureRandom and a 128-bit string generated with this is as unique as a UUID.
      *
      * @param numBits The number of bits of randomness.
-     * @throws InvalidArgumentException if numBits is not > 0.
+     * @throws IllegalArgumentException if numBits is not > 0.
      * @return The secure random string.
      */
     @JvmOverloads
@@ -61,7 +60,7 @@ object IdentityUtils {
      * This method should not be considered secure.
      *
      * @param numBits The number of bits of randomness.
-     * @throws InvalidArgumentException if numBits is not > 0.
+     * @throws IllegalArgumentException if numBits is not > 0.
      * @return The secure random string.
      */
     @JvmOverloads

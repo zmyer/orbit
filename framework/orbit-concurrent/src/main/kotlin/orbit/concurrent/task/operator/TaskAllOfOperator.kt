@@ -7,7 +7,7 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.Task
-import orbit.util.tries.Failure
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -17,6 +17,7 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
 
     init {
         val countdown = AtomicInteger(tasks.count())
+        val taskContext = TaskContext.current()
 
         tasks.forEach { task ->
             task.doAlways { taskResult ->
@@ -25,7 +26,9 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
                 }
 
                 if (countdown.decrementAndGet() == 0) {
+                    taskContext?.push()
                     onFulfilled(resultHolder)
+                    taskContext?.pop()
                 }
             }
         }
@@ -33,6 +36,7 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
 
     override fun onFulfilled(result: Try<Unit>) {
         value = result
+        taskCompletionContext = TaskContext.current()
         triggerListeners()
     }
 }

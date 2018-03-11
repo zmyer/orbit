@@ -6,6 +6,7 @@
 
 package orbit.concurrent.task.operator
 
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 
 internal class TaskDoOnValueOperator<T>(private val body: (T) -> Unit): TaskOperator<T, T>() {
@@ -16,6 +17,7 @@ internal class TaskDoOnValueOperator<T>(private val body: (T) -> Unit): TaskOper
         } catch(throwable: Throwable) {
             Try.failed(throwable)
         }
+        taskCompletionContext = TaskContext.current()
         triggerListeners()
     }
 }

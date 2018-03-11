@@ -7,6 +7,7 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.Task
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 
 
@@ -26,5 +27,6 @@ internal class TaskFlatMapOperator<I, O>(private val body: (I) -> Task<O>): Task
             value = Try.failed(it)
             triggerListeners()
         }
+        taskCompletionContext = TaskContext.current()
     }
 }

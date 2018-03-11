@@ -6,6 +6,7 @@
 
 package orbit.concurrent.task.operator
 
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.CountDownLatch
 
@@ -14,6 +15,7 @@ internal class TaskAwaitOperator<I>: TaskOperator<I, I>() {
 
     override fun onFulfilled(result: Try<I>) {
         value = result
+        taskCompletionContext = TaskContext.current()
         latch.countDown()
         triggerListeners()
     }

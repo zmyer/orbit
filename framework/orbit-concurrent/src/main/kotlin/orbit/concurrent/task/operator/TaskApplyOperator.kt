@@ -7,17 +7,23 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.job.JobManager
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 
 internal class TaskApplyOperator<T>(jobManager: JobManager, body: () -> T): TaskOperator<T, T>() {
     init {
+        val taskContext = TaskContext.current()
+
         jobManager.submit {
-            onFulfilled(Try{ body() })
+            taskContext?.push()
+            onFulfilled(Try { body() })
+            taskContext?.pop()
         }
     }
 
     override fun onFulfilled(result: Try<T>) {
         value = result
+        taskCompletionContext = TaskContext.current()
         triggerListeners()
     }
 }

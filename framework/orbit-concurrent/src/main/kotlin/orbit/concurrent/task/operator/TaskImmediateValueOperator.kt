@@ -6,6 +6,7 @@
 
 package orbit.concurrent.task.operator
 
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 
 internal class TaskImmediateValueOperator<T>(immediateValue: Try<T>): TaskOperator<T, T>() {
@@ -15,6 +16,7 @@ internal class TaskImmediateValueOperator<T>(immediateValue: Try<T>): TaskOperat
 
     override fun onFulfilled(result: Try<T>) {
         value = result
+        taskCompletionContext = TaskContext.current()
         triggerListeners()
     }
 }

@@ -39,6 +39,9 @@ abstract class Task<T> {
     @Volatile
     protected var value: Try<T>? = null
 
+    @Volatile
+    protected var taskCompletionContext: TaskContext? = null
+
     @JvmSynthetic
     internal fun triggerListeners() {
         tailrec fun drainQueue(opVal: Try<T>) {
@@ -50,7 +53,7 @@ abstract class Task<T> {
         }
 
         val valResult = value
-        if(valResult != null) {
+        if (valResult != null) {
             if(lock.tryLock()) {
                 try {
                     drainQueue(valResult)
@@ -63,12 +66,14 @@ abstract class Task<T> {
 
     @JvmSynthetic
     internal open fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
+        taskCompletionContext?.push()
         listener.onFulfilled(triggerVal)
+        taskCompletionContext?.pop()
     }
 
     private fun addListener(taskOperator: TaskOperator<T, *>) {
         val valResult = value
-        if(valResult == null) {
+        if (valResult == null) {
             listeners.add(taskOperator)
             triggerListeners()
         } else {

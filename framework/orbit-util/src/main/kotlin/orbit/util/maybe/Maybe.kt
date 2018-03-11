@@ -120,6 +120,19 @@ sealed class Maybe<out T> {
         } else {
             empty()
         }
+
+        /**
+         * Creates an Orbit [Maybe] from the provided value, which may be null.
+         *
+         * @param value A potentially null value.
+         * @return A [Maybe] that is empty is the value is null.
+         */
+        @JvmStatic
+        fun <V> ofNullable(value: V?): Maybe<V> = if (value != null) {
+            just(value)
+        } else {
+            empty()
+        }
     }
 }
 

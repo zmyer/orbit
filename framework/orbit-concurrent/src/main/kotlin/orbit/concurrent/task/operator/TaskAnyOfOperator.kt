@@ -7,18 +7,21 @@
 package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.Task
+import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, Unit>() {
     init {
         val completed = AtomicBoolean(false)
+        val taskContext = TaskContext.current()
 
         tasks.forEach { task ->
             task.doAlways  {
-                if(completed.compareAndSet(false, true))
-                {
+                if (completed.compareAndSet(false, true)) {
+                    taskContext?.push()
                     onFulfilled(Try.success(Unit))
+                    taskContext?.pop()
                 }
             }
         }
@@ -26,6 +29,7 @@ internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
 
     override fun onFulfilled(result: Try<Unit>) {
         value = result
+        taskCompletionContext = TaskContext.current()
         triggerListeners()
     }
 }

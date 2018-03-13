@@ -15,7 +15,6 @@ import orbit.concurrent.pipeline.operator.PipelineFilterOperator
 import orbit.concurrent.pipeline.operator.PipelineFlatMapOperator
 import orbit.concurrent.pipeline.operator.PipelineOperator
 import orbit.concurrent.pipeline.operator.PipelineRunOnOperator
-import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicReference
 

@@ -4,8 +4,8 @@
  See license in LICENSE.
  */
 
-package orbit.concurrent.task.operator
+package orbit.concurrent.flow
 
-import orbit.concurrent.task.impl.AbstractTaskImpl
-
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+interface Publisher<T> {
+    fun subscribe(subscriber: Subscriber<T>)
+}

@@ -6,22 +6,21 @@
 
 package orbit.concurrent.task.operator
 
-import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.CountDownLatch
 
-internal class TaskAwaitOperator<I>: TaskOperator<I, I>() {
+internal class TaskAwait<T>: TaskOperator<T, T>() {
+    private var earlyValue: Try<T>? = null
     private val latch = CountDownLatch(1)
 
-    override fun onFulfilled(result: Try<I>) {
-        value = result
-        taskCompletionContext = TaskContext.current()
+    override fun operator(item: Try<T>) {
+        earlyValue = item
         latch.countDown()
-        triggerListeners()
+        publish(item)
     }
 
-    internal fun waitOnLatch(): I {
+    internal fun waitOnLatch(): T {
         latch.await()
-        return value!!.get()
+        return earlyValue!!.get()
     }
 }

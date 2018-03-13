@@ -6,6 +6,10 @@
 
 package orbit.concurrent.task.operator
 
-import orbit.concurrent.task.impl.AbstractTaskImpl
+import orbit.util.tries.Try
 
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+internal class TaskJust<T>(immediateValue: Try<T>): TaskNoOp<T>() {
+    init {
+       onNext(immediateValue)
+    }
+}

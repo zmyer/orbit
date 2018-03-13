@@ -11,7 +11,7 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, Unit>() {
+internal class TaskAllOf(tasks: Iterable<Task<*>>): TaskNoOp<Unit>() {
     @Volatile
     private var resultHolder: Try<Unit> = Try.success(Unit)
 
@@ -27,16 +27,10 @@ internal class TaskAllOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, U
 
                 if (countdown.decrementAndGet() == 0) {
                     taskContext?.push()
-                    onFulfilled(resultHolder)
+                    onNext(resultHolder)
                     taskContext?.pop()
                 }
             }
         }
-    }
-
-    override fun onFulfilled(result: Try<Unit>) {
-        value = result
-        taskCompletionContext = TaskContext.current()
-        triggerListeners()
     }
 }

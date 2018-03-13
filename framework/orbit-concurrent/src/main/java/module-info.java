@@ -8,6 +8,7 @@ module orbit.concurrent {
     exports orbit.concurrent.job;
     exports orbit.concurrent.pipeline;
     exports orbit.concurrent.task;
+    exports orbit.concurrent.flow;
 
     requires orbit.logging;
     requires orbit.util;

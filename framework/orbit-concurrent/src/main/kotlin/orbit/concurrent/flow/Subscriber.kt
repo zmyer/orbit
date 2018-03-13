@@ -4,8 +4,10 @@
  See license in LICENSE.
  */
 
-package orbit.concurrent.task.operator
+package orbit.concurrent.flow
 
-import orbit.concurrent.task.impl.AbstractTaskImpl
+import orbit.util.tries.Try
 
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+interface Subscriber<T> {
+    fun onNext(item: Try<T>)
+}

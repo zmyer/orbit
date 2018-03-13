@@ -6,6 +6,10 @@
 
 package orbit.concurrent.task.operator
 
-import orbit.concurrent.task.impl.AbstractTaskImpl
+import orbit.util.tries.Try
 
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+internal open class TaskNoOp<T>: TaskOperator<T, T>() {
+    override fun operator(item: Try<T>) {
+        publish(item)
+    }
+}

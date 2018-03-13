@@ -10,8 +10,7 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
 
-
-internal class TaskFromCompletableFutureOperator<T>(completableFuture: CompletableFuture<T>): TaskOperator<T, T>() {
+internal class TaskFromCompletableFuture<T>(completableFuture: CompletableFuture<T>): TaskNoOp<T>() {
     init {
         val taskContext = TaskContext.current()
 
@@ -19,18 +18,12 @@ internal class TaskFromCompletableFutureOperator<T>(completableFuture: Completab
             taskContext?.push()
 
             if (t != null) {
-                onFulfilled(Try.failed(t))
+                onNext(Try.failed(t))
             } else {
-                onFulfilled(Try.success(v!!))
+                onNext(Try.success(v!!))
             }
 
             taskContext?.pop()
         }
-    }
-
-    override fun onFulfilled(result: Try<T>) {
-        value = result
-        taskCompletionContext = TaskContext.current()
-        triggerListeners()
     }
 }

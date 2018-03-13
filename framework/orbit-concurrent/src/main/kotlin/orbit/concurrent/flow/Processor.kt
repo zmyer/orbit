@@ -4,8 +4,6 @@
  See license in LICENSE.
  */
 
-package orbit.concurrent.task.operator
+package orbit.concurrent.flow
 
-import orbit.concurrent.task.impl.AbstractTaskImpl
-
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+interface Processor<I, O>: Subscriber<I>, Publisher<O>

@@ -11,25 +11,19 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class TaskAnyOfOperator(tasks: Iterable<Task<*>>): TaskOperator<Unit, Unit>() {
+internal class TaskAnyOf(tasks: Iterable<Task<*>>): TaskNoOp<Unit>() {
     init {
         val completed = AtomicBoolean(false)
         val taskContext = TaskContext.current()
 
         tasks.forEach { task ->
-            task.doAlways  {
+            task.doAlways {
                 if (completed.compareAndSet(false, true)) {
                     taskContext?.push()
-                    onFulfilled(Try.success(Unit))
+                    onNext(Try.success(Unit))
                     taskContext?.pop()
                 }
             }
         }
-    }
-
-    override fun onFulfilled(result: Try<Unit>) {
-        value = result
-        taskCompletionContext = TaskContext.current()
-        triggerListeners()
     }
 }

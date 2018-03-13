@@ -6,100 +6,49 @@
 
 package orbit.concurrent.task
 
+import orbit.concurrent.flow.Processor
+import orbit.concurrent.flow.Publisher
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
-import orbit.concurrent.task.operator.TaskAllOfOperator
-import orbit.concurrent.task.operator.TaskAnyOfOperator
-import orbit.concurrent.task.operator.TaskApplyOperator
-import orbit.concurrent.task.operator.TaskAwaitOperator
-import orbit.concurrent.task.operator.TaskDoAlwaysOperator
-import orbit.concurrent.task.operator.TaskFromCompletableFutureOperator
-import orbit.concurrent.task.operator.TaskFlatMapOperator
-import orbit.concurrent.task.operator.TaskMapOperator
-import orbit.concurrent.task.operator.TaskDoOnErrorOperator
-import orbit.concurrent.task.operator.TaskDoOnValueOperator
-import orbit.concurrent.task.operator.TaskOperator
-import orbit.concurrent.task.operator.TaskRunOnOperator
-import orbit.concurrent.task.operator.TaskImmediateValueOperator
-import orbit.util.tries.Failure
-import orbit.util.tries.Success
+import orbit.concurrent.task.operator.TaskAllOf
+import orbit.concurrent.task.operator.TaskAnyOf
+import orbit.concurrent.task.operator.TaskApply
+import orbit.concurrent.task.operator.TaskAwait
+import orbit.concurrent.task.operator.TaskDoAlways
+import orbit.concurrent.task.operator.TaskDoOnError
+import orbit.concurrent.task.operator.TaskDoOnValue
+import orbit.concurrent.task.operator.TaskFlatMap
+import orbit.concurrent.task.operator.TaskFromCompletableFuture
+import orbit.concurrent.task.operator.TaskJust
+import orbit.concurrent.task.operator.TaskMap
+import orbit.concurrent.task.operator.TaskRunOn
 import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.Flow
 
 /**
  * Represents that a unit of asynchronous work will be completed and the value will be made available in the future.
  * [Task]s are guaranteed to complete and may complete successfully or exceptionally.
  */
-abstract class Task<T> {
-    private val listeners = ConcurrentLinkedQueue<TaskOperator<T, *>>()
-    private val lock = ReentrantLock()
-
-    @Volatile
-    protected var value: Try<T>? = null
-
-    @Volatile
-    protected var taskCompletionContext: TaskContext? = null
-
-    @JvmSynthetic
-    internal fun triggerListeners() {
-        tailrec fun drainQueue(opVal: Try<T>) {
-            val polled = listeners.poll()
-            if(polled != null) {
-                executeListener(polled, opVal)
-                drainQueue(opVal)
-            }
-        }
-
-        val valResult = value
-        if (valResult != null) {
-            if(lock.tryLock()) {
-                try {
-                    drainQueue(valResult)
-                } finally {
-                    lock.unlock()
-                }
-            }
-        }
-    }
-
-    @JvmSynthetic
-    internal open fun executeListener(listener: TaskOperator<T, *>, triggerVal: Try<T>) {
-        taskCompletionContext?.push()
-        listener.onFulfilled(triggerVal)
-        taskCompletionContext?.pop()
-    }
-
-    private fun addListener(taskOperator: TaskOperator<T, *>) {
-        val valResult = value
-        if (valResult == null) {
-            listeners.add(taskOperator)
-            triggerListeners()
-        } else {
-            executeListener(taskOperator, valResult)
-        }
-
-    }
-
+abstract class Task<T>: Publisher<T> {
     /**
      * Upon this [Task]'s completion, executes the given function and returns a new [Task] with the result of the
      * original.
      *
      * @param body The function to run.
-     * @return The task.
+     * @return The future.
      */
     fun doAlways(body: (Try<T>) -> Unit): Task<T> =
-            TaskDoAlwaysOperator(body).apply { addListener(this) }
+            TaskDoAlways(body).also { this.subscribe(it) }
 
     /**
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
      *
      * @param body The function to run on success.
-     * @return The task.
+     * @return The future.
      */
     fun doOnValue(body: (T) -> Unit): Task<T> =
-            TaskDoOnValueOperator(body).apply { addListener(this) }
+            TaskDoOnValue(body).also { this.subscribe(it) }
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -108,7 +57,29 @@ abstract class Task<T> {
      * @return The task.
      */
     fun doOnError(body: (Throwable) -> Unit): Task<T> =
-            TaskDoOnErrorOperator<T>(body).apply { addListener(this) }
+            TaskDoOnError<T>(body).also { this.subscribe(it) }
+
+    /**
+     * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
+     *
+     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
+     *
+     * @param body The mapping function.
+     * @return The completed task with the new value.
+     */
+    fun <R> map(body: (T) -> R): Task<R> =
+            TaskMap(body).also { this.subscribe(it) }
+
+    /**
+     * Asynchronously maps the value of this [Task] to another [Task] and flattens the result of the latter.
+     *
+     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
+     *
+     * @param body The mapping function.
+     * @return A new asynchronous [Task] with the mapped value.
+     */
+    fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
+            TaskFlatMap(body).also { this.subscribe(it) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -121,7 +92,7 @@ abstract class Task<T> {
      * @return The [Task].
      */
     fun runOn(jobManager: JobManager): Task<T> =
-            TaskRunOnOperator<T>(jobManager).apply { addListener(this) }
+            TaskRunOn<T>(jobManager).also { this.subscribe(it) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -136,28 +107,6 @@ abstract class Task<T> {
     fun runOn(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
-     * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
-     *
-     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
-     *
-     * @param body The mapping function.
-     * @return The completed task with the new value.
-     */
-    fun <O> map(body: (T) -> O): Task<O> =
-            TaskMapOperator(body).apply { addListener(this) }
-
-    /**
-     * Asynchronously maps the value of this [Task] to another [Task] and flattens the result of the latter.
-     *
-     * If the initial [Task] is in a failed state the new [Task] is failed with the same [Throwable].
-     *
-     * @param body The mapping function.
-     * @return A new asynchronous [Task] with the mapped value.
-     */
-    fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
-            TaskFlatMapOperator(body).apply { addListener(this) }
-
-    /**
      * Causes the current thread to wait for the [Task] to be completed.
      *
      * Upon [Task] completion the successful completion value is returned of the failure [Throwable] is raised.
@@ -167,7 +116,30 @@ abstract class Task<T> {
      * @throws Throwable The [Throwable] of the failed tasked if failed.
      */
     fun await(): T =
-            TaskAwaitOperator<T>().apply { addListener(this) }.waitOnLatch()
+            TaskAwait<T>().also { this.subscribe(it) }.waitOnLatch()
+
+    /**
+     * Returns true if this [Task] is complete either successfully or exceptionally.
+     *
+     * @return true if this [Task] is complete, otherwise false.
+     */
+    abstract fun isComplete(): Boolean
+
+    /**
+     * Returns true if this [Task] completed successfully. Returns false if the [Task] completed exceptionally
+     * or is not yet completed.
+     *
+     * @return true if this [Task] was successful, otherwise false.
+     */
+    abstract fun isSuccessful(): Boolean
+
+    /**
+     * Returns true if this [Task] completed with an error. Returns false if the [Task] completed successfully.
+     * or is not yet completed.
+     *
+     * @return true if this [Task] was an error, otherwise false.
+     */
+    abstract fun isError(): Boolean
 
     /**
      * Converts this task into a Java [CompletableFuture] which is resolved based on the [Task] result.
@@ -186,40 +158,7 @@ abstract class Task<T> {
         return cf
     }
 
-    /**
-     * Returns true if this [Task] is complete either successfully or exceptionally.
-     *
-     * @return true if this [Task] is complete, otherwise false.
-     */
-    fun isComplete() = value != null
-
-    /**
-     * Returns true if this [Task] completed successfully. Returns false if the [Task] completed exceptionally
-     * or is not yet completed.
-     *
-     * @return true if this [Task] was successful, otherwise false.
-     */
-    fun isSuccessful() = when(value) {
-        is Success -> true
-        is Failure -> false
-        null -> false
-    }
-
-    /**
-     * Returns true if this [Task] completed exceptionally. Returns false if the [Task] completed successfully
-     * or is not yet completed.
-     *
-     * @return true if this [Task] was exceptional, otherwise false.
-     */
-    fun isExceptional() = when(value) {
-        is Failure -> true
-        is Success -> false
-        null -> false
-    }
-
     companion object {
-        private val EMPTY_TASK = just(Unit)
-
         /**
          * Creates a [Task] which executes on the default [JobManager].
          *
@@ -254,7 +193,7 @@ abstract class Task<T> {
          * @return The [Task].
          */
         @JvmStatic
-        fun <V> create(jobManager: JobManager, body: () -> V): Task<V> = TaskApplyOperator(jobManager, body)
+        fun <V> create(jobManager: JobManager, body: () -> V): Task<V> = TaskApply(jobManager, body)
 
         /**
          * Creates a [Task] which is immediately completed with the specified value.
@@ -265,7 +204,7 @@ abstract class Task<T> {
          * @return The completed [Task].
          */
         @JvmStatic
-        fun <V> just(value: V): Task<V> = TaskImmediateValueOperator(Try.success(value))
+        fun <V> just(value: V): Task<V> = TaskJust(Try.success(value))
 
         /**
          * Creates a [Task] which is immediately failed with the specified value.
@@ -276,7 +215,7 @@ abstract class Task<T> {
          * @return The failed [Task].
          */
         @JvmStatic
-        fun <V> fail(t: Throwable): Task<V> = TaskImmediateValueOperator(Try.failed(t))
+        fun <V> fail(t: Throwable): Task<V> = TaskJust(Try.failed(t))
 
         /**
          * Returns an empty [Task] that is already completed with an empty result.
@@ -286,7 +225,7 @@ abstract class Task<T> {
          * @return The empty [Task].
          */
         @JvmStatic
-        fun empty(): Task<Unit> = EMPTY_TASK
+        fun empty(): Task<Unit> = Task.just(Unit)
 
         /**
          * Returns a new [Task] that is completed when all of the supplied [Task]s are completed.
@@ -297,7 +236,7 @@ abstract class Task<T> {
          * @return The new [Task].
          */
         @JvmStatic
-        fun allOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAllOfOperator(tasks)
+        fun allOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAllOf(tasks)
 
         /**
          * Returns a new [Task] that is completed when all of the supplied [Task]s are completed.
@@ -319,7 +258,7 @@ abstract class Task<T> {
          * @return The new [Task].
          */
         @JvmStatic
-        fun anyOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAnyOfOperator(tasks)
+        fun anyOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAnyOf(tasks)
 
         /**
          * Returns a new [Task] that is completed when any of the supplied [Task]s are completed.
@@ -339,6 +278,7 @@ abstract class Task<T> {
          * @return The new [Task].
          */
         @JvmStatic
-        fun <V> fromCompletableFuture(cf: CompletableFuture<V>): Task<V> = TaskFromCompletableFutureOperator(cf)
+        fun <V> fromCompletableFuture(cf: CompletableFuture<V>): Task<V> =
+                TaskFromCompletableFuture(cf)
     }
 }

@@ -6,14 +6,20 @@
 
 package orbit.concurrent.task
 
+import orbit.concurrent.task.impl.AbstractTaskImpl
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * Represents a [Task] that must be completed externally.
- */
-class Promise<T>: Task<T>() {
+class Promise<T>: AbstractTaskImpl<T, T>(){
     private val hasFired = AtomicBoolean(false)
+
+    override fun operator(item: Try<T>) {
+        item.onFailure {
+            completeExceptionally(it)
+        }.onSuccess {
+            complete(it)
+        }
+    }
 
     /**
      * Completes the [Promise] successfully with the supplied result.
@@ -23,8 +29,7 @@ class Promise<T>: Task<T>() {
      */
     fun complete(result: T) {
         if(hasFired.compareAndSet(false, true)) {
-            value = Try.success(result)
-            triggerListeners()
+            publish(Try.success(result))
         } else {
             throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")
         }
@@ -38,8 +43,7 @@ class Promise<T>: Task<T>() {
      */
     fun completeExceptionally(result: Throwable) {
         if(hasFired.compareAndSet(false, true)) {
-            value = Try.failed(result)
-            triggerListeners()
+            publish(Try.failed(result))
         } else {
             throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")
         }

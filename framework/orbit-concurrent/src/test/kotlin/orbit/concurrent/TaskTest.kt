@@ -171,10 +171,10 @@ class TaskTest {
 
         val failPromise = Promise<Int>()
         Assertions.assertFalse(failPromise.isComplete())
-        Assertions.assertFalse(failPromise.isExceptional())
+        Assertions.assertFalse(failPromise.isError())
         failPromise.completeExceptionally(TestException())
         Assertions.assertTrue(failPromise.isComplete())
-        Assertions.assertTrue (failPromise.isExceptional())
+        Assertions.assertTrue (failPromise.isError())
         Assertions.assertThrows(TestException::class.java, { failPromise.await() })
     }
 
@@ -202,7 +202,7 @@ class TaskTest {
         Assertions.assertFalse(failAllOf.isComplete())
         failPromise2.completeExceptionally(TestException())
         Assertions.assertTrue(failAllOf.isComplete())
-        Assertions.assertTrue(failAllOf.isExceptional())
+        Assertions.assertTrue(failAllOf.isError())
     }
 
     @Test

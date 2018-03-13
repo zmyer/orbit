@@ -8,7 +8,7 @@ package orbit.concurrent.task.operator
 
 import orbit.util.tries.Try
 
-internal class TaskJust<T>(immediateValue: Try<T>): TaskNoOp<T>() {
+internal class TaskJust<T>(immediateValue: Try<T>): TaskForwarder<T>() {
     init {
        onNext(immediateValue)
     }

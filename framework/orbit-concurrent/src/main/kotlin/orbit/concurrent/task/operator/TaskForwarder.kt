@@ -8,7 +8,7 @@ package orbit.concurrent.task.operator
 
 import orbit.util.tries.Try
 
-internal open class TaskNoOp<T>: TaskOperator<T, T>() {
+internal open class TaskForwarder<T>: TaskOperator<T, T>() {
     override fun operator(item: Try<T>) {
         publish(item)
     }

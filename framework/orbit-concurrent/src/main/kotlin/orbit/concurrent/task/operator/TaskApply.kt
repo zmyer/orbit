@@ -10,7 +10,7 @@ import orbit.concurrent.job.JobManager
 import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 
-internal class TaskApply<T>(jobManager: JobManager, body: () -> T): TaskNoOp<T>() {
+internal class TaskApply<T>(jobManager: JobManager, body: () -> T): TaskForwarder<T>() {
     init {
         val taskContext = TaskContext.current()
 

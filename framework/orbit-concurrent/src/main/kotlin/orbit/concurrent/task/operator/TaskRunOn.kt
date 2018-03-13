@@ -10,7 +10,7 @@ import orbit.concurrent.flow.Subscriber
 import orbit.concurrent.job.JobManager
 import orbit.util.tries.Try
 
-internal class TaskRunOn<T>(private val jobManager: JobManager): TaskNoOp<T>() {
+internal class TaskRunOn<T>(private val jobManager: JobManager): TaskForwarder<T>() {
     override fun sendTo(listener: Subscriber<T>, opVal: Try<T>) {
         jobManager.submit {
             super.sendTo(listener, opVal)

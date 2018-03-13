@@ -10,7 +10,7 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
 
-internal class TaskFromCompletableFuture<T>(completableFuture: CompletableFuture<T>): TaskNoOp<T>() {
+internal class TaskFromCompletableFuture<T>(completableFuture: CompletableFuture<T>): TaskForwarder<T>() {
     init {
         val taskContext = TaskContext.current()
 

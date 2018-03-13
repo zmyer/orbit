@@ -11,7 +11,7 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class TaskAnyOf(tasks: Iterable<Task<*>>): TaskNoOp<Unit>() {
+internal class TaskAnyOf(tasks: Iterable<Task<*>>): TaskForwarder<Unit>() {
     init {
         val completed = AtomicBoolean(false)
         val taskContext = TaskContext.current()

@@ -9,15 +9,14 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineDoOnErrorOperator<S, T>(parent: Pipeline<S, T>, private val body: (Throwable) -> Unit):
+internal class PipelineDoOnValue<S, T>(parent: Pipeline<S, T>, private val body: (T) -> Unit):
         PipelineOperator<S, T, T>(parent) {
-
-    override fun onNext(value: Try<T>) {
+    override fun operator(item: Try<T>) {
         try {
-            value.onFailure(body)
-            triggerListeners(value)
+            item.onSuccess(body)
+            publish(item)
         } catch(throwable: Throwable) {
-            triggerListeners(Try.failed(throwable))
+            publish(Try.failed(throwable))
         }
     }
 }

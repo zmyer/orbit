@@ -43,12 +43,13 @@ abstract class AbstractTaskImpl<T, R> internal constructor(): Processor<T, R>, T
 
     protected abstract fun operator(item: Try<T>)
 
-    protected open fun publish(item: Try<R>) {
+    protected fun publish(item: Try<R>) {
+        if(cachedValue != null) throw IllegalStateException("Tasks may only be completed once.")
         cachedValue = item
         broadcast()
     }
 
-    protected open fun broadcast() {
+    private fun broadcast() {
         tailrec fun drainQueue(opVal: Try<R>) {
             val polled = listeners.poll()
             if (polled != null) {

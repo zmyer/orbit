@@ -7,12 +7,11 @@
 package orbit.concurrent.pipeline.operator
 
 import orbit.concurrent.pipeline.Pipeline
+import orbit.concurrent.pipeline.impl.AbstractPipelineImpl
 import orbit.util.tries.Try
 
-abstract class PipelineOperator<S, I, O>(private val parent: Pipeline<S, I>): Pipeline<S, O>() {
-    internal abstract fun onNext(value: Try<I>)
-
-    override fun onSink(value: Try<S>) {
-        parent.onSink(value)
+internal abstract class PipelineOperator<S, T, R>(private val parent: Pipeline<S, T>): AbstractPipelineImpl<S, T, R>() {
+    override fun onSink(item: Try<S>) {
+        parent.onSink(item)
     }
 }

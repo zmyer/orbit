@@ -9,18 +9,16 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineFilterOperator<S, I>(parent: Pipeline<S, I>, private val body: (I) -> Boolean):
-        PipelineOperator<S, I, I>(parent) {
-
-    override fun onNext(value: Try<I>) {
-        value
-            .onSuccess {
+internal class PipelineFilter<S, T>(parent: Pipeline<S, T>, private val body: (T) -> Boolean):
+        PipelineOperator<S, T, T>(parent) {
+    override fun operator(item: Try<T>) {
+        item.onSuccess {
                 try {
                     if(body(it)) {
-                        triggerListeners(Try.success(it))
+                        publish(Try.success(it))
                     }
                 } catch(throwable: Throwable) {
-                    triggerListeners(Try.failed(throwable))
+                    publish(Try.failed(throwable))
                 }
             }
     }

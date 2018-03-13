@@ -6,64 +6,29 @@
 
 package orbit.concurrent.pipeline
 
+import orbit.concurrent.flow.Publisher
 import orbit.concurrent.job.JobManager
-import orbit.concurrent.pipeline.operator.PipelineDoAlwaysOperator
-import orbit.concurrent.pipeline.operator.PipelineMapOperator
-import orbit.concurrent.pipeline.operator.PipelineDoOnErrorOperator
-import orbit.concurrent.pipeline.operator.PipelineDoOnValueOperator
-import orbit.concurrent.pipeline.operator.PipelineFilterOperator
-import orbit.concurrent.pipeline.operator.PipelineFlatMapOperator
-import orbit.concurrent.pipeline.operator.PipelineOperator
-import orbit.concurrent.pipeline.operator.PipelineRunOnOperator
+import orbit.concurrent.pipeline.operator.PipelineDoAlways
+import orbit.concurrent.pipeline.operator.PipelineDoOnError
+import orbit.concurrent.pipeline.operator.PipelineDoOnValue
+import orbit.concurrent.pipeline.operator.PipelineFilter
+import orbit.concurrent.pipeline.operator.PipelineFlatMap
+import orbit.concurrent.pipeline.operator.PipelineMap
+import orbit.concurrent.pipeline.impl.PipelineSink
+import orbit.concurrent.pipeline.operator.PipelineRunOn
 import orbit.util.tries.Try
-import java.util.concurrent.atomic.AtomicReference
+import java.util.function.Consumer
 
-/**
- * Represents a [Pipeline] which transforms sunk values.
- */
-abstract class Pipeline<S, T> {
-    private class Sink<X>: Pipeline<X, X>()
+abstract class Pipeline<S, T>: Publisher<T> {
+    internal abstract fun onSink(item: Try<S>)
 
-    private val listeners = AtomicReference(listOf<PipelineOperator<S, T, *>>())
-
-    private fun addListener(listener: PipelineOperator<S, T, *>) {
-        do {
-            val listenerList = listeners.get()
-        } while(!listeners.compareAndSet(listenerList, listenerList + listener))
-    }
-
-    @JvmSynthetic
-    internal fun triggerListeners(value: Try<T>) {
-        listeners.get().forEach {
-            it.onNext(value)
-        }
-    }
-
-    @JvmSynthetic
-    internal open fun onSink(value: Try<S>) {
-        @Suppress("UNCHECKED_CAST")
-        triggerListeners(value as Try<T>)
-    }
-
-    /**
-     * Sinks a successful value into the [Pipeline].
-     *
-     * @param value The value to sink.
-     * @return The pipeline.
-     */
-    fun sinkValue(value: S): Pipeline<S, T> {
-        onSink(Try.success(value))
+    fun sinkValue(item: S): Pipeline<S, T> {
+        onSink(Try.success(item))
         return this
     }
 
-    /**
-     * Sinks an error value into the [Pipeline].
-     *
-     * @param throwable The error to sink.
-     * @return The pipeline.
-     */
-    fun sinkError(throwable: Throwable): Pipeline<S, T> {
-        onSink(Try.failed(throwable))
+    fun sinkError(item: Throwable): Pipeline<S, T> {
+        onSink(Try.failed(item))
         return this
     }
 
@@ -75,7 +40,11 @@ abstract class Pipeline<S, T> {
      * @return The new pipeline.
      */
     fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
-            PipelineDoAlwaysOperator(this, body).apply { addListener(this) }
+            PipelineDoAlways(this, body).also { this.subscribe(it) }
+    fun doAlways(body: Consumer<Try<T>>): Pipeline<S, T> =
+            doAlways({ body.accept(it) })
+    fun doAlways(body: Runnable): Pipeline<S, T> =
+            doAlways({ body.run() })
 
     /**
      * Upon this [Pipeline] receiving a successful value, executes the given function and emits the result of the
@@ -85,7 +54,11 @@ abstract class Pipeline<S, T> {
      * @return The new pipeline.
      */
     fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
-            PipelineDoOnValueOperator(this, body).apply { addListener(this) }
+            PipelineDoOnValue(this, body).also { this.subscribe(it) }
+    fun doOnValue(body: Consumer<T>): Pipeline<S, T> =
+            doOnValue({ body.accept(it) })
+    fun doOnValue(body: Runnable): Pipeline<S, T> =
+            doOnValue({ body.run() })
 
     /**
      * Upon this [Pipeline] receiving an error value, executes the given function and emits the result of the
@@ -95,7 +68,11 @@ abstract class Pipeline<S, T> {
      * @return The new pipeline.
      */
     fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
-            PipelineDoOnErrorOperator(this, body).apply { addListener(this) }
+            PipelineDoOnError(this, body).also { this.subscribe(it) }
+    fun doOnError(body: Consumer<Throwable>): Pipeline<S, T> =
+            doOnError({ body.accept(it) })
+    fun doOnError(body: Runnable): Pipeline<S, T> =
+            doOnError({ body.run() })
 
     /**
      * Synchronously maps successful values received by this [Pipeline] to a new value and emits it.
@@ -106,7 +83,7 @@ abstract class Pipeline<S, T> {
      * @return The new [Pipeline].
      */
     fun <V> map(body: (T) -> V): Pipeline<S, V> =
-            PipelineMapOperator(this, body).apply { addListener(this) }
+            PipelineMap(this, body).also { this.subscribe(it) }
 
     /**
      * Asynchronously maps successful values received by this [Pipeline] to a new [Pipeline], flattens and emits it.
@@ -117,16 +94,7 @@ abstract class Pipeline<S, T> {
      * @return The new [Pipeline].
      */
     fun <V> flatMap(body: (T) -> Pipeline<T, V>): Pipeline<S, V> =
-            PipelineFlatMapOperator(this, body).apply { addListener(this) }
-
-    /**
-     * Asynchronously maps successful values received by this [Pipeline] to a new [Pipeline], flattens and emits it.
-     *
-     * If the received value is a failed value the [Pipeline] is failed with the same [Throwable].
-     *
-     * @param mapper The pipeline to map into.
-     * @return The new [Pipeline].
-     */
+            PipelineFlatMap(this, body).also { this.subscribe(it) }
     fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
             flatMap({mapper})
 
@@ -141,7 +109,7 @@ abstract class Pipeline<S, T> {
      * @return The filtered [Pipeline].
      */
     fun filter(body: (T) -> Boolean): Pipeline<S, T> =
-            PipelineFilterOperator(this, body).apply { addListener(this) }
+            PipelineFilter(this, body).also { this.subscribe(it) }
 
     /**
      * Each value received by this [Pipeline] will be emitted on the specified [JobManager].
@@ -151,19 +119,17 @@ abstract class Pipeline<S, T> {
      * @return The new pipeline.
      */
     fun runOn(jobManager: JobManager): Pipeline<S, T> =
-            PipelineRunOnOperator(this, jobManager).apply { addListener(this) }
-
-    /**
-     * Each value received by this [Pipeline] will be emitted on the specified [JobManager].
-     * Each value is emitted regardless of if it is successful or an error.
-     *
-     * @param body A function that returns the [JobManager] to emit values on.
-     * @return The new pipeline.
-     */
-    fun runOn(body: () -> JobManager): Pipeline<S, T> = runOn(body())
+            PipelineRunOn(this, jobManager).also { this.subscribe(it) }
+    fun runOn(body: () -> JobManager): Pipeline<S, T> =
+            runOn(body())
 
     companion object {
+        /**
+         * Creates a new [Pipeline].
+         *
+         * @return The new [Pipeline].
+         */
         @JvmStatic
-        fun <V> create(): Pipeline<V, V> = Sink()
+        fun <V> create(): Pipeline<V, V> = PipelineSink()
     }
 }

@@ -9,22 +9,21 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineFlatMapOperator<S, I, O>(parent: Pipeline<S, I>, private val body: (I) -> Pipeline<I, O>):
-        PipelineOperator<S, I, O>(parent) {
-
-    override fun onNext(value: Try<I>) {
-        value.onSuccess {
+internal class PipelineFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> Pipeline<T, R>):
+        PipelineOperator<S, T, R>(parent) {
+    override fun operator(item: Try<T>) {
+        item.onSuccess {
             try {
                 val nestedPipeline = body(it)
                 nestedPipeline.doAlways {
-                    triggerListeners(it)
+                    publish(it)
                 }
                 nestedPipeline.sinkValue(it)
             } catch(throwable: Throwable) {
-                triggerListeners(Try.failed(throwable))
+                publish(Try.failed(throwable))
             }
         }.onFailure {
-            triggerListeners(Try.failed(it))
+            publish(Try.failed(it))
         }
     }
 }

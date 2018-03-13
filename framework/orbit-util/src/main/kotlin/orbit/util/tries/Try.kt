@@ -8,6 +8,7 @@ package orbit.util.tries
 
 import orbit.util.maybe.Maybe
 import java.util.Optional
+import java.util.function.Consumer
 
 /**
  * Represents a computation that may be either a computed value ([Success]) or an exception ([Failure]).
@@ -116,6 +117,10 @@ sealed class Try<T> {
         }
         is Failure -> this
     }
+    fun onSuccess(body: Consumer<T>) =
+            onSuccess({ body.accept(it)})
+    fun onSuccess(body: Runnable) =
+            onSuccess({ body.run()})
 
     /**
      * Executes the function only if the [Try] is an exception.
@@ -131,6 +136,10 @@ sealed class Try<T> {
             this
         }
     }
+    fun onFailure(body: Consumer<Throwable>) =
+            onFailure({ body.accept(it)})
+    fun onFailure(body: Runnable) =
+            onFailure({ body.run()})
 
     companion object {
         /**

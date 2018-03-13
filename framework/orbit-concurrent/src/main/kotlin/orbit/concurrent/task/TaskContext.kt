@@ -50,7 +50,7 @@ class TaskContext {
 
     private val id = nextId.getAndIncrement()
 
-    val properties: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
+    private val properties: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
 
     /**
      * Push this [TaskContext] instance on the current thread's stack of [TaskContext]s.

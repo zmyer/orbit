@@ -7,6 +7,7 @@
 package orbit.util.maybe
 
 import java.util.Optional
+import java.util.function.Consumer
 
 /**
  * Represents the result of a computation which is either a computed value ([Some]) or nothing ([None]).
@@ -77,6 +78,10 @@ sealed class Maybe<out T> {
         }
         return this
     }
+    fun onSomething(body: Consumer<in T>) =
+            onSomething({body.accept(it)})
+    fun onSomething(body: Runnable) =
+            onSomething({body.run()})
 
     /**
      * Executes the supplied function if the [Maybe] contains nothing.
@@ -90,6 +95,8 @@ sealed class Maybe<out T> {
         }
         return this
     }
+    fun onNothing(body: Runnable) =
+            onNothing({body.run()})
 
     companion object {
         /**
@@ -142,7 +149,7 @@ object None: Maybe<Nothing>() {
     override fun get() = throw IllegalAccessException("Trying to use None.get")
 }
 
-data class Some<T>(private val value: T): Maybe<T>() {
+data class Some<out T>(private val value: T): Maybe<T>() {
     override val isEmpty = false
     override fun get() = value
 }

@@ -6,6 +6,7 @@
 
 package orbit.concurrent.task.impl
 
+import orbit.concurrent.flow.Processor
 import orbit.concurrent.flow.Subscriber
 import orbit.concurrent.task.Task
 import orbit.concurrent.task.TaskContext
@@ -15,7 +16,7 @@ import orbit.util.tries.Try
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
 
-abstract class AbstractTaskImpl<T, R> internal constructor(): Subscriber<T>, Task<R>() {
+abstract class AbstractTaskImpl<T, R> internal constructor(): Processor<T, R>, Task<R>() {
     private val listeners = ConcurrentLinkedQueue<Subscriber<R>>()
     private val lock = ReentrantLock()
 

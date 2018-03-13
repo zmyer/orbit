@@ -6,7 +6,6 @@
 
 package orbit.concurrent.task
 
-import orbit.concurrent.flow.Processor
 import orbit.concurrent.flow.Publisher
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
@@ -24,7 +23,7 @@ import orbit.concurrent.task.operator.TaskMap
 import orbit.concurrent.task.operator.TaskRunOn
 import orbit.util.tries.Try
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Flow
+import java.util.function.Consumer
 
 /**
  * Represents that a unit of asynchronous work will be completed and the value will be made available in the future.
@@ -40,6 +39,10 @@ abstract class Task<T>: Publisher<T> {
      */
     fun doAlways(body: (Try<T>) -> Unit): Task<T> =
             TaskDoAlways(body).also { this.subscribe(it) }
+    fun doAlways(body: Consumer<Try<T>>): Task<T> =
+            doAlways({body.accept(it)})
+    fun doAlways(body: Runnable): Task<T> =
+            doAlways({body.run()})
 
     /**
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
@@ -49,6 +52,10 @@ abstract class Task<T>: Publisher<T> {
      */
     fun doOnValue(body: (T) -> Unit): Task<T> =
             TaskDoOnValue(body).also { this.subscribe(it) }
+    fun doOnValue(body: Consumer<T>): Task<T> =
+            doOnValue({body.accept(it)})
+    fun doOnValue(body: Runnable): Task<T> =
+            doOnValue({body.run()})
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -58,6 +65,11 @@ abstract class Task<T>: Publisher<T> {
      */
     fun doOnError(body: (Throwable) -> Unit): Task<T> =
             TaskDoOnError<T>(body).also { this.subscribe(it) }
+    fun doOnError(body: Consumer<Throwable>): Task<T> =
+            doOnError({body.accept(it)})
+    fun doOnError(body: Runnable): Task<T> =
+            doOnError({body.run()})
+
 
     /**
      * Synchronously maps the value of this [Task] to a new value and returns a completed [Task].
@@ -159,13 +171,6 @@ abstract class Task<T>: Publisher<T> {
     }
 
     companion object {
-        /**
-         * Creates a [Task] which executes on the default [JobManager].
-         *
-         * @param body The function to be executed by the [JobManager].
-         * @return The [Task].
-         */
-        operator fun <V> invoke(body: () -> V) = create(body)
 
         /**
          * Creates a [Task] which executes on the specified [JobManager].
@@ -175,15 +180,7 @@ abstract class Task<T>: Publisher<T> {
          * @param body The function to be executed by the [JobManager].
          */
         operator fun <V> invoke(jobManager: JobManager, body: () -> V) = create(jobManager, body)
-
-        /**
-         * Creates a [Task] which executes on the default [JobManager].
-         *
-         * @param body The function to be executed by the [JobManager].
-         * @return The [Task].
-         */
-        @JvmStatic
-        fun <V> create(body: () -> V): Task<V> = create(JobManagers.parallel(), body)
+        operator fun <V> invoke(body: () -> V) = create(body)
 
         /**
          * Creates a [Task] which executes on the specified [JobManager].
@@ -194,11 +191,19 @@ abstract class Task<T>: Publisher<T> {
          */
         @JvmStatic
         fun <V> create(jobManager: JobManager, body: () -> V): Task<V> = TaskApply(jobManager, body)
+        @JvmStatic
+        fun <V> create(body: () -> V): Task<V> = create(JobManagers.parallel(), body)
+        @JvmStatic
+        fun create(jobManager: JobManager, body: Runnable): Task<Unit> = create(jobManager ,{ body.run() })
+        @JvmStatic
+        fun create(body: Runnable): Task<Unit> = create(JobManagers.parallel(), body)
+
+
 
         /**
          * Creates a [Task] which is immediately completed with the specified value.
          *
-         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         * Callbacks will run on the calling thread. See [Task.runOn] to execute on another manager.
          *
          * @param value The value for the [Task] to be resolved with.
          * @return The completed [Task].
@@ -209,7 +214,7 @@ abstract class Task<T>: Publisher<T> {
         /**
          * Creates a [Task] which is immediately failed with the specified value.
          *
-         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         * Callbacks will run on the calling thread. See [Task.runOn] to execute on another manager.
          *
          * @param t The [Throwable] for the [Task] to be resolved with.
          * @return The failed [Task].
@@ -220,7 +225,7 @@ abstract class Task<T>: Publisher<T> {
         /**
          * Returns an empty [Task] that is already completed with an empty result.
          *
-         * Callbacks will run on the calling thread. See [Task.forceJobManager] to execute on another manager.
+         * Callbacks will run on the calling thread. See [Task.runOn] to execute on another manager.
          *
          * @return The empty [Task].
          */
@@ -238,14 +243,6 @@ abstract class Task<T>: Publisher<T> {
         @JvmStatic
         fun allOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAllOf(tasks)
 
-        /**
-         * Returns a new [Task] that is completed when all of the supplied [Task]s are completed.
-         * If any of the supplied [Task]s complete exceptionally then the new [Task] is completed with one of those
-         * exceptions, otherwise it is completed with [Unit].
-         *
-         * @param tasks The [Task]s.
-         * @return The new [Task].
-         */
         @JvmStatic
         fun allOf(vararg tasks: Task<*>) = allOf(tasks.asIterable())
 
@@ -260,14 +257,6 @@ abstract class Task<T>: Publisher<T> {
         @JvmStatic
         fun anyOf(tasks: Iterable<Task<*>>): Task<Unit> = TaskAnyOf(tasks)
 
-        /**
-         * Returns a new [Task] that is completed when any of the supplied [Task]s are completed.
-         * The new [Task] is always completed successfully even if the first supplied [Task] to complete completed
-         * exceptionally.
-         *
-         * @param tasks The [Task]s.
-         * @return The new [Task].
-         */
         @JvmStatic
         fun anyOf(vararg tasks: Task<*>): Task<Unit> = anyOf(tasks.asIterable())
 
@@ -280,5 +269,13 @@ abstract class Task<T>: Publisher<T> {
         @JvmStatic
         fun <V> fromCompletableFuture(cf: CompletableFuture<V>): Task<V> =
                 TaskFromCompletableFuture(cf)
+
+        /**
+         * Creates a new [Promise].
+         *
+         * @return The new [Promise].
+         */
+        @JvmStatic
+        fun <V> promise() = Promise<V>()
     }
 }

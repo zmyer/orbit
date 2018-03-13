@@ -8,6 +8,7 @@ package orbit.concurrent
 
 import orbit.concurrent.job.JobManagers
 import orbit.concurrent.pipeline.Pipeline
+import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -147,6 +148,32 @@ class PipelineTest {
             }
 
         errorPipeline.sinkValue(5)
+        Assertions.assertThrows(TestException::class.java, { tempResult.get() })
+    }
+
+    @Test
+    fun testFlatMapTask() {
+        var tempResult: Try<Int> = Try.success(0)
+
+        val successTask = Task.just(42)
+
+        val successPipeline = Pipeline.create<Int>()
+            .flatMapTask(successTask)
+            .doAlways {
+                tempResult = it
+            }
+
+        successPipeline.sinkValue(12)
+        Assertions.assertEquals(42, tempResult.get())
+
+        val failTask = Task.fail<Int>(TestException())
+        val failPipeline = Pipeline.create<Int>()
+            .flatMapTask(failTask)
+            .doAlways {
+                tempResult = it
+            }
+
+        failPipeline.sinkValue(12)
         Assertions.assertThrows(TestException::class.java, { tempResult.get() })
     }
 

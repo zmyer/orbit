@@ -35,7 +35,7 @@ abstract class Task<T>: Publisher<T> {
      * original.
      *
      * @param body The function to run.
-     * @return The future.
+     * @return The task.
      */
     fun doAlways(body: (Try<T>) -> Unit): Task<T> =
             TaskDoAlways(body).also { this.subscribe(it) }
@@ -48,7 +48,7 @@ abstract class Task<T>: Publisher<T> {
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
      *
      * @param body The function to run on success.
-     * @return The future.
+     * @return The task.
      */
     fun doOnValue(body: (T) -> Unit): Task<T> =
             TaskDoOnValue(body).also { this.subscribe(it) }

@@ -16,6 +16,8 @@ import orbit.concurrent.pipeline.operator.PipelineFlatMap
 import orbit.concurrent.pipeline.operator.PipelineMap
 import orbit.concurrent.pipeline.impl.PipelineSink
 import orbit.concurrent.pipeline.operator.PipelineRunOn
+import orbit.concurrent.pipeline.operator.PipelineTaskFlatMap
+import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 import java.util.function.Consumer
 
@@ -97,6 +99,20 @@ abstract class Pipeline<S, T>: Publisher<T> {
             PipelineFlatMap(this, body).also { this.subscribe(it) }
     fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
             flatMap({mapper})
+
+
+    /**
+     * Asynchronously maps successful values received by this [Pipeline] to a new [Task], flattens and emits it.
+     *
+     * If the received value is a failed value the [Pipeline] is failed with the same [Throwable].
+     *
+     * @param body The mapping function.
+     * @return The new [Pipeline].
+     */
+    fun <V> flatMapTask(body: (T) -> Task<V>): Pipeline<S, V> =
+            PipelineTaskFlatMap(this, body).also { this.subscribe(it) }
+    fun <V> flatMapTask(mapper: Task<V>): Pipeline<S, V> =
+            flatMapTask({mapper})
 
     /**
      * Evaluates each successful value received by this [Pipeline] against the supplied predicate and only emits those

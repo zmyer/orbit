@@ -23,20 +23,15 @@ configureProject(":framework:orbit-runtime", [withKotlin, withJava, withTests])
 
 buildscript {
     ext.kotlinVersion = getProperty("kotlin.version")
-    ext.junitPlatformVersion = "1.0.3"
 
     repositories {
         mavenCentral()
         jcenter()
-        maven {
-            url "https://dl.bintray.com/kotlin/kotlin-eap"
-        } // TODO: Remove when dokka stable works with Kotlin 1.2
     }
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
-        classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
     }
 }
 
@@ -50,8 +45,8 @@ ext {
     orgName = "Electronic Arts"
     orgUrl = "http://www.ea.com"
 
-    javaTargetVersion = "9"
-    javaSourceVersion = "9"
+    javaTargetVersion = "1.8"
+    javaSourceVersion = "1.8"
     kotlinTargetVersion = "1.8"
 
     junitJupiterVersion = "5.1.0"
@@ -74,7 +69,6 @@ configure(withKotlin) {
     compileKotlin {
         kotlinOptions {
             jvmTarget = kotlinTargetVersion
-            compileKotlin.destinationDir = compileJava.destinationDir
         }
     }
 
@@ -97,13 +91,6 @@ configure(withJava) {
     compileJava   {
         sourceCompatibility = javaSourceVersion
         targetCompatibility = javaTargetVersion
-
-        doFirst {
-            options.compilerArgs = [
-                    '--module-path', classpath.asPath,
-            ]
-            classpath = files()
-        }
     }
 
     compileTestJava {
@@ -112,8 +99,6 @@ configure(withJava) {
     }
 
     jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
         manifest {
             attributes(
                     "Name": project.name,

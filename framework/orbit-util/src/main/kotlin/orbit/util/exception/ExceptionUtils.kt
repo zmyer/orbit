@@ -6,19 +6,22 @@
 
 package orbit.util.exception
 
-object ExceptionUtils {
-    private const val MAX_DEPTH = 128
+import orbit.util.maybe.Maybe
 
-    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0): T? {
+object ExceptionUtils {
+    private const val MAX_DEPTH = 32
+
+    private tailrec fun <T: Throwable> checkChainRecursive(cause: Class<out T>, chain: Throwable?, depth: Int = 0):
+            Maybe<T> {
         return if (chain != null && depth < MAX_DEPTH) {
             if (cause.isInstance(chain)) {
                 @Suppress("UNCHECKED_CAST")
-                chain as? T
+                Maybe.just(chain as T)
             } else {
                 checkChainRecursive(cause, chain.cause, depth + 1)
             }
         } else {
-            null
+            Maybe.empty()
         }
     }
 
@@ -51,7 +54,7 @@ object ExceptionUtils {
      */
     @JvmStatic
     fun <T: Throwable> isCauseInChain(cause: Class<out T>, chain: T?) =
-            checkChainRecursive(cause, chain) != null
+            checkChainRecursive(cause, chain).isPresent
 
     /**
      * Gets the specified exception type (cause) if it is in the chain of exceptions provided.
@@ -61,7 +64,7 @@ object ExceptionUtils {
      * @return The discovered exception, otherwise null.
      */
     @JvmStatic
-    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): T? =
+    fun <T: Throwable> getCauseInChain(cause: Class<out T>, chain: Throwable?): Maybe<T> =
             checkChainRecursive(cause, chain)
 
 }

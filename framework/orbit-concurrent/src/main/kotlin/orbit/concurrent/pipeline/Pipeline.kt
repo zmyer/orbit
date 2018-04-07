@@ -41,11 +41,11 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
+    infix fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
             PipelineDoAlways(this, body).also { this.subscribe(it) }
-    fun doAlways(body: Consumer<Try<T>>): Pipeline<S, T> =
+    infix fun doAlways(body: Consumer<Try<T>>): Pipeline<S, T> =
             doAlways({ body.accept(it) })
-    fun doAlways(body: Runnable): Pipeline<S, T> =
+    infix fun doAlways(body: Runnable): Pipeline<S, T> =
             doAlways({ body.run() })
 
     /**
@@ -55,11 +55,11 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
+    infix fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
             PipelineDoOnValue(this, body).also { this.subscribe(it) }
-    fun doOnValue(body: Consumer<T>): Pipeline<S, T> =
+    infix fun doOnValue(body: Consumer<T>): Pipeline<S, T> =
             doOnValue({ body.accept(it) })
-    fun doOnValue(body: Runnable): Pipeline<S, T> =
+    infix fun doOnValue(body: Runnable): Pipeline<S, T> =
             doOnValue({ body.run() })
 
     /**
@@ -69,11 +69,11 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
+    infix fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
             PipelineDoOnError(this, body).also { this.subscribe(it) }
-    fun doOnError(body: Consumer<Throwable>): Pipeline<S, T> =
+    infix fun doOnError(body: Consumer<Throwable>): Pipeline<S, T> =
             doOnError({ body.accept(it) })
-    fun doOnError(body: Runnable): Pipeline<S, T> =
+    infix fun doOnError(body: Runnable): Pipeline<S, T> =
             doOnError({ body.run() })
 
     /**
@@ -84,7 +84,7 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    fun <V> map(body: (T) -> V): Pipeline<S, V> =
+    infix fun <V> map(body: (T) -> V): Pipeline<S, V> =
             PipelineMap(this, body).also { this.subscribe(it) }
 
     /**
@@ -95,9 +95,9 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    fun <V> flatMap(body: (T) -> Pipeline<T, V>): Pipeline<S, V> =
+    infix fun <V> flatMap(body: (T) -> Pipeline<T, V>): Pipeline<S, V> =
             PipelineFlatMap(this, body).also { this.subscribe(it) }
-    fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
+    infix fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
             flatMap({mapper})
 
 
@@ -109,9 +109,9 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    fun <V> flatMapTask(body: (T) -> Task<V>): Pipeline<S, V> =
+    infix fun <V> flatMapTask(body: (T) -> Task<V>): Pipeline<S, V> =
             PipelineTaskFlatMap(this, body).also { this.subscribe(it) }
-    fun <V> flatMapTask(mapper: Task<V>): Pipeline<S, V> =
+    infix fun <V> flatMapTask(mapper: Task<V>): Pipeline<S, V> =
             flatMapTask({mapper})
 
     /**
@@ -124,7 +124,7 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The predicate.
      * @return The filtered [Pipeline].
      */
-    fun filter(body: (T) -> Boolean): Pipeline<S, T> =
+    infix fun filter(body: (T) -> Boolean): Pipeline<S, T> =
             PipelineFilter(this, body).also { this.subscribe(it) }
 
     /**
@@ -136,7 +136,7 @@ abstract class Pipeline<S, T>: Publisher<T> {
      */
     fun runOn(jobManager: JobManager): Pipeline<S, T> =
             PipelineRunOn(this, jobManager).also { this.subscribe(it) }
-    fun runOn(body: () -> JobManager): Pipeline<S, T> =
+    infix fun runOn(body: () -> JobManager): Pipeline<S, T> =
             runOn(body())
 
     companion object {

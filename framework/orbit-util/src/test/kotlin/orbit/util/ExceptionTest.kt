@@ -44,14 +44,14 @@ class ExceptionTest {
     fun testUtils() {
         val nullException: OrbitException? = null
         Assertions.assertFalse(ExceptionUtils.isCauseInChain<OrbitException>(nullException))
-        Assertions.assertNull(ExceptionUtils.getCauseInChain<OrbitException>(nullException))
+        Assertions.assertTrue(ExceptionUtils.getCauseInChain<OrbitException>(nullException).isEmpty)
 
         val topLevelException = OrbitException()
         Assertions.assertTrue(ExceptionUtils.isCauseInChain<OrbitException>(topLevelException))
-        Assertions.assertNotNull(ExceptionUtils.getCauseInChain<OrbitException>(topLevelException))
+        Assertions.assertTrue(ExceptionUtils.getCauseInChain<OrbitException>(topLevelException).isPresent)
 
         val secondLevelException = RuntimeException("secondLevel", OrbitException())
         Assertions.assertTrue(ExceptionUtils.isCauseInChain<OrbitException>(secondLevelException))
-        Assertions.assertNotNull(ExceptionUtils.getCauseInChain<OrbitException>(secondLevelException))
+        Assertions.assertTrue(ExceptionUtils.getCauseInChain<OrbitException>(secondLevelException).isPresent)
     }
 }

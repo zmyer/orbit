@@ -8,7 +8,7 @@ package orbit.util.exception
 
 /**
  * The base exception type used by Orbit.
- * All Orbit exceptions derive from this exception.
+ * Orbit exceptions derive from this exception.
  */
 open class OrbitException
     @JvmOverloads

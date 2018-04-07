@@ -37,11 +37,11 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run.
      * @return The task.
      */
-    fun doAlways(body: (Try<T>) -> Unit): Task<T> =
+    infix fun doAlways(body: (Try<T>) -> Unit): Task<T> =
             TaskDoAlways(body).also { this.subscribe(it) }
-    fun doAlways(body: Consumer<Try<T>>): Task<T> =
+    infix fun doAlways(body: Consumer<Try<T>>): Task<T> =
             doAlways({body.accept(it)})
-    fun doAlways(body: Runnable): Task<T> =
+    infix fun doAlways(body: Runnable): Task<T> =
             doAlways({body.run()})
 
     /**
@@ -50,11 +50,11 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run on success.
      * @return The task.
      */
-    fun doOnValue(body: (T) -> Unit): Task<T> =
+    infix fun doOnValue(body: (T) -> Unit): Task<T> =
             TaskDoOnValue(body).also { this.subscribe(it) }
-    fun doOnValue(body: Consumer<T>): Task<T> =
+    infix fun doOnValue(body: Consumer<T>): Task<T> =
             doOnValue({body.accept(it)})
-    fun doOnValue(body: Runnable): Task<T> =
+    infix fun doOnValue(body: Runnable): Task<T> =
             doOnValue({body.run()})
 
     /**
@@ -63,11 +63,11 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run on failure.
      * @return The task.
      */
-    fun doOnError(body: (Throwable) -> Unit): Task<T> =
+    infix fun doOnError(body: (Throwable) -> Unit): Task<T> =
             TaskDoOnError<T>(body).also { this.subscribe(it) }
-    fun doOnError(body: Consumer<Throwable>): Task<T> =
+    infix fun doOnError(body: Consumer<Throwable>): Task<T> =
             doOnError({body.accept(it)})
-    fun doOnError(body: Runnable): Task<T> =
+    infix fun doOnError(body: Runnable): Task<T> =
             doOnError({body.run()})
 
 
@@ -79,7 +79,7 @@ abstract class Task<T>: Publisher<T> {
      * @param body The mapping function.
      * @return The completed task with the new value.
      */
-    fun <R> map(body: (T) -> R): Task<R> =
+    infix fun <R> map(body: (T) -> R): Task<R> =
             TaskMap(body).also { this.subscribe(it) }
 
     /**
@@ -90,7 +90,7 @@ abstract class Task<T>: Publisher<T> {
      * @param body The mapping function.
      * @return A new asynchronous [Task] with the mapped value.
      */
-    fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
+    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
             TaskFlatMap(body).also { this.subscribe(it) }
 
     /**
@@ -116,7 +116,7 @@ abstract class Task<T>: Publisher<T> {
      * @param body A function which returns the desired target [JobManager].
      * @return The [Task].
      */
-    fun runOn(body: () -> JobManager): Task<T> = runOn(body())
+    infix fun runOn(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
      * Causes the current thread to wait for the [Task] to be completed.

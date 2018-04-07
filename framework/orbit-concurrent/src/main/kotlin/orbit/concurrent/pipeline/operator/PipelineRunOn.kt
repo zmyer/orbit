@@ -10,8 +10,8 @@ import orbit.concurrent.job.JobManager
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineRunOn<S, T>(parent: Pipeline<S, T>, private val jobManager: JobManager):
-        PipelineOperator<S, T, T>(parent) {
+internal class PipelineRunOn<S, T>(parent: Pipeline<S, T>, private val jobManager: JobManager) :
+    PipelineOperator<S, T, T>(parent) {
     override fun operator(item: Try<T>) {
         jobManager.submit {
             publish(item)

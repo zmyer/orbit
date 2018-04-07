@@ -6,9 +6,9 @@
 
 package orbit.concurrent.job.impl
 
-import orbit.util.misc.Disposable
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
+import orbit.util.misc.Disposable
 
 internal class BlockingJobManager : JobManager {
     private object DummyDisposable : Disposable {
@@ -20,7 +20,7 @@ internal class BlockingJobManager : JobManager {
     override fun submit(body: () -> Unit): Disposable {
         try {
             body()
-        } catch(throwable: Throwable) {
+        } catch (throwable: Throwable) {
             JobManagers.handleUncaughtException(throwable)
         }
         return DummyDisposable

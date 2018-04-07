@@ -98,9 +98,9 @@ class TaskContext {
     operator fun get(name: String): Any? = properties[name]
 
     operator fun set(name: String, value: Any?) =
-            if (value != null) {
-                properties[name] = value
-            } else {
-                properties.remove(name)
-            }
+        if (value != null) {
+            properties[name] = value
+        } else {
+            properties.remove(name)
+        }
 }

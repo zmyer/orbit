@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ExceptionJavaTest {
+
     @Test
     void testExceptionJavaAPI() {
         final OrbitException blankOrbitException = new OrbitException();
@@ -26,7 +27,9 @@ class ExceptionJavaTest {
         final OrbitException nullOrbitException = null;
         Assertions.assertFalse(ExceptionUtils.isCauseInChain(OrbitException.class, nullOrbitException));
 
-        final RuntimeException nestedOrbitException = new RuntimeException("nested", new OrbitException());
-        Assertions.assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
+        final RuntimeException nestedOrbitException = new RuntimeException("nested",
+            new OrbitException());
+        Assertions
+            .assertTrue(ExceptionUtils.isCauseInChain(OrbitException.class, nestedOrbitException));
     }
 }

@@ -6,4 +6,4 @@
 
 package orbit.concurrent
 
-class TestException: RuntimeException() { }
+class TestException : RuntimeException() {}

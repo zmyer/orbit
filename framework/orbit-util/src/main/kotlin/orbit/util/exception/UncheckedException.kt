@@ -12,5 +12,5 @@ package orbit.util.exception
  */
 open class UncheckedException
 @JvmOverloads
-constructor(message: String? = null, cause: Throwable? = null):
-        OrbitException(message, cause)
+constructor(message: String? = null, cause: Throwable? = null) :
+    OrbitException(message, cause)

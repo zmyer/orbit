@@ -37,10 +37,10 @@ class TaskTest {
 
     @Test
     fun testFlatMap() {
-        val success = Task { 5 }.flatMap { x-> Task { x * x } }
+        val success = Task { 5 }.flatMap { x -> Task { x * x } }
         Assertions.assertEquals(25, success.await())
 
-        val initialFail = Task<Int> { throw TestException() }.flatMap { x-> Task { x * x } }
+        val initialFail = Task<Int> { throw TestException() }.flatMap { x -> Task { x * x } }
         Assertions.assertThrows(TestException::class.java, { initialFail.await() })
 
         @Suppress("UNREACHABLE_CODE")
@@ -57,12 +57,12 @@ class TaskTest {
         var didFire: Boolean
 
         didFire = false
-        val success = Task { "success" }.doAlways { it.onSuccess { didFire = true }}
+        val success = Task { "success" }.doAlways { it.onSuccess { didFire = true } }
         Assertions.assertEquals("success", success.await())
         Assertions.assertTrue(didFire)
 
         didFire = false
-        val fail = Task { throw TestException() }.doAlways { it.onFailure { didFire = true }}
+        val fail = Task { throw TestException() }.doAlways { it.onFailure { didFire = true } }
         Assertions.assertThrows(TestException::class.java, { fail.await() })
         Assertions.assertTrue(didFire)
     }
@@ -112,12 +112,12 @@ class TaskTest {
         }.runOn {
             newThread
         }.doOnValue {
-                shouldMatch = (threadLocal.get() == 42)
-            }.runOn {
-                dummyThread
-            }.doOnValue {
-                shouldNotMatch = (threadLocal.get() == 42)
-            }
+            shouldMatch = (threadLocal.get() == 42)
+        }.runOn {
+            dummyThread
+        }.doOnValue {
+            shouldNotMatch = (threadLocal.get() == 42)
+        }
         task.await()
         Assertions.assertTrue(shouldMatch)
         Assertions.assertFalse(shouldNotMatch)
@@ -166,7 +166,7 @@ class TaskTest {
         Assertions.assertFalse(successPromise.isSuccessful())
         successPromise.complete(42)
         Assertions.assertTrue(successPromise.isComplete())
-        Assertions.assertTrue (successPromise.isSuccessful())
+        Assertions.assertTrue(successPromise.isSuccessful())
         Assertions.assertEquals(42, successPromise.await())
 
         val failPromise = Promise<Int>()
@@ -174,7 +174,7 @@ class TaskTest {
         Assertions.assertFalse(failPromise.isError())
         failPromise.completeExceptionally(TestException())
         Assertions.assertTrue(failPromise.isComplete())
-        Assertions.assertTrue (failPromise.isError())
+        Assertions.assertTrue(failPromise.isError())
         Assertions.assertThrows(TestException::class.java, { failPromise.await() })
     }
 

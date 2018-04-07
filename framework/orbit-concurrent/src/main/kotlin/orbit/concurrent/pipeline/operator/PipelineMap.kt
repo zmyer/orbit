@@ -9,8 +9,8 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> R):
-        PipelineOperator<S, T, R>(parent) {
+internal class PipelineMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> R) :
+    PipelineOperator<S, T, R>(parent) {
     override fun operator(item: Try<T>) {
         item.onSuccess {
             publish(Try { body(it) })

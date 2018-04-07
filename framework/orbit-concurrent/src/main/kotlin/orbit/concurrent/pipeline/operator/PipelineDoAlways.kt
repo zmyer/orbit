@@ -9,13 +9,13 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineDoAlways<S, T>(parent: Pipeline<S, T>, private val body: (Try<T>) -> Unit):
-        PipelineOperator<S, T, T>(parent) {
+internal class PipelineDoAlways<S, T>(parent: Pipeline<S, T>, private val body: (Try<T>) -> Unit) :
+    PipelineOperator<S, T, T>(parent) {
     override fun operator(item: Try<T>) {
         try {
             body(item)
             publish(item)
-        } catch(throwable: Throwable) {
+        } catch (throwable: Throwable) {
             publish(Try.failed(throwable))
         }
     }

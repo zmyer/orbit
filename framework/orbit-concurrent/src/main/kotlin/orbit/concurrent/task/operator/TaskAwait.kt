@@ -9,7 +9,7 @@ package orbit.concurrent.task.operator
 import orbit.util.tries.Try
 import java.util.concurrent.CountDownLatch
 
-internal class TaskAwait<T>: TaskOperator<T, T>() {
+internal class TaskAwait<T> : TaskOperator<T, T>() {
     private var earlyValue: Try<T>? = null
     private val latch = CountDownLatch(1)
 

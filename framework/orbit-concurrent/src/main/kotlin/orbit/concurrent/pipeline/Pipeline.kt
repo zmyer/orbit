@@ -8,20 +8,20 @@ package orbit.concurrent.pipeline
 
 import orbit.concurrent.flow.Publisher
 import orbit.concurrent.job.JobManager
+import orbit.concurrent.pipeline.impl.PipelineSink
 import orbit.concurrent.pipeline.operator.PipelineDoAlways
 import orbit.concurrent.pipeline.operator.PipelineDoOnError
 import orbit.concurrent.pipeline.operator.PipelineDoOnValue
 import orbit.concurrent.pipeline.operator.PipelineFilter
 import orbit.concurrent.pipeline.operator.PipelineFlatMap
 import orbit.concurrent.pipeline.operator.PipelineMap
-import orbit.concurrent.pipeline.impl.PipelineSink
 import orbit.concurrent.pipeline.operator.PipelineRunOn
 import orbit.concurrent.pipeline.operator.PipelineTaskFlatMap
 import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 import java.util.function.Consumer
 
-abstract class Pipeline<S, T>: Publisher<T> {
+abstract class Pipeline<S, T> : Publisher<T> {
     internal abstract fun onSink(item: Try<S>)
 
     fun sinkValue(item: S): Pipeline<S, T> {
@@ -41,12 +41,14 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    infix fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
-            PipelineDoAlways(this, body).also { this.subscribe(it) }
-    infix fun doAlways(body: Consumer<Try<T>>): Pipeline<S, T> =
-            doAlways({ body.accept(it) })
-    infix fun doAlways(body: Runnable): Pipeline<S, T> =
-            doAlways({ body.run() })
+    fun doAlways(body: (Try<T>) -> Unit): Pipeline<S, T> =
+        PipelineDoAlways(this, body).also { this.subscribe(it) }
+
+    fun doAlways(body: Consumer<Try<T>>): Pipeline<S, T> =
+        doAlways({ body.accept(it) })
+
+    fun doAlways(body: Runnable): Pipeline<S, T> =
+        doAlways({ body.run() })
 
     /**
      * Upon this [Pipeline] receiving a successful value, executes the given function and emits the result of the
@@ -55,12 +57,14 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    infix fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
-            PipelineDoOnValue(this, body).also { this.subscribe(it) }
-    infix fun doOnValue(body: Consumer<T>): Pipeline<S, T> =
-            doOnValue({ body.accept(it) })
-    infix fun doOnValue(body: Runnable): Pipeline<S, T> =
-            doOnValue({ body.run() })
+    fun doOnValue(body: (T) -> Unit): Pipeline<S, T> =
+        PipelineDoOnValue(this, body).also { this.subscribe(it) }
+
+    fun doOnValue(body: Consumer<T>): Pipeline<S, T> =
+        doOnValue({ body.accept(it) })
+
+    fun doOnValue(body: Runnable): Pipeline<S, T> =
+        doOnValue({ body.run() })
 
     /**
      * Upon this [Pipeline] receiving an error value, executes the given function and emits the result of the
@@ -69,12 +73,14 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The function to run.
      * @return The new pipeline.
      */
-    infix fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
-            PipelineDoOnError(this, body).also { this.subscribe(it) }
-    infix fun doOnError(body: Consumer<Throwable>): Pipeline<S, T> =
-            doOnError({ body.accept(it) })
-    infix fun doOnError(body: Runnable): Pipeline<S, T> =
-            doOnError({ body.run() })
+    fun doOnError(body: (Throwable) -> Unit): Pipeline<S, T> =
+        PipelineDoOnError(this, body).also { this.subscribe(it) }
+
+    fun doOnError(body: Consumer<Throwable>): Pipeline<S, T> =
+        doOnError({ body.accept(it) })
+
+    fun doOnError(body: Runnable): Pipeline<S, T> =
+        doOnError({ body.run() })
 
     /**
      * Synchronously maps successful values received by this [Pipeline] to a new value and emits it.
@@ -84,8 +90,8 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    infix fun <V> map(body: (T) -> V): Pipeline<S, V> =
-            PipelineMap(this, body).also { this.subscribe(it) }
+    fun <V> map(body: (T) -> V): Pipeline<S, V> =
+        PipelineMap(this, body).also { this.subscribe(it) }
 
     /**
      * Asynchronously maps successful values received by this [Pipeline] to a new [Pipeline], flattens and emits it.
@@ -95,10 +101,11 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    infix fun <V> flatMap(body: (T) -> Pipeline<T, V>): Pipeline<S, V> =
-            PipelineFlatMap(this, body).also { this.subscribe(it) }
-    infix fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
-            flatMap({mapper})
+    fun <V> flatMap(body: (T) -> Pipeline<T, V>): Pipeline<S, V> =
+        PipelineFlatMap(this, body).also { this.subscribe(it) }
+
+    fun <V> flatMap(mapper: Pipeline<T, V>): Pipeline<S, V> =
+        flatMap({ mapper })
 
 
     /**
@@ -109,10 +116,11 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The mapping function.
      * @return The new [Pipeline].
      */
-    infix fun <V> flatMapTask(body: (T) -> Task<V>): Pipeline<S, V> =
-            PipelineTaskFlatMap(this, body).also { this.subscribe(it) }
-    infix fun <V> flatMapTask(mapper: Task<V>): Pipeline<S, V> =
-            flatMapTask({mapper})
+    fun <V> flatMapTask(body: (T) -> Task<V>): Pipeline<S, V> =
+        PipelineTaskFlatMap(this, body).also { this.subscribe(it) }
+
+    fun <V> flatMapTask(mapper: Task<V>): Pipeline<S, V> =
+        flatMapTask({ mapper })
 
     /**
      * Evaluates each successful value received by this [Pipeline] against the supplied predicate and only emits those
@@ -124,8 +132,8 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @param body The predicate.
      * @return The filtered [Pipeline].
      */
-    infix fun filter(body: (T) -> Boolean): Pipeline<S, T> =
-            PipelineFilter(this, body).also { this.subscribe(it) }
+    fun filter(body: (T) -> Boolean): Pipeline<S, T> =
+        PipelineFilter(this, body).also { this.subscribe(it) }
 
     /**
      * Each value received by this [Pipeline] will be emitted on the specified [JobManager].
@@ -135,9 +143,10 @@ abstract class Pipeline<S, T>: Publisher<T> {
      * @return The new pipeline.
      */
     fun runOn(jobManager: JobManager): Pipeline<S, T> =
-            PipelineRunOn(this, jobManager).also { this.subscribe(it) }
-    infix fun runOn(body: () -> JobManager): Pipeline<S, T> =
-            runOn(body())
+        PipelineRunOn(this, jobManager).also { this.subscribe(it) }
+
+    fun runOn(body: () -> JobManager): Pipeline<S, T> =
+        runOn(body())
 
     companion object {
         /**

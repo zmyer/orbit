@@ -7,13 +7,13 @@
 package orbit.concurrent;
 
 import orbit.concurrent.task.TaskContext;
+import java.util.Set;
+import java.util.concurrent.Semaphore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-import java.util.concurrent.Semaphore;
-
 public class TaskContextJavaTest {
+
     @Test
     public void testCurrent() {
         TaskContext taskContext = new TaskContext();

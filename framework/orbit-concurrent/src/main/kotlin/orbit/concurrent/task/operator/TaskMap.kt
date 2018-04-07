@@ -8,7 +8,7 @@ package orbit.concurrent.task.operator
 
 import orbit.util.tries.Try
 
-internal class TaskMap<I, O>(private val body: (I) -> O): TaskOperator<I, O>() {
+internal class TaskMap<I, O>(private val body: (I) -> O) : TaskOperator<I, O>() {
     override fun operator(item: Try<I>) {
         item.onSuccess {
             publish(Try { body(it) })

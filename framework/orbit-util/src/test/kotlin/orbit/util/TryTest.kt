@@ -11,18 +11,18 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TryTest {
-    class TryTestException: RuntimeException("TryTestException")
+    class TryTestException : RuntimeException("TryTestException")
 
     @Test
     fun testBasicSuccess() {
-        val success = Try  { "success"}
+        val success = Try { "success" }
         Assertions.assertTrue(success.isSuccess)
         Assertions.assertEquals("success", success.get())
     }
 
     @Test
     fun testBasicFailure() {
-        val fail = Try  { throw TryTestException() }
+        val fail = Try { throw TryTestException() }
         Assertions.assertTrue(fail.isFailure)
         Assertions.assertThrows(TryTestException::class.java, fail::get)
     }
@@ -62,7 +62,7 @@ class TryTest {
         val square = Try { 5 }.flatMap { Try { it * it } }
         Assertions.assertEquals(25, square.get())
 
-        val failInTry = Try<Int> { throw TryTestException() }.flatMap { Try{ it * it}  }
+        val failInTry = Try<Int> { throw TryTestException() }.flatMap { Try { it * it } }
         Assertions.assertTrue(failInTry.isFailure)
 
         val failInMap = Try { 5 }.flatMap { Try { throw TryTestException() } }

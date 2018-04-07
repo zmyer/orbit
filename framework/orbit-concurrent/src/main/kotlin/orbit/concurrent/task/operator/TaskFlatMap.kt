@@ -9,14 +9,14 @@ package orbit.concurrent.task.operator
 import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 
-internal class TaskFlatMap<I, O>(private val body: (I) -> Task<O>): TaskOperator<I, O>() {
+internal class TaskFlatMap<I, O>(private val body: (I) -> Task<O>) : TaskOperator<I, O>() {
     override fun operator(item: Try<I>) {
         item.onSuccess {
             try {
                 body(it).doAlways {
                     publish(it)
                 }
-            } catch(t: Throwable) {
+            } catch (t: Throwable) {
                 publish(Try.failed(t))
             }
         }.onFailure {

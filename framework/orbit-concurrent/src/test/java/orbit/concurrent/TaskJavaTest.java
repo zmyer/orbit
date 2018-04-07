@@ -7,13 +7,13 @@
 package orbit.concurrent;
 
 import orbit.concurrent.task.Task;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 class TaskJavaTest {
+
     @Test
     void testAsCompletableFuture() {
         try {
@@ -25,7 +25,7 @@ class TaskJavaTest {
             final CompletableFuture<Integer> failCf = failTask.asCompletableFuture();
             Assertions.assertThrows(ExecutionException.class, failCf::get);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
 
         }
     }

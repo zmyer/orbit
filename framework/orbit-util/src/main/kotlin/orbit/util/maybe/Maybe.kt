@@ -21,7 +21,7 @@ sealed class Maybe<out T> {
     /**
      * Converts the [Maybe] to a Java [Optional].
      */
-    fun asOptional(): Optional<out T> = if(isEmpty) {
+    fun asOptional(): Optional<out T> = if (isEmpty) {
         Optional.empty()
     } else {
         Optional.of(get())
@@ -32,7 +32,7 @@ sealed class Maybe<out T> {
      *
      * @return The computed value or null.
      */
-    fun orNull(): T? = if(isEmpty) {
+    fun orNull(): T? = if (isEmpty) {
         null
     } else {
         get()
@@ -46,7 +46,7 @@ sealed class Maybe<out T> {
      * @param body The mapping function.
      * @return The new [Maybe].
      */
-    fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if(isEmpty) {
+    fun <V> flatMap(body: (T) -> Maybe<V>): Maybe<V> = if (isEmpty) {
         None
     } else {
         body(get())
@@ -60,7 +60,7 @@ sealed class Maybe<out T> {
      * @param body The mapping function.
      * @return The new [Maybe].
      */
-    fun <V> map(body: (T) -> V): Maybe<V> = if(isEmpty) {
+    fun <V> map(body: (T) -> V): Maybe<V> = if (isEmpty) {
         None
     } else {
         Some(body(get()))
@@ -73,15 +73,17 @@ sealed class Maybe<out T> {
      * @return The original [Maybe] for chaining purposes.
      */
     fun onSomething(body: (T) -> Unit): Maybe<T> {
-        if(isPresent) {
+        if (isPresent) {
             body(get())
         }
         return this
     }
+
     fun onSomething(body: Consumer<in T>) =
-            onSomething({body.accept(it)})
+        onSomething({ body.accept(it) })
+
     fun onSomething(body: Runnable) =
-            onSomething({body.run()})
+        onSomething({ body.run() })
 
     /**
      * Executes the supplied function if the [Maybe] contains nothing.
@@ -90,13 +92,14 @@ sealed class Maybe<out T> {
      * @return The original [Maybe] for chaining purposes.
      */
     fun onNothing(body: () -> Unit): Maybe<T> {
-        if(isEmpty) {
+        if (isEmpty) {
             body()
         }
         return this
     }
+
     fun onNothing(body: Runnable) =
-            onNothing({body.run()})
+        onNothing({ body.run() })
 
     companion object {
         /**
@@ -122,7 +125,7 @@ sealed class Maybe<out T> {
          * @return The [Maybe].
          */
         @JvmStatic
-        fun <V> fromOptional(optional: Optional<V>) = if(optional.isPresent) {
+        fun <V> fromOptional(optional: Optional<V>) = if (optional.isPresent) {
             just(optional.get())
         } else {
             empty()
@@ -144,12 +147,12 @@ sealed class Maybe<out T> {
 }
 
 
-object None: Maybe<Nothing>() {
+object None : Maybe<Nothing>() {
     override val isEmpty = true
     override fun get() = throw IllegalAccessException("Trying to use None.get")
 }
 
-data class Some<out T>(private val value: T): Maybe<T>() {
+data class Some<out T>(private val value: T) : Maybe<T>() {
     override val isEmpty = false
     override fun get() = value
 }

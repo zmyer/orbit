@@ -12,13 +12,13 @@ import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicReference
 
-internal abstract class AbstractPipelineImpl<S, T, R>: Processor<T, R>, Pipeline<S, R>() {
+internal abstract class AbstractPipelineImpl<S, T, R> : Processor<T, R>, Pipeline<S, R>() {
     private val listeners = AtomicReference(listOf<Subscriber<R>>())
 
     override fun subscribe(subscriber: Subscriber<R>) {
         do {
             val listenerList = listeners.get()
-        } while(!listeners.compareAndSet(listenerList, listenerList + subscriber))
+        } while (!listeners.compareAndSet(listenerList, listenerList + subscriber))
     }
 
     override fun onNext(item: Try<T>) {

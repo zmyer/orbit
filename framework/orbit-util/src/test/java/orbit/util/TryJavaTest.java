@@ -7,12 +7,12 @@
 package orbit.util;
 
 import orbit.util.tries.Try;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 class TryJavaTest {
+
     private static class TryJavaTestException extends RuntimeException {
 
     }
@@ -25,12 +25,14 @@ class TryJavaTest {
         Assertions.assertEquals("success", success.get());
 
         // Basic fail
-        final Try<String> fail = Try.create(() -> { throw new TryJavaTestException(); });
+        final Try<String> fail = Try.create(() -> {
+            throw new TryJavaTestException();
+        });
         Assertions.assertTrue(fail.isFailure());
         Assertions.assertThrows(TryJavaTestException.class, fail::get);
 
         // Try an operator
-        final Try<Integer> map = Try.create(() -> 5).map((v) -> v*v);
+        final Try<Integer> map = Try.create(() -> 5).map((v) -> v * v);
         Assertions.assertTrue(map.isSuccess());
         Assertions.assertEquals((Integer) 25, map.get());
     }
@@ -42,7 +44,9 @@ class TryJavaTest {
         Assertions.assertTrue(javaStringOptional.isPresent());
         Assertions.assertEquals("stringTry", javaStringOptional.get());
 
-        final Try<String> throwableTry = Try.create(() -> { throw new TryJavaTestException(); });
+        final Try<String> throwableTry = Try.create(() -> {
+            throw new TryJavaTestException();
+        });
         final Optional<String> javaEmptyOptional = throwableTry.asOptional();
         Assertions.assertFalse(javaEmptyOptional.isPresent());
     }

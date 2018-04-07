@@ -6,26 +6,26 @@
 
 package orbit.concurrent.job.impl
 
-import orbit.util.misc.Disposable
 import orbit.concurrent.job.JobManager
 import orbit.concurrent.job.JobManagers
+import orbit.util.misc.Disposable
 import java.util.concurrent.ExecutorService
 
-internal class JavaExecutorJobManager(private val executorService: ExecutorService): JobManager {
+internal class JavaExecutorJobManager(private val executorService: ExecutorService) : JobManager {
 
-    private class JobOffer(private val body: () -> Unit): Disposable {
+    private class JobOffer(private val body: () -> Unit) : Disposable {
 
         @Volatile
         private var isCanceled = false
 
         fun run() {
-                if(!isCanceled) {
-                    try {
-                        body()
-                    }catch(t: Throwable) {
-                        JobManagers.handleUncaughtException(t)
-                    }
+            if (!isCanceled) {
+                try {
+                    body()
+                } catch (t: Throwable) {
+                    JobManagers.handleUncaughtException(t)
                 }
+            }
         }
 
         override fun dispose() {
@@ -35,7 +35,7 @@ internal class JavaExecutorJobManager(private val executorService: ExecutorServi
 
     override fun submit(body: () -> Unit): Disposable {
         val job = JobOffer(body)
-        executorService.submit( Runnable {
+        executorService.submit(Runnable {
             job.run()
         })
         return job

@@ -49,7 +49,7 @@ ext {
 }
 
 allprojects {
-    group =  orbitGroup
+    group = orbitGroup
     version = orbitVersion
 
     repositories {
@@ -81,7 +81,7 @@ configure(withKotlin) {
 configure(withJava) {
     apply plugin: "java"
 
-    compileJava   {
+    compileJava {
         sourceCompatibility = javaSourceVersion
         targetCompatibility = javaTargetVersion
     }

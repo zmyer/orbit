@@ -16,11 +16,12 @@ import java.util.concurrent.atomic.AtomicLong
  */
 object IdentityUtils {
     private val base64Chars = charArrayOf(
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_')
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'
+    )
 
     private val secureRNG = SecureRandom()
     private val pseudoRNG get() = ThreadLocalRandom.current()
@@ -29,13 +30,13 @@ object IdentityUtils {
 
     private fun generateRandomString(numBits: Int, random: Random): String {
         tailrec fun internalGenerate(bitsLeft: Int, target: StringBuilder, random: Random) {
-            val rangeMax = if(bitsLeft > 6) 64 else 1 shl bitsLeft
+            val rangeMax = if (bitsLeft > 6) 64 else 1 shl bitsLeft
             target.append(base64Chars[random.nextInt(rangeMax)])
             val remaining = bitsLeft - 6
-            if(remaining > 0) internalGenerate(remaining, target, random)
+            if (remaining > 0) internalGenerate(remaining, target, random)
         }
 
-        if(numBits <= 0) throw IllegalArgumentException("numBits must be > 0.")
+        if (numBits <= 0) throw IllegalArgumentException("numBits must be > 0.")
         val targetString = StringBuilder(1 + (numBits / 6))
         internalGenerate(numBits, targetString, random)
         return targetString.toString()

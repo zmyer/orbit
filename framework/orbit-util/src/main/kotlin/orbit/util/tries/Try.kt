@@ -38,7 +38,7 @@ sealed class Try<T> {
      *
      * @return The Java [Optional].
      */
-    fun asOptional() = when(this) {
+    fun asOptional() = when (this) {
         is Success -> Optional.of(get())
         is Failure -> Optional.empty()
     }
@@ -48,7 +48,7 @@ sealed class Try<T> {
      *
      * @return The Orbit [Maybe].
      */
-    fun asMaybe() = when(this) {
+    fun asMaybe() = when (this) {
         is Success -> Maybe.just(get())
         is Failure -> Maybe.empty()
     }
@@ -60,7 +60,7 @@ sealed class Try<T> {
      * @param body The computation to perform if the [Try] is an exception.
      * @return The computed value or the result of the provided function.
      */
-    fun getOrElse(body: () -> T): T = when(this) {
+    fun getOrElse(body: () -> T): T = when (this) {
         is Success -> get()
         is Failure -> body()
     }
@@ -71,7 +71,7 @@ sealed class Try<T> {
      *
      * @return The computed value or null.
      */
-    fun orNull() = when(this) {
+    fun orNull() = when (this) {
         is Success -> get()
         is Failure -> null
     }
@@ -84,10 +84,10 @@ sealed class Try<T> {
      * @param body The mapping function.
      * @return The new [Try].
      */
-    fun <Z> flatMap(body: (T) -> Try<Z>) = when(this) {
+    fun <Z> flatMap(body: (T) -> Try<Z>) = when (this) {
         is Success -> try {
             body(get())
-        } catch(t: Throwable) {
+        } catch (t: Throwable) {
             Failure<Z>(t)
         }
         is Failure -> Failure<Z>(throwable)
@@ -110,17 +110,19 @@ sealed class Try<T> {
      * @param body The function to execute if a computer value.
      * @return The current [Try].
      */
-    fun onSuccess(body: (T) -> Unit) = when(this) {
+    fun onSuccess(body: (T) -> Unit) = when (this) {
         is Success -> {
             body(get())
             this
         }
         is Failure -> this
     }
+
     fun onSuccess(body: Consumer<T>) =
-            onSuccess({ body.accept(it)})
+        onSuccess({ body.accept(it) })
+
     fun onSuccess(body: Runnable) =
-            onSuccess({ body.run()})
+        onSuccess({ body.run() })
 
     /**
      * Executes the function only if the [Try] is an exception.
@@ -129,17 +131,19 @@ sealed class Try<T> {
      * @param body The function to execute if an exception.
      * @return The current [Try].
      */
-    fun onFailure(body: (Throwable) -> Unit) = when(this) {
+    fun onFailure(body: (Throwable) -> Unit) = when (this) {
         is Success -> this
         is Failure -> {
             body(throwable)
             this
         }
     }
+
     fun onFailure(body: Consumer<Throwable>) =
-            onFailure({ body.accept(it)})
+        onFailure({ body.accept(it) })
+
     fun onFailure(body: Runnable) =
-            onFailure({ body.run()})
+        onFailure({ body.run() })
 
     companion object {
         /**
@@ -161,7 +165,7 @@ sealed class Try<T> {
         @JvmStatic
         fun <V> create(body: () -> V): Try<V> = try {
             Success(body())
-        } catch(v: Throwable) {
+        } catch (v: Throwable) {
             Failure(v)
         }
 
@@ -188,16 +192,16 @@ sealed class Try<T> {
 /**
  * Represents a successfully completed computed value [Try].
  */
-data class Success<T>(private val value: T): Try<T>() {
+data class Success<T>(private val value: T) : Try<T>() {
     override val isSuccess = true
 
     override fun get() = value
 }
 
 /**
-* Represents a failed [Try].
-*/
-data class Failure<T>(private val value: Throwable): Try<T>() {
+ * Represents a failed [Try].
+ */
+data class Failure<T>(private val value: Throwable) : Try<T>() {
     override val isSuccess = false
 
     override fun get() = throw throwable

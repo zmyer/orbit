@@ -9,12 +9,12 @@ package orbit.concurrent.task.operator
 import orbit.util.tries.Try
 
 
-internal class TaskDoOnError<T>(private val body: (Throwable) -> Unit): TaskOperator<T, T>() {
+internal class TaskDoOnError<T>(private val body: (Throwable) -> Unit) : TaskOperator<T, T>() {
     override fun operator(item: Try<T>) {
         val x: Try<T> = try {
             item.onFailure(body)
             item
-        } catch(throwable: Throwable) {
+        } catch (throwable: Throwable) {
             Try.failed(throwable)
         }
         publish(x)

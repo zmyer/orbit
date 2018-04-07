@@ -10,7 +10,7 @@ import orbit.concurrent.task.impl.AbstractTaskImpl
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicBoolean
 
-class Promise<T>: AbstractTaskImpl<T, T>(){
+class Promise<T> : AbstractTaskImpl<T, T>() {
     private val hasFired = AtomicBoolean(false)
 
     override fun operator(item: Try<T>) {
@@ -28,7 +28,7 @@ class Promise<T>: AbstractTaskImpl<T, T>(){
      * @throws IllegalStateException If the promise has already been completed.
      */
     fun complete(result: T) {
-        if(hasFired.compareAndSet(false, true)) {
+        if (hasFired.compareAndSet(false, true)) {
             publish(Try.success(result))
         } else {
             throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")
@@ -42,7 +42,7 @@ class Promise<T>: AbstractTaskImpl<T, T>(){
      * @throws IllegalStateException If the promise has already been completed.
      */
     fun completeExceptionally(result: Throwable) {
-        if(hasFired.compareAndSet(false, true)) {
+        if (hasFired.compareAndSet(false, true)) {
             publish(Try.failed(result))
         } else {
             throw IllegalStateException("Promise has already been completed. A promise may only be completed once.")

@@ -6,4 +6,4 @@
 
 package orbit.concurrent.flow
 
-interface Processor<I, O>: Subscriber<I>, Publisher<O>
+interface Processor<I, O> : Subscriber<I>, Publisher<O>

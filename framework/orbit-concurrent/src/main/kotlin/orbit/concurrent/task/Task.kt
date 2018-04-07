@@ -29,7 +29,7 @@ import java.util.function.Consumer
  * Represents that a unit of asynchronous work will be completed and the value will be made available in the future.
  * [Task]s are guaranteed to complete and may complete successfully or exceptionally.
  */
-abstract class Task<T>: Publisher<T> {
+abstract class Task<T> : Publisher<T> {
     /**
      * Upon this [Task]'s completion, executes the given function and returns a new [Task] with the result of the
      * original.
@@ -37,12 +37,14 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run.
      * @return The task.
      */
-    infix fun doAlways(body: (Try<T>) -> Unit): Task<T> =
-            TaskDoAlways(body).also { this.subscribe(it) }
-    infix fun doAlways(body: Consumer<Try<T>>): Task<T> =
-            doAlways({body.accept(it)})
-    infix fun doAlways(body: Runnable): Task<T> =
-            doAlways({body.run()})
+    fun doAlways(body: (Try<T>) -> Unit): Task<T> =
+        TaskDoAlways(body).also { this.subscribe(it) }
+
+    fun doAlways(body: Consumer<Try<T>>): Task<T> =
+        doAlways({ body.accept(it) })
+
+    fun doAlways(body: Runnable): Task<T> =
+        doAlways({ body.run() })
 
     /**
      * Upon this [Task]'s success, executes the given function and returns a new [Task] with the result of the original.
@@ -50,12 +52,14 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run on success.
      * @return The task.
      */
-    infix fun doOnValue(body: (T) -> Unit): Task<T> =
-            TaskDoOnValue(body).also { this.subscribe(it) }
-    infix fun doOnValue(body: Consumer<T>): Task<T> =
-            doOnValue({body.accept(it)})
-    infix fun doOnValue(body: Runnable): Task<T> =
-            doOnValue({body.run()})
+    fun doOnValue(body: (T) -> Unit): Task<T> =
+        TaskDoOnValue(body).also { this.subscribe(it) }
+
+    fun doOnValue(body: Consumer<T>): Task<T> =
+        doOnValue({ body.accept(it) })
+
+    fun doOnValue(body: Runnable): Task<T> =
+        doOnValue({ body.run() })
 
     /**
      * Upon this [Task]'s failure, executes the given function and returns a new [Task] with the result of the original.
@@ -63,12 +67,14 @@ abstract class Task<T>: Publisher<T> {
      * @param body The function to run on failure.
      * @return The task.
      */
-    infix fun doOnError(body: (Throwable) -> Unit): Task<T> =
-            TaskDoOnError<T>(body).also { this.subscribe(it) }
-    infix fun doOnError(body: Consumer<Throwable>): Task<T> =
-            doOnError({body.accept(it)})
-    infix fun doOnError(body: Runnable): Task<T> =
-            doOnError({body.run()})
+    fun doOnError(body: (Throwable) -> Unit): Task<T> =
+        TaskDoOnError<T>(body).also { this.subscribe(it) }
+
+    fun doOnError(body: Consumer<Throwable>): Task<T> =
+        doOnError({ body.accept(it) })
+
+    fun doOnError(body: Runnable): Task<T> =
+        doOnError({ body.run() })
 
 
     /**
@@ -79,8 +85,8 @@ abstract class Task<T>: Publisher<T> {
      * @param body The mapping function.
      * @return The completed task with the new value.
      */
-    infix fun <R> map(body: (T) -> R): Task<R> =
-            TaskMap(body).also { this.subscribe(it) }
+    fun <R> map(body: (T) -> R): Task<R> =
+        TaskMap(body).also { this.subscribe(it) }
 
     /**
      * Asynchronously maps the value of this [Task] to another [Task] and flattens the result of the latter.
@@ -90,8 +96,8 @@ abstract class Task<T>: Publisher<T> {
      * @param body The mapping function.
      * @return A new asynchronous [Task] with the mapped value.
      */
-    infix fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
-            TaskFlatMap(body).also { this.subscribe(it) }
+    fun <O> flatMap(body: (T) -> Task<O>): Task<O> =
+        TaskFlatMap(body).also { this.subscribe(it) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -104,7 +110,7 @@ abstract class Task<T>: Publisher<T> {
      * @return The [Task].
      */
     fun runOn(jobManager: JobManager): Task<T> =
-            TaskRunOn<T>(jobManager).also { this.subscribe(it) }
+        TaskRunOn<T>(jobManager).also { this.subscribe(it) }
 
     /**
      * Creates a new [Task] with the result of the current [Task] which forces operators to run on the specified
@@ -116,7 +122,7 @@ abstract class Task<T>: Publisher<T> {
      * @param body A function which returns the desired target [JobManager].
      * @return The [Task].
      */
-    infix fun runOn(body: () -> JobManager): Task<T> = runOn(body())
+    fun runOn(body: () -> JobManager): Task<T> = runOn(body())
 
     /**
      * Causes the current thread to wait for the [Task] to be completed.
@@ -128,7 +134,7 @@ abstract class Task<T>: Publisher<T> {
      * @throws Throwable The [Throwable] of the failed tasked if failed.
      */
     fun await(): T =
-            TaskAwait<T>().also { this.subscribe(it) }.waitOnLatch()
+        TaskAwait<T>().also { this.subscribe(it) }.waitOnLatch()
 
     /**
      * Returns true if this [Task] is complete either successfully or exceptionally.
@@ -180,6 +186,7 @@ abstract class Task<T>: Publisher<T> {
          * @param body The function to be executed by the [JobManager].
          */
         operator fun <V> invoke(jobManager: JobManager, body: () -> V) = create(jobManager, body)
+
         operator fun <V> invoke(body: () -> V) = create(body)
 
         /**
@@ -191,13 +198,15 @@ abstract class Task<T>: Publisher<T> {
          */
         @JvmStatic
         fun <V> create(jobManager: JobManager, body: () -> V): Task<V> = TaskApply(jobManager, body)
+
         @JvmStatic
         fun <V> create(body: () -> V): Task<V> = create(JobManagers.parallel(), body)
+
         @JvmStatic
-        fun create(jobManager: JobManager, body: Runnable): Task<Unit> = create(jobManager ,{ body.run() })
+        fun create(jobManager: JobManager, body: Runnable): Task<Unit> = create(jobManager, { body.run() })
+
         @JvmStatic
         fun create(body: Runnable): Task<Unit> = create(JobManagers.parallel(), body)
-
 
 
         /**
@@ -268,7 +277,7 @@ abstract class Task<T>: Publisher<T> {
          */
         @JvmStatic
         fun <V> fromCompletableFuture(cf: CompletableFuture<V>): Task<V> =
-                TaskFromCompletableFuture(cf)
+            TaskFromCompletableFuture(cf)
 
         /**
          * Creates a new [Promise].

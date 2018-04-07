@@ -8,7 +8,7 @@ package orbit.concurrent.pipeline.impl
 
 import orbit.util.tries.Try
 
-internal class PipelineSink<S, T>: AbstractPipelineImpl<S, T, T>() {
+internal class PipelineSink<S, T> : AbstractPipelineImpl<S, T, T>() {
     override fun operator(item: Try<T>) {
         publish(item)
     }

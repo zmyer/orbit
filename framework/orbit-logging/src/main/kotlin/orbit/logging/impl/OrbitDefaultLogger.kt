@@ -8,4 +8,4 @@ package orbit.logging.impl
 
 import orbit.logging.Logger
 
-internal class OrbitDefaultLogger(logger: org.slf4j.Logger): Logger, org.slf4j.Logger by logger
+internal class OrbitDefaultLogger(logger: org.slf4j.Logger) : Logger, org.slf4j.Logger by logger

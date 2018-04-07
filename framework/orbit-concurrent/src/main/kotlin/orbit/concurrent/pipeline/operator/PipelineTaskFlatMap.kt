@@ -10,8 +10,8 @@ import orbit.concurrent.pipeline.Pipeline
 import orbit.concurrent.task.Task
 import orbit.util.tries.Try
 
-internal class PipelineTaskFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> Task<R>):
-        PipelineOperator<S, T, R>(parent) {
+internal class PipelineTaskFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> Task<R>) :
+    PipelineOperator<S, T, R>(parent) {
     override fun operator(item: Try<T>) {
         item.onSuccess {
             try {
@@ -19,7 +19,7 @@ internal class PipelineTaskFlatMap<S, T, R>(parent: Pipeline<S, T>, private val 
                 nestedTask.doAlways {
                     publish(it)
                 }
-            } catch(throwable: Throwable) {
+            } catch (throwable: Throwable) {
                 publish(Try.failed(throwable))
             }
         }.onFailure {

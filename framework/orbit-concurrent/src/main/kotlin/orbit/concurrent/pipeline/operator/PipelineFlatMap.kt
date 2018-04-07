@@ -9,8 +9,8 @@ package orbit.concurrent.pipeline.operator
 import orbit.concurrent.pipeline.Pipeline
 import orbit.util.tries.Try
 
-internal class PipelineFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> Pipeline<T, R>):
-        PipelineOperator<S, T, R>(parent) {
+internal class PipelineFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body: (T) -> Pipeline<T, R>) :
+    PipelineOperator<S, T, R>(parent) {
     override fun operator(item: Try<T>) {
         item.onSuccess {
             try {
@@ -19,7 +19,7 @@ internal class PipelineFlatMap<S, T, R>(parent: Pipeline<S, T>, private val body
                     publish(it)
                 }
                 nestedPipeline.sinkValue(it)
-            } catch(throwable: Throwable) {
+            } catch (throwable: Throwable) {
                 publish(Try.failed(throwable))
             }
         }.onFailure {

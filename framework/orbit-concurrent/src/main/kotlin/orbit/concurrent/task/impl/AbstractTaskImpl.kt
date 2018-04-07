@@ -16,7 +16,7 @@ import orbit.util.tries.Try
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.ReentrantLock
 
-abstract class AbstractTaskImpl<T, R> internal constructor(): Processor<T, R>, Task<R>() {
+abstract class AbstractTaskImpl<T, R> internal constructor() : Processor<T, R>, Task<R>() {
     private val listeners = ConcurrentLinkedQueue<Subscriber<R>>()
     private val lock = ReentrantLock()
 
@@ -44,7 +44,7 @@ abstract class AbstractTaskImpl<T, R> internal constructor(): Processor<T, R>, T
     protected abstract fun operator(item: Try<T>)
 
     protected fun publish(item: Try<R>) {
-        if(cachedValue != null) throw IllegalStateException("Tasks may only be completed once.")
+        if (cachedValue != null) throw IllegalStateException("Tasks may only be completed once.")
         cachedValue = item
         broadcast()
     }
@@ -77,7 +77,7 @@ abstract class AbstractTaskImpl<T, R> internal constructor(): Processor<T, R>, T
     }
 
     override fun isComplete(): Boolean =
-            cachedValue != null
+        cachedValue != null
 
     override fun isSuccessful(): Boolean = when (cachedValue) {
         is Success -> true

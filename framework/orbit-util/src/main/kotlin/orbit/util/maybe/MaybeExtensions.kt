@@ -13,7 +13,7 @@ import java.util.Optional
  *
  * @return The [Maybe].
  */
-fun <T> T?.asMaybe() = if(this == null) {
+fun <T> T?.asMaybe() = if (this == null) {
     Maybe.empty()
 } else {
     Maybe.just(this)

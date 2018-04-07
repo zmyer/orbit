@@ -8,4 +8,4 @@ package orbit.concurrent.task.operator
 
 import orbit.concurrent.task.impl.AbstractTaskImpl
 
-internal abstract class TaskOperator<T, R>: AbstractTaskImpl<T, R>()
+internal abstract class TaskOperator<T, R> : AbstractTaskImpl<T, R>()

@@ -11,7 +11,7 @@ import orbit.concurrent.task.TaskContext
 import orbit.util.tries.Try
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class TaskAllOf(tasks: Iterable<Task<*>>): TaskForwarder<Unit>() {
+internal class TaskAllOf(tasks: Iterable<Task<*>>) : TaskForwarder<Unit>() {
     @Volatile
     private var resultHolder: Try<Unit> = Try.success(Unit)
 

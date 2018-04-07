@@ -10,7 +10,6 @@ def configureProject(final String projectName, final List<List<Project>> toAdd) 
     }
 }
 
-// Project Configurations
 def withKotlin = []
 def withJava = []
 def withTests = []
@@ -29,11 +28,9 @@ buildscript {
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
     }
 }
 
-// Global Properties
 ext {
     orbitGroup = "cloud.orbit"
     orbitVersion = getProperty("orbit.version")
@@ -60,7 +57,6 @@ allprojects {
     }
 }
 
-// Kotlin
 configure(withKotlin) {
     apply plugin: "kotlin"
 
@@ -82,7 +78,6 @@ configure(withKotlin) {
     }
 }
 
-// Java
 configure(withJava) {
     apply plugin: "java"
 
@@ -111,15 +106,12 @@ configure(withJava) {
     }
 }
 
-// Tests
 configure(withTests) {
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
         testRuntimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
     }
-
-
 
     test {
         failFast = true

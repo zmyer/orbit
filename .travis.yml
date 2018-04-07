@@ -1,5 +1,12 @@
 language: java
 sudo: false
 jdk:
-  - oraclejdk8
-  - oraclejdk9
+- oraclejdk8
+- oraclejdk9
+
+notifications:
+  slack:
+    secure: fO/eo7TGk225d4A0tWev7WHS84Y0mGD19MSWiTX6zu1xpVEcAmOMSTzMXNbbuDpESuX4vmSevr+kbz4Eafz37QBorn3VPBfI/ddKly5/73EX6XYpL/Y+leotjgUP89oTAbALdr04pc8GrSy+yw4LmVHcUqyVLbSumt5fpXc3cjw=
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/247b3c6e28a2d6b498fe

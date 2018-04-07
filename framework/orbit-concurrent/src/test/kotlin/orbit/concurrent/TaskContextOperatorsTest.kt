@@ -51,7 +51,7 @@ class TaskContextOperatorsTest {
         val sem = Semaphore(0)
         val executor = Executors.newSingleThreadExecutor()
 
-        val completableFuture = CompletableFuture<Unit>().completeAsync(Supplier {
+        val completableFuture = CompletableFuture.supplyAsync(Supplier {
             otherTaskContext.push()
             sem.acquire()
         }, executor)

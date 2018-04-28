@@ -1,1 +1,0 @@
-travis encrypt "electronic-arts:3QLcSqwauMnTkoLl67WXe0KI" --add notifications.slack -r orbit/orbit

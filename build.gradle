@@ -21,7 +21,7 @@ configureProject(":framework:orbit-net", [withKotlin, withJava, withTests])
 
 
 buildscript {
-    ext.kotlinVersion = getProperty("kotlin.version")
+    ext.kotlinVersion = "1.2.41"
 
     repositories {
         mavenCentral()

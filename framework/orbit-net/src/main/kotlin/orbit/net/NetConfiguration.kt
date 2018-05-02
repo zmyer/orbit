@@ -9,5 +9,5 @@ package orbit.net
 data class NetConfiguration(
     val clusterName: ClusterName = ClusterName("orbit-cluster"),
     val nodeName: NodeName = NodeName(clusterName.nameString),
-    val nodeIdentity: NodeIdentity
+    val nodeIdentity: NodeIdentity = NodeIdentity.random()
 )

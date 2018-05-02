@@ -6,4 +6,10 @@
 
 package orbit.net
 
-data class NodeIdentity(val identityString: String)
+import orbit.util.misc.secureRandom
+
+data class NodeIdentity(val identityString: String) {
+    companion object {
+        fun random() = NodeIdentity(String.secureRandom())
+    }
+}

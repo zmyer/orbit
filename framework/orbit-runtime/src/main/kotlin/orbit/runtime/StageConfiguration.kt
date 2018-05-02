@@ -4,6 +4,10 @@
  See license in LICENSE.
  */
 
-dependencies {
-    compile(project(":framework:orbit-logging"))
-}
+package orbit.runtime
+
+import orbit.net.NetConfiguration
+
+data class StageConfiguration(
+    val netConfiguration: NetConfiguration = NetConfiguration()
+)

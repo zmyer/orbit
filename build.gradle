@@ -18,6 +18,7 @@ configureProject(":framework:orbit-logging", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-util", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-concurrent", [withKotlin, withJava, withTests])
 configureProject(":framework:orbit-net", [withKotlin, withJava, withTests])
+configureProject(":framework:orbit-runtime", [withKotlin, withJava, withTests])
 
 
 buildscript {
@@ -25,7 +26,6 @@ buildscript {
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
@@ -38,9 +38,9 @@ ext {
     orbitVersion = getProperty("orbit.version")
     orbitCodename = getProperty("orbit.codename")
     orbitCompat = getProperty("orbit.compat")
-    orbitUrl = "http://www.orbit.cloud"
+    orbitUrl = "https://www.orbit.cloud"
     orgName = "Electronic Arts"
-    orgUrl = "http://www.ea.com"
+    orgUrl = "https://www.ea.com"
 
     javaTargetVersion = "1.8"
     javaSourceVersion = "1.8"
@@ -56,6 +56,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 

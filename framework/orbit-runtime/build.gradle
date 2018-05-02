@@ -5,5 +5,10 @@
  */
 
 dependencies {
+    compile("org.kodein.di:kodein-di-erased-jvm:5.0.0")
+
     compile(project(":framework:orbit-logging"))
+    compile(project(":framework:orbit-util"))
+    compile(project(":framework:orbit-concurrent"))
+    compile(project(":framework:orbit-net"))
 }
